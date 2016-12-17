@@ -51,6 +51,19 @@ demographics$team <-
 levels(demographics$team)
 
 
+age_levels <- c("Under 18", "18-22", "23-26",
+                "27-30", "31-36", "37+")
+
+levels(demographics$age) <- age_levels
+
+# check levels
+levels(demographics$age)
+# set contrasts
+contrasts(demographics$age) <- c(1:6)
+# contr.sum(demographics$age)
+
+
+
 # make histogram of age distribution
 age_hist <- ggplot(aes(age), data = demographics) +
   geom_bar()
@@ -135,48 +148,70 @@ dev_incl_plot
 
 # ---- models -----
 
+# combine demographics and dev_inclusion tbls
 demogr_inclus <- as.tbl(cbind(demographics, dev_inclusion))
 
-
+# make vectors of womens and mixed teams
 womens_teams <- c("Dish", "Frenzy", "Nemesis")
 mixed_teams <- c("ELevate", "Jabba The Huck", 
                  "Shakedown", "Stack Cats", "UPA")
 
 
+# make column for team_type: mixed, womens, no_team
 demogr_inclus$team_type <- 
   ifelse(demogr_inclus$team %in% mixed_teams, demogr_inclus$team_type <- "mixed",
          ifelse(demogr_inclus$team %in% womens_teams, demogr_inclus$team_type <- "womens",
                 demogr_inclus$team_type <- "no_team"))
 
+# from team_type, make club_or_not column
+demogr_inclus$club_or_not <- 
+  ifelse(demogr_inclus$team_type == "no_team",
+         demogr_inclus$club_or_not <- "no_club",
+         demogr_inclus$club_or_not <- "club")
+
+# make these new variables factors
+demogr_inclus$team_type <- factor(demogr_inclus$team_type)
+demogr_inclus$club_or_not <- factor(demogr_inclus$club_or_not)
 
 
-sort_teams <- function(d, v) {
-  for (t in v) {
-    if (t %in% womens_teams) {
-      d$team_type <- "womens"
-    } else if (t %in% mixed_teams) {
-      d$team_type <- "mixed"
-    } else {
-      d$team_type <- "no_team"
-    }
-  }
-}
-sort_teams(demogr_inclus, demogr_inclus$team)
+library(lme4)
+m.age <- glm(club_or_not ~ age,
+         data = na.omit(demogr_inclus),
+         family = binomial())
 
 
-sort_teams <- function(v) {
-  for (t in v) {
-    if (t %in% womens_teams) {
-      demogr_inclus$team_type <- "womens"
-    } else if (t %in% mixed_teams) {
-      demogr_inclus$team_type <- "mixed"
-    } else {
-      demogr_inclus$team_type <- "no_team"
-    }
-  }
-}
-sort_teams(demogr_inclus$team)
-sort_teams(vector(demogr_inclus$team))
+m.UC.team_type <- aov(UC ~ team_type,
+         data = na.omit(demogr_inclus))
+
+
+
+
+# sort_teams <- function(d, v) {
+#   for (t in v) {
+#     if (t %in% womens_teams) {
+#       d$team_type <- "womens"
+#     } else if (t %in% mixed_teams) {
+#       d$team_type <- "mixed"
+#     } else {
+#       d$team_type <- "no_team"
+#     }
+#   }
+# }
+# demogr_inclus$team_type <- sort_teams(demogr_inclus, demogr_inclus$team)
+# 
+# 
+# sort_teams <- function(v) {
+#   for (t in v) {
+#     if (t %in% womens_teams) {
+#       demogr_inclus$team_type <- "womens"
+#     } else if (t %in% mixed_teams) {
+#       demogr_inclus$team_type <- "mixed"
+#     } else {
+#       demogr_inclus$team_type <- "no_team"
+#     }
+#   }
+# }
+# demogr_inclus$team_type <- sort_teams(demogr_inclus$team)
 
 
 
