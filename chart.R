@@ -49,3 +49,8 @@ dev_incl_plot
 club.or.not <- ggplot(aes(team_type), data = na.omit(demogr_inclus)) +
   geom_bar(position = "dodge")
 club.or.not
+
+
+
+
+
