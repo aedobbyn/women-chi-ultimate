@@ -3,10 +3,16 @@
 library(tidyverse)
 library(readxl)
 library(plyr)
+library(googlesheets)
+library(hash)
 
 sorted <- read_excel("women_chicago_ultimate_raw.xlsx", sheet = 1, skip = 1)
 raw <- read_excel("women_chicago_ultimate_raw.xlsx", sheet = 2, skip = 0)
-quant <- read_excel("women_ultimate_quant_data.xlsx")
+# quant <- read_excel("women_ultimate_quant_data.xlsx")
+
+quant_sheet <- gs_title("women ultimate quant data.xlsx")
+quant <- quant_sheet %>% 
+  gs_read(ws = 1)
 
 # last row is NA, get rid of it
 sorted <- sorted[1:(nrow(sorted) - 1), ]
@@ -47,6 +53,7 @@ playing <- playing %>%
     first_experience = `What best describes your first ultimate experience?`
 )
 
+
 # satisfaction
 satisfaction <- dat[, 10:15]
 
@@ -82,9 +89,6 @@ inclusion <- inclusion %>%
 # ------------ demographics -----------
 demographics$where_live <- factor(demographics$where_live)
 demographics$can_quote <- factor(demographics$can_quote)
-demographics$team <- factor(demographics$team)
-# demographics$currently_playing <- factor(demographics$currently_playing) # this is free response, needs hand coding or could do some NLP stuff though
-# demographics$played_this_year <- factor(demographics$played_this_year) # same
 
 # set age levels ordinally
 age_levels <- c("Under 18", "18-22", "23-26",
@@ -94,14 +98,70 @@ demographics$age <- factor(demographics$age, levels = age_levels, ordered = TRUE
 
 levels(demographics$age)
 
-# rename team levels for non-Chicago club teams to make shorter
-demographics$team <- 
-  plyr::revalue(demographics$team, 
-                c(`I play on a non-Chicago-based club team.` = "Non-Chicago",
-                  `I don't play on a Chicago-based club team.` = "No-Club"))
 
 
 # ------------ playing -------------- 
+
+playing$team <- factor(playing$team)
+
+# rename team levels for non-Chicago club teams to make shorter
+playing$team <- 
+  plyr::revalue(playing$team, 
+                c(`I play on a non-Chicago-based club team.` = "Non-Chicago",
+                  `I don't play on a Chicago-based club team.` = "No-Club"))
+
+playing$currently_playing <- factor(playing$currently_playing) # will be replaced below by one from quant dataset
+playing$how_long_play <- factor(playing$how_long_play) 
+playing$start_playing <- factor(playing$start_playing)
+playing$first_experience <- factor(playing$first_experience)
+
+# ---
+# pull in currently_playing from quant instead because it was hand coded there
+playing$currently_playing <- quant[["Please indicate the ultimate you are playing (or registered for) right now:"]]
+
+# create a hash object to store the levels we want based on hand coding
+currently_playing.dict <- hash(c(1:6), c("League Only", "Combination of League, Club, College",
+                       "Club Only", "College Only", "None", "Pickup"))
+
+# extract the values
+currently_playing.vals <- values(currently_playing.dict)
+
+# set the levels of currently_playing based on 
+playing$currently_playing <- factor(playing$currently_playing, labels = currently_playing.vals)
+
+
+# ----
+# pull in start_playing from quant instead because it was hand coded there
+playing$start_playing <- quant[["At what point in your life did you start playing ultimate?"]]
+
+# create a hash object to store the levels we want based on hand coding
+start_playing.dict <- hash(c(1:3), c("College", "High School", "Post-College"))
+
+# extract the values
+start_playing.vals <- values(start_playing.dict)
+
+# set the levels of currently_playing based on 
+playing$start_playing <- factor(playing$start_playing, labels = start_playing.vals)
+
+
+# ---
+
+# pull in first_experience from quant instead because it was hand coded there
+playing$first_experience <- quant[["What best describes your first ultimate experience?"]]
+
+# create a hash object to store the levels we want based on hand coding
+first_experience.dict <- hash(c(1:4), c("College", "Middle or High School", 
+                                        "Pickup", "League"))
+
+# extract the values
+first_experience.vals <- values(first_experience.dict)
+
+# set the levels of currently_playing based on 
+playing$first_experience <- factor(playing$first_experience, labels = first_experience.vals)
+
+
+
+
 
 
 # ------------ satisfaction -------------- 
