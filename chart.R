@@ -22,26 +22,26 @@ age_play_time
 
 
 
-dev_incl_plot <- ggplot(aes(women), data = na.omit(dev_inclusion)) +
+incl_plot <- ggplot(aes(women), data = na.omit(inclusion)) +
   geom_bar()
-dev_incl_plot
+incl_plot
 
-dev_incl_plot <- ggplot(aes(mixed), data = na.omit(dev_inclusion)) +
+incl_plot <- ggplot(aes(mixed), data = na.omit(inclusion)) +
   geom_bar()
-dev_incl_plot
+incl_plot
 
-dev_incl_plot <- ggplot(aes(UC), data = na.omit(dev_inclusion)) +
+incl_plot <- ggplot(aes(UC), data = na.omit(inclusion)) +
   geom_bar()
-dev_incl_plot
+incl_plot
 
-dev_incl_plot <- ggplot(aes(college), data = na.omit(dev_inclusion)) +
+incl_plot <- ggplot(aes(college), data = na.omit(inclusion)) +
   geom_bar()
-dev_incl_plot
+incl_plot
 
-dev_incl_plot <- ggplot(aes(college), data = dev_inclusion, na.rm=TRUE) +
+incl_plot <- ggplot(aes(college), data = inclusion, na.rm=TRUE) +
   geom_bar(fill = "red", position="dodge") +
   geom_bar(aes(women), fill = "blue", position="dodge")
-dev_incl_plot
+incl_plot
 
 
 
