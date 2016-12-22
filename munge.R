@@ -57,7 +57,7 @@ playing <- playing %>%
 # satisfaction
 satisfaction <- dat[, 10:15]
 
-satsifaction <- satisfaction %>% 
+satisfaction <- satisfaction %>% 
   dplyr::rename(
     amount = `How satisfied are you with the AMOUNT of ultimate you are currently playing?`, 
     level = `How satisfied are you with the LEVEL of ultimate you are currently playing?`,
@@ -115,6 +115,7 @@ playing$how_long_play <- factor(playing$how_long_play)
 playing$start_playing <- factor(playing$start_playing)
 playing$first_experience <- factor(playing$first_experience)
 
+
 # ---
 # pull in currently_playing from quant instead because it was hand coded there
 playing$currently_playing <- quant[["Please indicate the ultimate you are playing (or registered for) right now:"]]
@@ -157,14 +158,42 @@ first_experience.dict <- hash(c(1:4), c("College", "Middle or High School",
 first_experience.vals <- values(first_experience.dict)
 
 # set the levels of currently_playing based on 
-playing$first_experience <- factor(playing$first_experience, labels = first_experience.vals)
-
-
-
+playing$first_experience <- factor(playing$first_experience, levels = first_experience.vals, labels = first_experience.vals)
 
 
 
 # ------------ satisfaction -------------- 
+
+satisfaction$amount <- factor(satisfaction$amount)
+satisfaction$level <- factor(satisfaction$level)
+satisfaction$club <- factor(satisfaction$club)
+satisfaction$recreational <- factor(satisfaction$recreational)
+satisfaction$college <- factor(satisfaction$college)
+satisfaction$youth <- factor(satisfaction$youth)
+
+
+# differentiate variable names in different mini datasets by appending 
+# dataset name to beginning of var name
+names(satisfaction) <- paste0("satis_", names(satisfaction))
+
+
+satis_dict <- hash(c("Not satisfied -- I want to play more.",
+                     "Neutral -- I don't have strong feelings about the amount of ultimate I'm playing.",
+                     "Somewhat satisfied -- I sometimes wish I could play more, but overall I'm happy with the amount that I play.",
+                     "Somewhat satisfied -- I sometimes wish I played less, but overall I'm happy with the amount that I play.",
+                     "Very satisfied -- I'm playing just the right amount"),
+                   c("Not satisfied", "Neutral", 
+                     "Somewhat satisfied: wants more", "Somewhat satisfied: wants less",
+                     "Very satisfied"))
+
+# try mutate maybe
+# for (i in na.omit(satisfaction$satis_amount)) {
+#   ifelse(satisfaction$satis_amount[i] %in% keys(satis_dict),
+#          satisfaction$satis_amount[i] <- values(satis_dict)[satisfaction$satis_amount[i] %in% keys(satis_dict)],
+#          satisfaction$satis_amount[i] <- "Other")
+# }
+
+
 
 
 
@@ -172,19 +201,41 @@ playing$first_experience <- factor(playing$first_experience, labels = first_expe
 
 # reorder levels so that Disagree is coded as 1 and Agree is coded as 5
 name_levels <- c("Disagree", "Somewhat disagree",
-                 "Neutral - I don't have an opinion here.",
+                 "Neutral - I don't have an opinion here", 
                  "Somewhat Agree", "Agree")
 
 # set datatypes. ordered = TRUE because these are ordinal variables.
 inclusion$UC <- factor(inclusion$UC, levels = name_levels, ordered = TRUE)
 inclusion$college <- factor(inclusion$college, levels = name_levels, ordered = TRUE)
 inclusion$women <- factor(inclusion$women, levels = name_levels, ordered = TRUE)
-inclusion$mixed <- factor(inclusion$mixed,  levels = name_levels, ordered = TRUE)
+
+
+# "Neutral" response is worded differently in mixed
+mixed_levels <- c("Disagree", "Somewhat disagree",
+                  "Neutral - I don't have an opinion", 
+                  "Somewhat Agree", "Agree")
+
+inclusion$mixed <- factor(inclusion$mixed,  levels = mixed_levels, ordered = TRUE)  
 
 
 # check levels
 levels(inclusion$UC)
+levels(inclusion$mixed)
 
+
+# rename levels in 
+levels(inclusion$UC)[levels(inclusion$UC) == "Neutral - I don't have an opinion here"] <- "Neutral"
+levels(inclusion$college)[levels(inclusion$college) == "Neutral - I don't have an opinion here"] <- "Neutral"
+levels(inclusion$women)[levels(inclusion$women) == "Neutral - I don't have an opinion here"] <- "Neutral"
+
+levels(inclusion$mixed)[levels(inclusion$mixed) == "Neutral - I don't have an opinion"] <- "Neutral"
+
+
+
+# differentiate variable names in different mini datasets by appending 
+# dataset name to beginning of var name
+names(satisfaction) <- paste0("satis_", names(satisfaction))
+names(inclusion) <- paste0("inclus_", names(inclusion))
 
 
 
@@ -192,6 +243,7 @@ levels(inclusion$UC)
 
 
 # --------------------------- recombine -------------------------------
+
 
 # combine mini datasets back together in all
 all <- as.tbl(cbind(demographics, playing, satisfaction, inclusion))
@@ -202,15 +254,17 @@ mixed_teams <- c("ELevate", "Jabba The Huck",
                  "Shakedown", "Stack Cats", "UPA")
 
 
+# --------------- new columns ---------------
+
 # make column for team_type: mixed, womens, no_team
 all$team_type <- 
   ifelse(all$team %in% mixed_teams, all$team_type <- "mixed",
          ifelse(all$team %in% womens_teams, all$team_type <- "womens",
-                all$team_type <- "other"))
+                all$team_type <- "no_club"))
 
 # from team_type, make club_or_not column
 all$club_or_not <- 
-  ifelse(all$team_type == "other",
+  ifelse(all$team_type == "no_club",
          all$club_or_not <- "not_club",
          all$club_or_not <- "club")
 

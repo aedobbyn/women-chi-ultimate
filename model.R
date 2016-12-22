@@ -2,6 +2,13 @@
 
 # ---- models -----
 
+m.big <- MASS::polr(satis_amount ~ age + team_type + currently_playing + how_long_play, data = all)
+
+# does team type predict how included people feel women are
+m.inclus_women.team_type <- MASS::polr(inclus_women ~ team_type, 
+                                       data = all)
+
+
 # ordinal logistic: does age predict team_type?
 m.team_type.age <- MASS::polr(team_type ~ age,
                               data = demogr_inclus)
@@ -24,3 +31,8 @@ summary(m.UC.team)
 # regular lm doesn't work
 m.UC.team_type.2 <- lm(UC ~ team_type,
                        data = demogr_inclus)
+
+
+
+
+

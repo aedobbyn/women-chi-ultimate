@@ -6,11 +6,50 @@ age_hist <- ggplot(aes(age), data = demographics) +
   geom_bar()
 age_hist
 
-
 # make histogram of team distribution
 team_hist <- ggplot(aes(team), data = demographics) +
   geom_bar()
 team_hist
+
+
+# first_experience histogram
+qplot(first_experience, data = all)
+
+
+# inclusion types
+
+incl.types <- ggplot(data = all) +
+  geom_bar(aes(inclus_mixed), fill = "blue", alpha = 0.5) +
+  geom_bar(aes(inclus_women), fill = "red", alpha = 0.5)
+incl.types
+
+
+
+# age histogram by team type
+age.team_type <-  ggplot(data = all) +
+  facet_grid( ~ team_type) +
+  geom_bar(aes(age))
+age.team_type
+
+
+
+# how well are women included by team type
+inclus_women.team_type <- ggplot(data = all) +
+  facet_grid( ~ team_type) +
+  geom_bar(aes(inclus_women)) + 
+  theme(axis.text.x = element_text(angle = 60, hjust = 1))
+inclus_women.team_type
+
+
+# 
+inclus_women.team_type <- ggplot(data = all) +
+  facet_grid( ~ team_type) +
+  geom_bar(aes(inclus_women)) + 
+  theme(axis.text.x = element_text(angle = 60, hjust = 1))
+inclus_women.team_type
+
+
+
 
 # team demographics (need a better way to represent this)
 age_play_time <- ggplot(aes(team, age), data = demographics, na.rm = TRUE, stat=count) +
