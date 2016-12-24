@@ -16,6 +16,22 @@ team_hist
 qplot(first_experience, data = all)
 
 
+
+# satisfaction amount and level by team type
+# amount
+satis_amount.team_type <- ggplot(data = all) +
+  geom_bar(aes(x = satis_amount_recode, fill = team_type), position = "dodge") +
+  theme(axis.text.x = element_text(angle = 60, hjust = 1))
+satis_amount.team_type
+
+# level
+satis_level.team_type <- ggplot(data = na.omit(all)) +
+  geom_bar(aes(x = satis_level_recode, fill = team_type), position = "dodge") +
+  theme(axis.text.x = element_text(angle = 60, hjust = 1))
+satis_level.team_type
+
+
+
 # inclusion types
 
 incl.types <- ggplot(data = all) +

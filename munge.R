@@ -59,12 +59,12 @@ satisfaction <- dat[, 10:15]
 
 satisfaction <- satisfaction %>% 
   dplyr::rename(
-    amount = `How satisfied are you with the AMOUNT of ultimate you are currently playing?`, 
-    level = `How satisfied are you with the LEVEL of ultimate you are currently playing?`,
-    club = `How connected do you feel to the CLUB ultimate community in Chicago?`,
-    recreational = `How connected do you feel to the RECREATIONAL ultimate community in Chicago? (e.g. UC leagues, pickup)`,
-    college = `How connected do you feel to the COLLEGE ultimate community in Chicago?`,
-    youth = `How connected do you feel to the YOUTH ultimate community in Chicago? (e.g. CUJO, YCC, high school, middle school, etc.)`
+    satis_amount = `How satisfied are you with the AMOUNT of ultimate you are currently playing?`, 
+    satis_level = `How satisfied are you with the LEVEL of ultimate you are currently playing?`,
+    satis_club = `How connected do you feel to the CLUB ultimate community in Chicago?`,
+    satis_recreational = `How connected do you feel to the RECREATIONAL ultimate community in Chicago? (e.g. UC leagues, pickup)`,
+    satis_college = `How connected do you feel to the COLLEGE ultimate community in Chicago?`,
+    satis_youth = `How connected do you feel to the YOUTH ultimate community in Chicago? (e.g. CUJO, YCC, high school, middle school, etc.)`
 )
 
 
@@ -73,10 +73,10 @@ inclusion <- dat[, 16:19]
 
 inclusion <- inclusion %>% 
   dplyr::rename(
-    UC = `Ultimate Chicago supports the development and inclusion of women in ultimate.`,
-    college = `College ultimate teams support the development and inclusion of women in ultimate.`,
-    women = `Women's club teams support the development and inclusion of women in ultimate.`,
-    mixed = `Mixed club teams support the development and inclusion of women in ultimate.`
+    inclus_UC = `Ultimate Chicago supports the development and inclusion of women in ultimate.`,
+    inclus_college = `College ultimate teams support the development and inclusion of women in ultimate.`,
+    inclus_women = `Women's club teams support the development and inclusion of women in ultimate.`,
+    inclus_mixed = `Mixed club teams support the development and inclusion of women in ultimate.`
 )
 
 
@@ -159,27 +159,27 @@ first_experience.vals <- values(first_experience.dict)
 
 # set the levels of currently_playing based on 
 playing$first_experience <- factor(playing$first_experience, 
-                                   levels = first_experience.vals, 
+                                   # levels = first_experience.vals, 
                                    labels = first_experience.vals)
 
 
 
 # ------------ satisfaction -------------- 
 
-satisfaction$amount <- factor(satisfaction$amount)
-satisfaction$level <- factor(satisfaction$level)
-satisfaction$club <- factor(satisfaction$club)
-satisfaction$recreational <- factor(satisfaction$recreational)
-satisfaction$college <- factor(satisfaction$college)
-satisfaction$youth <- factor(satisfaction$youth)
+satisfaction$satis_amount <- factor(satisfaction$amount)
+satisfaction$satis_level <- factor(satisfaction$level)
+satisfaction$satis_club <- factor(satisfaction$club)
+satisfaction$satis_recreational <- factor(satisfaction$recreational)
+satisfaction$satis_college <- factor(satisfaction$college)
+satisfaction$satis_youth <- factor(satisfaction$youth)
 
 
-# differentiate variable names in different mini datasets by appending 
-# dataset name to beginning of var name
-names(satisfaction) <- paste0("satis_", names(satisfaction))
+# # differentiate variable names in different mini datasets by appending 
+# # dataset name to beginning of var name
+# names(satisfaction) <- paste0("satis_", names(satisfaction))
 
 # make a vector of all the standardized non-Other answers
-satis_vec <- as.character(c("Not satisfied -- I want to play more.",
+satis_amount_vec <- as.character(c("Not satisfied -- I want to play more.",
   "Neutral -- I don't have strong feelings about the amount of ultimate I'm playing.",
   "Somewhat satisfied -- I sometimes wish I could play more, but overall I'm happy with the amount that I play.",
   "Somewhat satisfied -- I sometimes wish I played less, but overall I'm happy with the amount that I play.",
@@ -188,34 +188,12 @@ satis_vec <- as.character(c("Not satisfied -- I want to play more.",
 # make a vector of the levels with "Other" after Neutral. might want to revisit the placement of this
 # b/c if we take it outthere will be a bigger ordinal gap between neutral and somewhat satisfied than 
 # there should be.
-satis_vec_plus_other <- c("Not satisfied -- I want to play more.",
+satis_amount_vec_plus_other <- c("Not satisfied -- I want to play more.",
                           "Neutral -- I don't have strong feelings about the amount of ultimate I'm playing.",
                           "Other",
                           "Somewhat satisfied -- I sometimes wish I could play more, but overall I'm happy with the amount that I play.",
                           "Somewhat satisfied -- I sometimes wish I played less, but overall I'm happy with the amount that I play.",
                           "Very satisfied -- I'm playing just the right amount")
-
-
-# replace answers other than those in satis_vec with "Other"
-satisfaction <- satisfaction %>% 
-  mutate(
-    satis_amount_recode = ifelse(as.character(satis_amount) %in% satis_vec,
-           as.character(satis_amount), "Other")
-  )
-  # ) %>% 
-  # select(
-  #   -satis_amount
-  # ) %>% 
-  # rename(
-  #   `satis_amount` = `satis_amount_recode`
-  # )
-
-
-#
-satisfaction$satis_amount_recode <- factor(satisfaction$satis_amount_recode,
-                                     levels = satis_vec_plus_other,
-                                     ordered = TRUE)
-
 
 satis_relabel <- c("Not satisfied",
                    "Neutral", 
@@ -224,10 +202,20 @@ satis_relabel <- c("Not satisfied",
                    "Somewhat satisfied: wants less",
                    "Very satisfied")
 
-# change labels to 
+
+# replace answers other than those in satis_vec with "Other"
+satisfaction <- satisfaction %>% 
+  mutate(
+    satis_amount_recode = ifelse(as.character(satis_amount) %in% satis_amount_vec,
+           as.character(satis_amount), "Other")
+  )
+
+# relevel and relabel
 satisfaction$satis_amount_recode <- factor(satisfaction$satis_amount_recode,
+                                     levels = satis_amount_vec_plus_other,
                                      labels = satis_relabel,
                                      ordered = TRUE)
+
 
 
 # --
@@ -236,23 +224,32 @@ satisfaction$satis_amount_recode <- factor(satisfaction$satis_amount_recode,
 
 
 # make a vector of all the standardized non-Other answers
-satis_level_vec <- c("Not satisfied -- I want to play more competitively",
-                            "Not satisfied -- I want to play more competitively.",
+satis_level_vec <- as.character(c("Not satisfied -- I want to play more competitively",
+                            "Not satisfied -- I want to play less competitively.",
                             "Neutral -- I don't have strong feelings about the level of ultimate I'm playing.",
                             "Somewhat satisfied -- I sometimes wish I could play more competitively, but overall I'm satisfied with the level that I play.",
                             "Somewhat satisfied -- I sometimes wish I played less competitively, but overall I'm satisfied with the level that I play.", 
-                            "Very satisfied -- I have the opportunity to play at the right level of competitiveness for me.")
+                            "Very satisfied -- I have the opportunity to play at the right level of competitiveness for me."))
 
 # make a vector of the levels with "Other" after Neutral. might want to revisit the placement of this
 # b/c if we take it outthere will be a bigger ordinal gap between neutral and somewhat satisfied than 
 # there should be.
 satis_level_vec_plus_other  <- c("Not satisfied -- I want to play more competitively",
-                            "Not satisfied -- I want to play more competitively.",
-                            "Neutral -- I don't have strong feelings about the level of ultimate I'm playing.",
+                            # "Not satisfied -- I want to play less competitively.",
+                            # "Neutral -- I don't have strong feelings about the level of ultimate I'm playing.",
                             "Other",
                             "Somewhat satisfied -- I sometimes wish I could play more competitively, but overall I'm satisfied with the level that I play.",
                             "Somewhat satisfied -- I sometimes wish I played less competitively, but overall I'm satisfied with the level that I play.", 
                             "Very satisfied -- I have the opportunity to play at the right level of competitiveness for me.")
+
+satis_level_relabel <- c("Not satisfied: wants more competitive",
+                         # "Not satisfied: wants less competitive",
+                         # "Neutral",
+                         "Other",
+                         "Somewhat satisfied: wants more competitive",
+                         "Somewhat satisfied: wants less competitive",
+                         "Very satisfied")
+
 
 # replace answers other than those in satis_vec with "Other"
 satisfaction <- satisfaction %>% 
@@ -262,23 +259,20 @@ satisfaction <- satisfaction %>%
   )
 
 
-#
+# relevel and relabel
 satisfaction$satis_level_recode <- factor(satisfaction$satis_level_recode,
-                                           levels = satis_vec_plus_other,
+                                           levels = satis_level_vec_plus_other,
+                                          labels = satis_level_relabel,
                                            ordered = TRUE)
 
 
-satis_relabel <- c("Not satisfied",
-                   "Neutral",
-                   "Other",
-                   "Somewhat satisfied: wants more",
-                   "Somewhat satisfied: wants less",
-                   "Very satisfied")
+# drop columns from before recode
 
-# change labels to
-satisfaction$satis_level_recode <- factor(satisfaction$satis_level_recode,
-                                           labels = satis_relabel,
-                                           ordered = TRUE)
+satisfaction <- satisfaction %>% 
+  select(
+    -c(satis_amount, satis_level)
+  )
+
 
 
 
@@ -286,41 +280,42 @@ satisfaction$satis_level_recode <- factor(satisfaction$satis_level_recode,
 
 # reorder levels so that Disagree is coded as 1 and Agree is coded as 5
 name_levels <- c("Disagree", "Somewhat disagree",
-                 "Neutral - I don't have an opinion here", 
+                 "Neutral - I don't have an opinion here.", 
                  "Somewhat Agree", "Agree")
-
-# set datatypes. ordered = TRUE because these are ordinal variables.
-inclusion$UC <- factor(inclusion$UC, levels = name_levels, ordered = TRUE)
-inclusion$college <- factor(inclusion$college, levels = name_levels, ordered = TRUE)
-inclusion$women <- factor(inclusion$women, levels = name_levels, ordered = TRUE)
-
 
 # "Neutral" response is worded differently in mixed
 mixed_levels <- c("Disagree", "Somewhat disagree",
                   "Neutral - I don't have an opinion", 
                   "Somewhat Agree", "Agree")
 
-inclusion$mixed <- factor(inclusion$mixed,  levels = mixed_levels, ordered = TRUE)  
+
+# set datatypes. ordered = TRUE because these are ordinal variables.
+inclusion$inclus_UC <- factor(inclusion$inclus_UC, levels = name_levels, ordered = TRUE)
+inclusion$inclus_college <- factor(inclusion$inclus_college, levels = name_levels, ordered = TRUE)
+inclusion$inclus_women <- factor(inclusion$inclus_women, levels = name_levels, ordered = TRUE)
+
+
+inclusion$inclus_mixed <- factor(inclusion$inclus_mixed,  levels = mixed_levels, ordered = TRUE)  
 
 
 # check levels
-levels(inclusion$UC)
-levels(inclusion$mixed)
+levels(inclusion$inclus_UC)
+levels(inclusion$inclus_mixed)
 
 
 # rename levels in 
-levels(inclusion$UC)[levels(inclusion$UC) == "Neutral - I don't have an opinion here"] <- "Neutral"
-levels(inclusion$college)[levels(inclusion$college) == "Neutral - I don't have an opinion here"] <- "Neutral"
-levels(inclusion$women)[levels(inclusion$women) == "Neutral - I don't have an opinion here"] <- "Neutral"
+levels(inclusion$inclus_UC)[levels(inclusion$inclus_UC) == "Neutral - I don't have an opinion here."] <- "Neutral"
+levels(inclusion$inclus_college)[levels(inclusion$inclus_college) == "Neutral - I don't have an opinion here."] <- "Neutral"
+levels(inclusion$inclus_women)[levels(inclusion$inclus_women) == "Neutral - I don't have an opinion here."] <- "Neutral"
 
-levels(inclusion$mixed)[levels(inclusion$mixed) == "Neutral - I don't have an opinion"] <- "Neutral"
+levels(inclusion$inclus_mixed)[levels(inclusion$inclus_mixed) == "Neutral - I don't have an opinion"] <- "Neutral"
 
 
 
 # differentiate variable names in different mini datasets by appending 
 # dataset name to beginning of var name
-names(satisfaction) <- paste0("satis_", names(satisfaction))
-names(inclusion) <- paste0("inclus_", names(inclusion))
+# names(satisfaction) <- paste0("satis_", names(satisfaction))
+# names(inclusion) <- paste0("inclus_", names(inclusion))
 
 
 
@@ -361,77 +356,6 @@ all$club_or_not <- factor(all$club_or_not)
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-# sort_teams <- function(d, v) {
-#   for (t in v) {
-#     if (t %in% womens_teams) {
-#       d$team_type <- "womens"
-#     } else if (t %in% mixed_teams) {
-#       d$team_type <- "mixed"
-#     } else {
-#       d$team_type <- "no_team"
-#     }
-#   }
-# }
-# all$team_type <- sort_teams(all, all$team)
-# 
-
-# sort_teams <- function(v) {
-#   for (t in v) {
-#     if (t %in% womens_teams) {
-#       all$team_type <- "womens"
-#     } else if (t %in% mixed_teams) {
-#       all$team_type <- "mixed"
-#     } else {
-#       all$team_type <- "no_team"
-#     }
-#   }
-# }
-# all$team_type <- sort_teams(all$team)
-# 
-# 
-
-# all$team_type2 <- "x"
-#   
-# sort_teams <- function(v) {
-#   for (t in v) {
-#     if (t %in% womens_teams) {
-#       all$team_type2[t] <- "womens"
-#       print(all$team_type2[t])
-#     } else {
-#       all$team_type2[t] <- "not"
-#     }
-#   }
-# }
-# 
-# sort_teams(complete.cases(all$team))
-# 
-# 
-# u1 <- rnorm(30)
-# 
-# usq <- 0
-# 
-# for(i in 1:10) {
-#   usq[i] <- u1[i]*u1[i]
-#   print(usq[i])
-# }
-# 
-# 
-# 
-# usq[i] <- u1[i]*u1[i]
-# print(usq[i])
-# 
-# all$team_type2 <- sort_teams(all$team)
 
 
 
