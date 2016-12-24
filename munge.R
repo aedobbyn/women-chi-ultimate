@@ -158,7 +158,9 @@ first_experience.dict <- hash(c(1:4), c("College", "Middle or High School",
 first_experience.vals <- values(first_experience.dict)
 
 # set the levels of currently_playing based on 
-playing$first_experience <- factor(playing$first_experience, levels = first_experience.vals, labels = first_experience.vals)
+playing$first_experience <- factor(playing$first_experience, 
+                                   levels = first_experience.vals, 
+                                   labels = first_experience.vals)
 
 
 
@@ -177,22 +179,52 @@ satisfaction$youth <- factor(satisfaction$youth)
 names(satisfaction) <- paste0("satis_", names(satisfaction))
 
 
-satis_dict <- hash(c("Not satisfied -- I want to play more.",
-                     "Neutral -- I don't have strong feelings about the amount of ultimate I'm playing.",
-                     "Somewhat satisfied -- I sometimes wish I could play more, but overall I'm happy with the amount that I play.",
-                     "Somewhat satisfied -- I sometimes wish I played less, but overall I'm happy with the amount that I play.",
-                     "Very satisfied -- I'm playing just the right amount"),
-                   c("Not satisfied", "Neutral", 
-                     "Somewhat satisfied: wants more", "Somewhat satisfied: wants less",
-                     "Very satisfied"))
+# satis_dict <- hash(factor(c("Not satisfied -- I want to play more.",
+#                      "Neutral -- I don't have strong feelings about the amount of ultimate I'm playing.",
+#                      "Somewhat satisfied -- I sometimes wish I could play more, but overall I'm happy with the amount that I play.",
+#                      "Somewhat satisfied -- I sometimes wish I played less, but overall I'm happy with the amount that I play.",
+#                      "Very satisfied -- I'm playing just the right amount")),
+#                    factor(c("Not satisfied", "Neutral", 
+#                      "Somewhat satisfied: wants more", "Somewhat satisfied: wants less",
+#                      "Very satisfied")))
 
-# try mutate maybe
-# for (i in na.omit(satisfaction$satis_amount)) {
-#   ifelse(satisfaction$satis_amount[i] %in% keys(satis_dict),
-#          satisfaction$satis_amount[i] <- values(satis_dict)[satisfaction$satis_amount[i] %in% keys(satis_dict)],
-#          satisfaction$satis_amount[i] <- "Other")
-# }
+satis_vec <- as.character(c("Not satisfied -- I want to play more.",
+  "Neutral -- I don't have strong feelings about the amount of ultimate I'm playing.",
+  "Somewhat satisfied -- I sometimes wish I could play more, but overall I'm happy with the amount that I play.",
+  "Somewhat satisfied -- I sometimes wish I played less, but overall I'm happy with the amount that I play.",
+  "Very satisfied -- I'm playing just the right amount"))
 
+
+# replace answers other than those in satis_vec with "Other"
+satisfaction <- satisfaction %>% 
+  mutate(
+    satis_amount2 = ifelse(as.character(satis_amount) %in% satis_vec,
+           as.character(satis_amount), "Other")
+  ) 
+
+satis_vec_plus_other <- c("Not satisfied -- I want to play more.",
+                          "Neutral -- I don't have strong feelings about the amount of ultimate I'm playing.",
+                          "Other",
+                          "Somewhat satisfied -- I sometimes wish I could play more, but overall I'm happy with the amount that I play.",
+                          "Somewhat satisfied -- I sometimes wish I played less, but overall I'm happy with the amount that I play.",
+                          "Very satisfied -- I'm playing just the right amount")
+
+satisfaction$satis_amount2 <- factor(satisfaction$satis_amount2,
+                                     levels = satis_vec_plus_other,
+                                     ordered = TRUE)
+
+
+satis_relabel <- c("Not satisfied",
+                   "Neutral", 
+                   "Other",
+                   "Somewhat satisfied: wants more", 
+                   "Somewhat satisfied: wants less",
+                   "Very satisfied")
+
+# change labels to 
+satisfaction$satis_amount2 <- factor(satisfaction$satis_amount2,
+                                     labels = satis_relabel,
+                                     ordered = TRUE)
 
 
 
