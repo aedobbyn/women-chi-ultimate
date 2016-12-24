@@ -178,30 +178,16 @@ satisfaction$youth <- factor(satisfaction$youth)
 # dataset name to beginning of var name
 names(satisfaction) <- paste0("satis_", names(satisfaction))
 
-
-# satis_dict <- hash(factor(c("Not satisfied -- I want to play more.",
-#                      "Neutral -- I don't have strong feelings about the amount of ultimate I'm playing.",
-#                      "Somewhat satisfied -- I sometimes wish I could play more, but overall I'm happy with the amount that I play.",
-#                      "Somewhat satisfied -- I sometimes wish I played less, but overall I'm happy with the amount that I play.",
-#                      "Very satisfied -- I'm playing just the right amount")),
-#                    factor(c("Not satisfied", "Neutral", 
-#                      "Somewhat satisfied: wants more", "Somewhat satisfied: wants less",
-#                      "Very satisfied")))
-
+# make a vector of all the standardized non-Other answers
 satis_vec <- as.character(c("Not satisfied -- I want to play more.",
   "Neutral -- I don't have strong feelings about the amount of ultimate I'm playing.",
   "Somewhat satisfied -- I sometimes wish I could play more, but overall I'm happy with the amount that I play.",
   "Somewhat satisfied -- I sometimes wish I played less, but overall I'm happy with the amount that I play.",
   "Very satisfied -- I'm playing just the right amount"))
 
-
-# replace answers other than those in satis_vec with "Other"
-satisfaction <- satisfaction %>% 
-  mutate(
-    satis_amount2 = ifelse(as.character(satis_amount) %in% satis_vec,
-           as.character(satis_amount), "Other")
-  ) 
-
+# make a vector of the levels with "Other" after Neutral. might want to revisit the placement of this
+# b/c if we take it outthere will be a bigger ordinal gap between neutral and somewhat satisfied than 
+# there should be.
 satis_vec_plus_other <- c("Not satisfied -- I want to play more.",
                           "Neutral -- I don't have strong feelings about the amount of ultimate I'm playing.",
                           "Other",
@@ -209,7 +195,24 @@ satis_vec_plus_other <- c("Not satisfied -- I want to play more.",
                           "Somewhat satisfied -- I sometimes wish I played less, but overall I'm happy with the amount that I play.",
                           "Very satisfied -- I'm playing just the right amount")
 
-satisfaction$satis_amount2 <- factor(satisfaction$satis_amount2,
+
+# replace answers other than those in satis_vec with "Other"
+satisfaction <- satisfaction %>% 
+  mutate(
+    satis_amount_recode = ifelse(as.character(satis_amount) %in% satis_vec,
+           as.character(satis_amount), "Other")
+  )
+  # ) %>% 
+  # select(
+  #   -satis_amount
+  # ) %>% 
+  # rename(
+  #   `satis_amount` = `satis_amount_recode`
+  # )
+
+
+#
+satisfaction$satis_amount_recode <- factor(satisfaction$satis_amount_recode,
                                      levels = satis_vec_plus_other,
                                      ordered = TRUE)
 
@@ -222,10 +225,60 @@ satis_relabel <- c("Not satisfied",
                    "Very satisfied")
 
 # change labels to 
-satisfaction$satis_amount2 <- factor(satisfaction$satis_amount2,
+satisfaction$satis_amount_recode <- factor(satisfaction$satis_amount_recode,
                                      labels = satis_relabel,
                                      ordered = TRUE)
 
+
+# --
+
+# do same for satisfaction level
+
+
+# make a vector of all the standardized non-Other answers
+satis_level_vec <- c("Not satisfied -- I want to play more competitively",
+                            "Not satisfied -- I want to play more competitively.",
+                            "Neutral -- I don't have strong feelings about the level of ultimate I'm playing.",
+                            "Somewhat satisfied -- I sometimes wish I could play more competitively, but overall I'm satisfied with the level that I play.",
+                            "Somewhat satisfied -- I sometimes wish I played less competitively, but overall I'm satisfied with the level that I play.", 
+                            "Very satisfied -- I have the opportunity to play at the right level of competitiveness for me.")
+
+# make a vector of the levels with "Other" after Neutral. might want to revisit the placement of this
+# b/c if we take it outthere will be a bigger ordinal gap between neutral and somewhat satisfied than 
+# there should be.
+satis_level_vec_plus_other  <- c("Not satisfied -- I want to play more competitively",
+                            "Not satisfied -- I want to play more competitively.",
+                            "Neutral -- I don't have strong feelings about the level of ultimate I'm playing.",
+                            "Other",
+                            "Somewhat satisfied -- I sometimes wish I could play more competitively, but overall I'm satisfied with the level that I play.",
+                            "Somewhat satisfied -- I sometimes wish I played less competitively, but overall I'm satisfied with the level that I play.", 
+                            "Very satisfied -- I have the opportunity to play at the right level of competitiveness for me.")
+
+# replace answers other than those in satis_vec with "Other"
+satisfaction <- satisfaction %>% 
+  mutate(
+    satis_level_recode = ifelse(as.character(satis_level) %in% satis_level_vec,
+                                 as.character(satis_level), "Other")
+  )
+
+
+#
+satisfaction$satis_level_recode <- factor(satisfaction$satis_level_recode,
+                                           levels = satis_vec_plus_other,
+                                           ordered = TRUE)
+
+
+satis_relabel <- c("Not satisfied",
+                   "Neutral",
+                   "Other",
+                   "Somewhat satisfied: wants more",
+                   "Somewhat satisfied: wants less",
+                   "Very satisfied")
+
+# change labels to
+satisfaction$satis_level_recode <- factor(satisfaction$satis_level_recode,
+                                           labels = satis_relabel,
+                                           ordered = TRUE)
 
 
 
