@@ -61,3 +61,14 @@
 # all$team_type2 <- sort_teams(all$team)
 
 
+
+
+
+
+# satis_level.prop.team_type <- ggplot(data = na.omit(all)) +
+#   geom_bar(aes(x = satis_level_recode, fill = team_type), 
+#            position = "dodge", y = ..density..) +
+#   theme(axis.text.x = element_text(angle = 60, hjust = 1))
+# satis_level.prop.team_types
+
+

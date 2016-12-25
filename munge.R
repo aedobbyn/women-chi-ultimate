@@ -88,13 +88,16 @@ inclusion <- inclusion %>%
 
 # ------------ demographics -----------
 demographics$where_live <- factor(demographics$where_live)
-demographics$can_quote <- factor(demographics$can_quote)
+demographics$can_quote <- factor(demographics$can_quote,
+                                 labels = c("More info", "No", "Yes"))
 
 # set age levels ordinally
 age_levels <- c("Under 18", "18-22", "23-26",
                 "27-30", "31-36", "37+")
 
-demographics$age <- factor(demographics$age, levels = age_levels, ordered = TRUE)
+demographics$age <- factor(demographics$age, 
+                           levels = age_levels,
+                           ordered = TRUE)
 
 levels(demographics$age)
 
@@ -117,6 +120,21 @@ playing$first_experience <- factor(playing$first_experience)
 
 
 # ---
+
+how_long_play.dict <- hash(c(1:5), c("<1 year", "1-3 years",
+                                     "3-5 years", "5-10 years",
+                                     "10+ years"))
+
+# extract the values
+how_long_play.vals <- values(how_long_play.dict)
+
+# set the levels of currently_playing based on 
+playing$how_long_play <- factor(playing$how_long_play, 
+                                levels = how_long_play.vals,
+                                ordered = TRUE)
+
+
+# ---
 # pull in currently_playing from quant instead because it was hand coded there
 playing$currently_playing <- quant[["Please indicate the ultimate you are playing (or registered for) right now:"]]
 
@@ -128,7 +146,9 @@ currently_playing.dict <- hash(c(1:6), c("League Only", "Combination of League, 
 currently_playing.vals <- values(currently_playing.dict)
 
 # set the levels of currently_playing based on 
-playing$currently_playing <- factor(playing$currently_playing, labels = currently_playing.vals)
+playing$currently_playing <- factor(playing$currently_playing, 
+                                    labels = currently_playing.vals,
+                                    ordered = TRUE)
 
 
 # ----
@@ -142,7 +162,10 @@ start_playing.dict <- hash(c(1:3), c("College", "High School", "Post-College"))
 start_playing.vals <- values(start_playing.dict)
 
 # set the levels of currently_playing based on 
-playing$start_playing <- factor(playing$start_playing, labels = start_playing.vals)
+playing$start_playing <- factor(playing$start_playing, 
+                                labels = start_playing.vals) # ordered != TRUE b/c in quant dataset
+# high school is coded as a 2 in between college and post-college, so ordering wouldn't make temporal sense
+
 
 
 # ---
@@ -159,8 +182,8 @@ first_experience.vals <- values(first_experience.dict)
 
 # set the levels of currently_playing based on 
 playing$first_experience <- factor(playing$first_experience, 
-                                   # levels = first_experience.vals, 
-                                   labels = first_experience.vals)
+                                   # levels = first_experience.vals,
+                                   labels = first_experience.vals)  # same here -- ordering doesn't make sense
 
 
 
@@ -180,6 +203,7 @@ satisfaction$satis_youth <- factor(satisfaction$youth)
 
 # make a vector of all the standardized non-Other answers
 satis_amount_vec <- as.character(c("Not satisfied -- I want to play more.",
+                                   "Not satisfied -- I want to play less.",
   "Neutral -- I don't have strong feelings about the amount of ultimate I'm playing.",
   "Somewhat satisfied -- I sometimes wish I could play more, but overall I'm happy with the amount that I play.",
   "Somewhat satisfied -- I sometimes wish I played less, but overall I'm happy with the amount that I play.",
@@ -189,13 +213,15 @@ satis_amount_vec <- as.character(c("Not satisfied -- I want to play more.",
 # b/c if we take it outthere will be a bigger ordinal gap between neutral and somewhat satisfied than 
 # there should be.
 satis_amount_vec_plus_other <- c("Not satisfied -- I want to play more.",
+                                 "Not satisfied -- I want to play less.",
                           "Neutral -- I don't have strong feelings about the amount of ultimate I'm playing.",
                           "Other",
                           "Somewhat satisfied -- I sometimes wish I could play more, but overall I'm happy with the amount that I play.",
                           "Somewhat satisfied -- I sometimes wish I played less, but overall I'm happy with the amount that I play.",
                           "Very satisfied -- I'm playing just the right amount")
 
-satis_relabel <- c("Not satisfied",
+satis_relabel <- c("Not satisfied: wants more",
+                   "Not satisfied: wants less",
                    "Neutral", 
                    "Other",
                    "Somewhat satisfied: wants more", 
@@ -235,16 +261,16 @@ satis_level_vec <- as.character(c("Not satisfied -- I want to play more competit
 # b/c if we take it outthere will be a bigger ordinal gap between neutral and somewhat satisfied than 
 # there should be.
 satis_level_vec_plus_other  <- c("Not satisfied -- I want to play more competitively",
-                            # "Not satisfied -- I want to play less competitively.",
-                            # "Neutral -- I don't have strong feelings about the level of ultimate I'm playing.",
+                            "Not satisfied -- I want to play less competitively.",
+                            "Neutral -- I don't have strong feelings about the level of ultimate I'm playing.",
                             "Other",
                             "Somewhat satisfied -- I sometimes wish I could play more competitively, but overall I'm satisfied with the level that I play.",
                             "Somewhat satisfied -- I sometimes wish I played less competitively, but overall I'm satisfied with the level that I play.", 
                             "Very satisfied -- I have the opportunity to play at the right level of competitiveness for me.")
 
 satis_level_relabel <- c("Not satisfied: wants more competitive",
-                         # "Not satisfied: wants less competitive",
-                         # "Neutral",
+                         "Not satisfied: wants less competitive",
+                         "Neutral",
                          "Other",
                          "Somewhat satisfied: wants more competitive",
                          "Somewhat satisfied: wants less competitive",
@@ -261,7 +287,7 @@ satisfaction <- satisfaction %>%
 
 # relevel and relabel
 satisfaction$satis_level_recode <- factor(satisfaction$satis_level_recode,
-                                           levels = satis_level_vec_plus_other,
+                                          levels = satis_level_vec_plus_other,
                                           labels = satis_level_relabel,
                                            ordered = TRUE)
 
@@ -272,6 +298,35 @@ satisfaction <- satisfaction %>%
   select(
     -c(satis_amount, satis_level)
   )
+
+
+# deal with rest of satisfaction 
+
+
+
+satis.dict <- hash(c(1:6), c("Disconnected",
+                             "Somewhat disconnected",
+                             "Neutral",
+                             "Somewhat connected",
+                             "Connected",
+                             "Very connected"))
+
+# extract the values
+satis.vals <- values(satis.dict)
+
+# set the levels of currently_playing based on 
+satisfaction$satis_club <- factor(satisfaction$satis_club, 
+                                  levels = satis.vals,
+                                  ordered = TRUE)
+satisfaction$satis_recreational <- factor(satisfaction$satis_recreational, 
+                                  levels = satis.vals,
+                                  ordered = TRUE)
+satisfaction$satis_college <- factor(satisfaction$satis_college, 
+                                    levels = satis.vals,
+                                    ordered = TRUE)
+satisfaction$satis_youth <- factor(satisfaction$satis_youth, 
+                                    levels = satis.vals,
+                                   ordered = TRUE)
 
 
 
