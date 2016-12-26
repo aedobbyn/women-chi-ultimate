@@ -1,21 +1,37 @@
 
 source("./munge.R")
 
+
+# -------------------- hists ------------
+
 # make histogram of age distribution
-age_hist <- ggplot(aes(age), data = demographics) +
-  geom_bar()
+age_hist <- ggplot(data = all) +
+  geom_bar(aes(x = age))
 age_hist
 
 # make histogram of team distribution
-team_hist <- ggplot(aes(team), data = demographics) +
-  geom_bar()
+team_hist <- ggplot(data = all) +
+  geom_bar(aes(x = team))
 team_hist
 
+# club or not barchart
+club.or.not <- ggplot(aes(team_type), data = na.omit(all)) +
+  geom_bar(position = "dodge")
+club.or.not
 
 # first_experience histogram
 qplot(first_experience, data = all)
 
+# age histogram by team type
+age.team_type <-  ggplot(data = all) +
+  facet_grid( ~ team_type) +
+  geom_bar(aes(age))
+age.team_type
 
+
+
+
+# ----------- satisfaction -----------
 
 # satisfaction amount and level by team type
 # amount
@@ -42,22 +58,14 @@ ggplot(na.omit(all)) +
 
 
 
+# --------------- inclusion -----------
 
-
-# inclusion types
-
-incl.types <- ggplot(data = all) +
+# inclusion 
+# mixed and womens overall
+incl.mixed.womens <- ggplot(data = all) +
   geom_bar(aes(inclus_mixed), fill = "blue", alpha = 0.5) +
   geom_bar(aes(inclus_women), fill = "red", alpha = 0.5)
-incl.types
-
-
-
-# age histogram by team type
-age.team_type <-  ggplot(data = all) +
-  facet_grid( ~ team_type) +
-  geom_bar(aes(age))
-age.team_type
+incl.mixed.womens
 
 
 
@@ -69,20 +77,13 @@ inclus_women.team_type <- ggplot(data = all) +
 inclus_women.team_type
 
 
-# 
-inclus_women.team_type <- ggplot(data = all) +
-  facet_grid( ~ team_type) +
-  geom_bar(aes(inclus_women)) + 
-  theme(axis.text.x = element_text(angle = 60, hjust = 1))
-inclus_women.team_type
-
 
 
 
 # team demographics (need a better way to represent this)
-age_play_time <- ggplot(aes(team, age), data = demographics, na.rm = TRUE, stat=count) +
-  geom_point() # aes(colour = where_live, size = count)
-age_play_time
+# age_play_time <- ggplot(aes(team, age), data = all, na.rm = TRUE, stat=count) +
+#   geom_point(aes(size = count)) # aes(colour = where_live, size = count)
+# age_play_time
 
 
 
@@ -110,15 +111,12 @@ age_play_time
 #   geom_bar(aes(women), fill = "blue", position="dodge")
 # incl_plot
 
+
 inclus_club.women <- ggplot(data = na.omit(all[all$team_type == "womens", ])) +
   geom_bar(aes(x = satis_club, fill = team))
 inclus_club.women
 
 
-# club or not barchart
-club.or.not <- ggplot(aes(team_type), data = na.omit(demogr_inclus)) +
-  geom_bar(position = "dodge")
-club.or.not
 
 
 

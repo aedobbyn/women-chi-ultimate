@@ -412,5 +412,18 @@ all$club_or_not <- factor(all$club_or_not)
 
 
 
+# -------- calculate overall happiness --------
+
+all <- all %>% 
+  mutate(
+    satis_combined = (as.numeric(satis_club) + as.numeric(satis_recreational) +
+      as.numeric(satis_college) + as.numeric(satis_youth) + as.numeric(satis_amount_recode) +
+      as.numeric(satis_level_recode)),
+    inclus_combined = (as.numeric(inclus_UC) + as.numeric(inclus_college) + as.numeric(inclus_women) +
+      as.numeric(inclus_mixed)),
+    satis_and_inclus_combined = (satis_combined + inclus_combined)
+  )
+
+
 
 
