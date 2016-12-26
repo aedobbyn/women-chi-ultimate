@@ -2,7 +2,12 @@
 
 # ---- models -----
 
-m.big <- MASS::polr(satis_amount ~ age + team_type + currently_playing + how_long_play, data = all)
+# omnibus 
+m.big <- lm(satis_and_inclus_combined ~ 
+              age + team_type + currently_playing + how_long_play, data = all)
+summary(m.big)
+# being on a women's or mixed team makes you significantly happier.
+
 
 # does team type predict how included people feel women are
 m.inclus_women.team_type <- MASS::polr(inclus_women ~ team_type, 
@@ -45,16 +50,21 @@ summary(m.UC.team)
 
 
 
+
+
+# ------------------ by team_type ---------------------
 # predict overall satisfaction, inclusion, and both from team type
 # both womens and mixed players have overall higher satisfaction and inclusion than non-club players
 m.satis_combined.team_type <- lm(satis_combined ~ team_type,
                        data = all)
 summary(m.satis_combined.team_type)
 
+# same
 m.inclus_combined.team_type <- lm(inclus_combined ~ team_type,
                                  data = all)
 summary(m.inclus_combined.team_type)
 
+# same
 m.satis_and_inclus_combined.team_type <- lm(satis_and_inclus_combined ~ team_type,
                                   data = all)
 summary(m.satis_and_inclus_combined.team_type)
@@ -67,6 +77,23 @@ womens_and_mixed.m.satis_and_inclus_combined.team_type <- lm(satis_and_inclus_co
 summary(womens_and_mixed.m.satis_and_inclus_combined.team_type)
 
 
+
+# ------------------ by team ---------------------
+# is one team the happiest?
+# non-club is significantly the unhappiest. 
+m.satis_combined.team <- lm(satis_combined ~ team,
+                                       data = all)
+summary(m.satis_combined.team)
+
+# "Other" feels significantly the least happy. Shakedown is marginally happy.
+m.inclus_combined.team <- lm(inclus_combined ~ team,
+                            data = all)
+summary(m.inclus_combined.team)
+
+# non-club is significantly the unhappiest. "Other" is marginally unhappy. 
+m.satis_and_inclus_combined.team <- lm(satis_and_inclus_combined ~ team,
+                                            data = all)
+summary(m.satis_and_inclus_combined.team)
 
 
 

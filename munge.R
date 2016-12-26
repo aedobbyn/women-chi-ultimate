@@ -475,14 +475,14 @@ sum(ncol(satisfaction)) + sum(ncol(inclusion))   # 10
 
 
 # get means by team_type -- not sure why this isn't working
-means <- all %>% 
+means.by.team_type <- all %>% 
   group_by(team_type) %>% 
   summarise(
     mean_satis = mean(satis_combined), 
     mean_inclus = mean(inclus_combined),
     mean_satis.plus.inclus = mean(satis_and_inclus_combined)
   )
-means
+means.by.team_type
 
 
 
