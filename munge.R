@@ -397,6 +397,10 @@ all$team_type <-
          ifelse(all$team %in% womens_teams, all$team_type <- "womens",
                 all$team_type <- "no_club"))
 
+# rearrange levels so 1 = no_club, the reference group
+all$team_type <- factor(all$team_type, levels(all$team_type)[c(2, 1, 3)])
+
+
 # from team_type, make club_or_not column
 all$club_or_not <- 
   ifelse(all$team_type == "no_club",
@@ -478,7 +482,7 @@ means <- all %>%
     mean_inclus = mean(inclus_combined),
     mean_satis.plus.inclus = mean(satis_and_inclus_combined)
   )
-
+means
 
 
 
