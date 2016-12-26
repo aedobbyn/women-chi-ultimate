@@ -424,6 +424,67 @@ all <- all %>%
     satis_and_inclus_combined = (satis_combined + inclus_combined)
   )
 
+summary(all$satis_and_inclus_combined)
+
+
+
+# ---- what were the *observed* max and min for these combined measures? ----
+
+# satisfaction
+max(all$satis_combined)   # 32
+min(all$satis_combined)   # 9
+
+# inclusion
+max(all$inclus_combined)  # 20
+min(all$inclus_combined)  # 10
+
+# both
+max(all$satis_and_inclus_combined)  # 50
+min(all$satis_and_inclus_combined)  # 20
+
+
+
+# ---- what were the *theoretical* max and min for these combined measures? ----
+
+# (theoretical minimum is assigned a 1 in all cases, so least satisfied/included sum will equal
+# the number of variables in satisfaction and inclusion datasets)
+
+# satisfaction
+max_satis <- max(as.numeric(levels(all$satis_club))) + max(as.numeric(all$satis_recreational)) +
+  max(as.numeric(all$satis_college)) + max(as.numeric(all$satis_youth)) + max(as.numeric(all$satis_amount_recode)) +
+  max(as.numeric(all$satis_level_recode))
+max_satis   # 36
+sum(ncol(satisfaction))  # 6
+
+
+#inclusion
+max_inclus <- max(as.numeric(all$inclus_UC)) + max(as.numeric(all$inclus_college)) + max(as.numeric(all$inclus_women)) +
+                 max(as.numeric(all$inclus_mixed))
+max_inclus   # 20
+sum(ncol(inclusion))   # 4
+
+
+# both
+max_satis + max_inclus # 56
+sum(ncol(satisfaction)) + sum(ncol(inclusion))   # 10
+
+
+
+# get means by team_type -- not sure why this isn't working
+means <- all %>% 
+  group_by(team_type) %>% 
+  summarise(
+    mean_satis = mean(satis_combined), 
+    mean_inclus = mean(inclus_combined),
+    mean_satis.plus.inclus = mean(satis_and_inclus_combined)
+  )
+
+
+
+
+
+
+
 
 
 

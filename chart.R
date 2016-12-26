@@ -165,4 +165,29 @@ womens_teams.how_long_play
 
 
 
+# overall satisfaction 
+satis_and_inclus_combined.hist <- ggplot(data = all) +
+  geom_bar(satis_and_inclus_combined)
+satis_and_inclus_combined.hist
+
+satis_and_inclus_combined.team_type <- ggplot(data = all) +
+  geom_bar(aes(satis_and_inclus_combined)) +
+  facet_grid(. ~ team_type)
+satis_and_inclus_combined.team_type
+
+ggplot(all, aes(x = age, y = satis_and_inclus_combined, colour = team_type)) + 
+  geom_jitter() +
+  geom_smooth()
+
+ggplot(all[all$team_type == "womens", ]) + 
+  geom_jitter(aes(x = age, y = satis_and_inclus_combined, colour = team)) 
+
+
+ggplot(all) + 
+  geom_bar(aes(x = team_type, y = mean(satis_and_inclus_combined)), stat = "identity") 
+
+
+
+
+
 
