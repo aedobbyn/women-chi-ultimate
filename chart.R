@@ -167,8 +167,10 @@ womens_teams.how_long_play
 
 # overall satisfaction 
 satis_and_inclus_combined.hist <- ggplot(data = all) +
-  geom_bar(satis_and_inclus_combined)
+  geom_point(satis_and_inclus_combined)
 satis_and_inclus_combined.hist
+
+
 
 satis_and_inclus_combined.team_type <- ggplot(data = all) +
   geom_bar(aes(satis_and_inclus_combined)) +

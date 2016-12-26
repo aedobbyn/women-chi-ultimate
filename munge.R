@@ -189,12 +189,12 @@ playing$first_experience <- factor(playing$first_experience,
 
 # ------------ satisfaction -------------- 
 
-satisfaction$satis_amount <- factor(satisfaction$amount)
-satisfaction$satis_level <- factor(satisfaction$level)
-satisfaction$satis_club <- factor(satisfaction$club)
-satisfaction$satis_recreational <- factor(satisfaction$recreational)
-satisfaction$satis_college <- factor(satisfaction$college)
-satisfaction$satis_youth <- factor(satisfaction$youth)
+# satisfaction$satis_amount <- factor(satisfaction$amount)
+# satisfaction$satis_level <- factor(satisfaction$level)
+# satisfaction$satis_club <- factor(satisfaction$club)
+# satisfaction$satis_recreational <- factor(satisfaction$recreational)
+# satisfaction$satis_college <- factor(satisfaction$college)
+# satisfaction$satis_youth <- factor(satisfaction$youth)
 
 
 # # differentiate variable names in different mini datasets by appending 
@@ -398,7 +398,11 @@ all$team_type <-
                 all$team_type <- "no_club"))
 
 # rearrange levels so 1 = no_club, the reference group
-all$team_type <- factor(all$team_type, levels(all$team_type)[c(2, 1, 3)])
+team_type.dict <- hash(c(1:3), c("no_club", "mixed", "womens"))
+team_type.vals <- values(team_type.dict)
+all$team_type <- factor(all$team_type, 
+                        levels = team_type.vals,
+                        ordered = TRUE)
 
 
 # from team_type, make club_or_not column
