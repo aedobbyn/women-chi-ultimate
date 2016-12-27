@@ -1,7 +1,11 @@
 
+# in ordered logit models, t value is ratio of coefficient:std.error
+# variable.L is the linear effect of the predictor variable on the response variable. 
+# variable.Q is the quadratic.
 
-# ---- models -----
 
+
+# ----------------- 
 # omnibus 
 m.big <- lm(satis_and_inclus_combined ~ 
               age + team_type + currently_playing + how_long_play, data = all)
@@ -9,20 +13,40 @@ summary(m.big)
 # being on a women's or mixed team makes you significantly happier.
 
 
+
+# ANOVA
+summary(aov(satis_and_inclus_combined ~ 
+            age + team_type + currently_playing + how_long_play, 
+            data = all))
+# age and team type are signif
+
+# linear age model
+# make age numeric, no longer an ordinal factor
+age.fit <- lm(satis_and_inclus_combined ~ as.numeric(age), data = all)
+summary(age.fit)
+# so in a linear model older -> less happy
+
+
+
+
+# ----------- ordered logit/probit regressions ---------------
+
 # does team type predict how included people feel women are
 m.inclus_women.team_type <- MASS::polr(inclus_women ~ team_type, 
                                        data = all,
                                        Hess = TRUE)
 
+# if need to calculate p values
+# save the model's coefficients and t-values, calculate the p values associated with them, and stitch
+# those back onto the 
 sum.m.inclus_women.team_type <- coef(summary(m.inclus_women.team_type))
-
 p.m.inclus_women.team_type <- pnorm(abs(sum.m.inclus_women.team_type[, "t value"]), lower.tail = FALSE) * 2
-
-## combined table
-(full.inclus_women.team_type <- cbind(p.m.inclus_women.team_type, "p value" = p.m.inclus_women.team_type))
+(full.inclus_women.team_type <- cbind(sum.m.inclus_women.team_type, "p value" = p.m.inclus_women.team_type))
 
 
-
+# conf int
+# if the int is outside 0, reject the null
+(conf.m.inclus_women.team_type <- confint(m.inclus_women.team_type))
 
 
 

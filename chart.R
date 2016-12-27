@@ -78,6 +78,50 @@ inclus_women.team_type
 
 
 
+# ------------- satis_and_inclus_combined -------------
+
+# overall satisfaction and inclusion histogram
+satis_and_inclus_combined.hist <- ggplot(data = all) +
+  geom_bar(aes(satis_and_inclus_combined))
+satis_and_inclus_combined.hist
+
+# by team type
+satis_and_inclus_combined.team_type <- ggplot(data = all) +
+  geom_bar(aes(satis_and_inclus_combined)) +
+  facet_grid(. ~ team_type)
+satis_and_inclus_combined.team_type
+
+ggplot(all, aes(x = age, y = satis_and_inclus_combined, colour = team_type)) + 
+  geom_jitter() +
+  geom_smooth()
+
+ggplot(all[all$team_type == "womens", ]) + 
+  geom_jitter(aes(x = age, y = satis_and_inclus_combined, colour = team)) 
+
+ggplot(all) + 
+  geom_bar(aes(x = team_type, y = mean(satis_and_inclus_combined)), stat = "identity") 
+
+
+# -------- age --------
+
+# effect of age on satisfaction and inclusion
+# jittered age (numeric) vs. satis_and_inclus_combined w/ linear regression line superimposed
+qplot(as.numeric(age), satis_and_inclus_combined,
+      data = all) +
+  geom_jitter() +
+  geom_smooth(method = "lm", se = FALSE)
+
+# same including team type
+# so mixed and no club women are driving the age effect on satisfaction and inclusion
+qplot(as.numeric(age), satis_and_inclus_combined, colour = team_type,
+      data = all) +
+  geom_jitter() +
+  geom_smooth(method = "lm", se = FALSE)
+
+# jittered age (ordinal) vs. satis_and_inclus_combined w/ boxplot superimposed
+qplot(age, satis_and_inclus_combined, data = all) +
+  geom_jitter() +
+  geom_boxplot(alpha = 0.3)
 
 
 # team demographics (need a better way to represent this)
@@ -115,8 +159,6 @@ inclus_women.team_type
 inclus_club.women <- ggplot(data = na.omit(all[all$team_type == "womens", ])) +
   geom_bar(aes(x = satis_club, fill = team))
 inclus_club.women
-
-
 
 
 
@@ -165,28 +207,6 @@ womens_teams.how_long_play
 
 
 
-# overall satisfaction 
-satis_and_inclus_combined.hist <- ggplot(data = all) +
-  geom_point(satis_and_inclus_combined)
-satis_and_inclus_combined.hist
-
-
-
-satis_and_inclus_combined.team_type <- ggplot(data = all) +
-  geom_bar(aes(satis_and_inclus_combined)) +
-  facet_grid(. ~ team_type)
-satis_and_inclus_combined.team_type
-
-ggplot(all, aes(x = age, y = satis_and_inclus_combined, colour = team_type)) + 
-  geom_jitter() +
-  geom_smooth()
-
-ggplot(all[all$team_type == "womens", ]) + 
-  geom_jitter(aes(x = age, y = satis_and_inclus_combined, colour = team)) 
-
-
-ggplot(all) + 
-  geom_bar(aes(x = team_type, y = mean(satis_and_inclus_combined)), stat = "identity") 
 
 
 
