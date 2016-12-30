@@ -5,13 +5,18 @@
 
 
 
-# ----------------- 
-# omnibus 
+# - - - - omnibus - - - - 
+# what is the effect of all non-ordinal predictors on overall 
 m.big <- lm(overall ~ 
-              age + team_type + currently_playing + how_long_play, data = all)
+              age + where_live + team + team_type + 
+              currently_playing + how_long_play, 
+            # start_playing,
+            data = all)
 summary(m.big)
-# being on a women's or mixed team makes you significantly happier.
 
+# being on a women's or mixed team makes you significantly happier.
+# no other big findings from this
+# - - - - - - - - - - - - 
 
 
 # ANOVA
@@ -31,6 +36,7 @@ summary(age.fit)
 
 # ----------- ordered logit/probit regressions ---------------
 
+# ------------------ *** example for calculating p values in case need to *** -------------------------------------- 
 # does team type predict how included people feel women are
 m.inclus_women.team_type <- MASS::polr(inclus_women ~ team_type, 
                                        data = all,
@@ -48,14 +54,13 @@ p.m.inclus_women.team_type <- pnorm(abs(sum.m.inclus_women.team_type[, "t value"
 # if the int is outside 0, reject the null
 (conf.m.inclus_women.team_type <- confint(m.inclus_women.team_type))
 
-
-
+# ---------------------------------------------------------------------------------------------------------------- 
 
 
 
 # ordinal logistic: does age predict team_type?
 m.team_type.age <- MASS::polr(team_type ~ age,
-                              data = demogr_inclus)
+                              data = all)
 summary(m.team_type.age)
 
 

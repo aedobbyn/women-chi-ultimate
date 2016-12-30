@@ -36,7 +36,7 @@ demographics <- dat[, 2:4]
 demographics <- demographics %>% 
   dplyr::rename(
   age = `Age:`,
-  where_live = `Please choose the option that best describes where you currently live.`,
+  # where_live = `Please choose the option that best describes where you currently live.`,  # taking this from hand-coded quant
   can_quote = `May we anonymously quote your answers from this survey?`
 )
 
@@ -98,7 +98,29 @@ inclusion <- inclusion %>%
 # ------------------- set datatypes ---------------------------------------------------------------
 
 # ------------ demographics -----------
-demographics$where_live <- factor(demographics$where_live)
+# getting where_live from quant
+demographics$where_live <- factor(quant[["Please choose the option that best describes where you currently live."]])
+
+where_live.dict <- hash(c(1:3), c("Chicago Suburbs", "Chicago", "Other"))
+
+# extract the values
+where_live.vals <- values(where_live.dict)
+
+# set the levels
+demographics$where_live <- factor(demographics$where_live, 
+                                labels = where_live.vals,
+                                ordered = TRUE)
+
+# set Chicago as reference level of 1
+new.where_live.dict <- hash(c(2, 1, 3), c("Chicago Suburbs", "Chicago", "Other"))
+
+demographics$where_live <- factor(demographics$where_live,
+                                  levels = values(new.where_live.dict),
+                                  ordered = TRUE)
+
+
+
+
 demographics$can_quote <- factor(demographics$can_quote,
                                  labels = c("More info", "No", "Yes"))
 
