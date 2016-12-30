@@ -1,4 +1,12 @@
 
+
+# differentiate variable names in different mini datasets by appending 
+# dataset name to beginning of var name
+# names(satisfaction) <- paste0("satis_", names(satisfaction))
+# names(inclusion) <- paste0("inclus_", names(inclusion))
+
+
+
 # sort_teams <- function(d, v) {
 #   for (t in v) {
 #     if (t %in% womens_teams) {

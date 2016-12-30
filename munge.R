@@ -57,14 +57,16 @@ playing <- playing %>%
 # satisfaction
 satisfaction <- dat[, 10:15]
 
+# satisfaction also encompasses all the connectedness questions
+
 satisfaction <- satisfaction %>% 
   dplyr::rename(
     satis_amount = `How satisfied are you with the AMOUNT of ultimate you are currently playing?`, 
     satis_level = `How satisfied are you with the LEVEL of ultimate you are currently playing?`,
-    satis_club = `How connected do you feel to the CLUB ultimate community in Chicago?`,
-    satis_recreational = `How connected do you feel to the RECREATIONAL ultimate community in Chicago? (e.g. UC leagues, pickup)`,
-    satis_college = `How connected do you feel to the COLLEGE ultimate community in Chicago?`,
-    satis_youth = `How connected do you feel to the YOUTH ultimate community in Chicago? (e.g. CUJO, YCC, high school, middle school, etc.)`
+    conn_club = `How connected do you feel to the CLUB ultimate community in Chicago?`,
+    conn_recreational = `How connected do you feel to the RECREATIONAL ultimate community in Chicago? (e.g. UC leagues, pickup)`,
+    conn_college = `How connected do you feel to the COLLEGE ultimate community in Chicago?`,
+    conn_youth = `How connected do you feel to the YOUTH ultimate community in Chicago? (e.g. CUJO, YCC, high school, middle school, etc.)`
 )
 
 
@@ -191,10 +193,10 @@ playing$first_experience <- factor(playing$first_experience,
 
 # satisfaction$satis_amount <- factor(satisfaction$amount)
 # satisfaction$satis_level <- factor(satisfaction$level)
-# satisfaction$satis_club <- factor(satisfaction$club)
-# satisfaction$satis_recreational <- factor(satisfaction$recreational)
-# satisfaction$satis_college <- factor(satisfaction$college)
-# satisfaction$satis_youth <- factor(satisfaction$youth)
+# satisfaction$conn_club <- factor(satisfaction$club)
+# satisfaction$conn_recreational <- factor(satisfaction$recreational)
+# satisfaction$conn_college <- factor(satisfaction$college)
+# satisfaction$conn_youth <- factor(satisfaction$youth)
 
 
 # # differentiate variable names in different mini datasets by appending 
@@ -293,7 +295,6 @@ satisfaction$satis_level_recode <- factor(satisfaction$satis_level_recode,
 
 
 # drop columns from before recode
-
 satisfaction <- satisfaction %>% 
   select(
     -c(satis_amount, satis_level)
@@ -301,9 +302,6 @@ satisfaction <- satisfaction %>%
 
 
 # deal with rest of satisfaction 
-
-
-
 satis.dict <- hash(c(1:6), c("Disconnected",
                              "Somewhat disconnected",
                              "Neutral",
@@ -315,16 +313,16 @@ satis.dict <- hash(c(1:6), c("Disconnected",
 satis.vals <- values(satis.dict)
 
 # set the levels of currently_playing based on 
-satisfaction$satis_club <- factor(satisfaction$satis_club, 
+satisfaction$conn_club <- factor(satisfaction$conn_club, 
                                   levels = satis.vals,
                                   ordered = TRUE)
-satisfaction$satis_recreational <- factor(satisfaction$satis_recreational, 
+satisfaction$conn_recreational <- factor(satisfaction$conn_recreational, 
                                   levels = satis.vals,
                                   ordered = TRUE)
-satisfaction$satis_college <- factor(satisfaction$satis_college, 
+satisfaction$conn_college <- factor(satisfaction$conn_college, 
                                     levels = satis.vals,
                                     ordered = TRUE)
-satisfaction$satis_youth <- factor(satisfaction$satis_youth, 
+satisfaction$conn_youth <- factor(satisfaction$conn_youth, 
                                     levels = satis.vals,
                                    ordered = TRUE)
 
@@ -367,13 +365,6 @@ levels(inclusion$inclus_mixed)[levels(inclusion$inclus_mixed) == "Neutral - I do
 
 
 
-# differentiate variable names in different mini datasets by appending 
-# dataset name to beginning of var name
-# names(satisfaction) <- paste0("satis_", names(satisfaction))
-# names(inclusion) <- paste0("inclus_", names(inclusion))
-
-
-
 
 
 
@@ -387,6 +378,9 @@ all <- as.tbl(cbind(demographics, playing, satisfaction, inclusion))
 womens_teams <- c("Dish", "Frenzy", "Nemesis")
 mixed_teams <- c("ELevate", "Jabba The Huck", 
                  "Shakedown", "Stack Cats", "UPA")
+
+
+
 
 
 # --------------- new columns ---------------
@@ -421,11 +415,10 @@ all$club_or_not <- factor(all$club_or_not)
 
 
 # -------- calculate overall happiness --------
-
 all <- all %>% 
   mutate(
-    satis_combined = (as.numeric(satis_club) + as.numeric(satis_recreational) +
-      as.numeric(satis_college) + as.numeric(satis_youth) + as.numeric(satis_amount_recode) +
+    satis_combined = (as.numeric(conn_club) + as.numeric(conn_recreational) +
+      as.numeric(conn_college) + as.numeric(conn_youth) + as.numeric(satis_amount_recode) +
       as.numeric(satis_level_recode)),
     inclus_combined = (as.numeric(inclus_UC) + as.numeric(inclus_college) + as.numeric(inclus_women) +
       as.numeric(inclus_mixed)),
@@ -458,8 +451,8 @@ min(all$satis_and_inclus_combined)  # 20
 # the number of variables in satisfaction and inclusion datasets)
 
 # satisfaction
-max_satis <- max(as.numeric(levels(all$satis_club))) + max(as.numeric(all$satis_recreational)) +
-  max(as.numeric(all$satis_college)) + max(as.numeric(all$satis_youth)) + max(as.numeric(all$satis_amount_recode)) +
+max_satis <- max(as.numeric(levels(all$conn_club))) + max(as.numeric(all$conn_recreational)) +
+  max(as.numeric(all$conn_college)) + max(as.numeric(all$conn_youth)) + max(as.numeric(all$satis_amount_recode)) +
   max(as.numeric(all$satis_level_recode))
 max_satis   # 36
 sum(ncol(satisfaction))  # 6
@@ -477,20 +470,15 @@ max_satis + max_inclus # 56
 sum(ncol(satisfaction)) + sum(ncol(inclusion))   # 10
 
 
-
-# get means by team_type -- not sure why this isn't working
-means.by.team_type <- all %>% 
-  group_by(team_type) %>% 
-  summarise(
+# get means by team_type
+means.by.team <- all %>% 
+  group_by(team_type, team) %>% 
+  dplyr::summarise(                        # make sure to include dplyr:: here. not sure which package is masking summarise()
     mean_satis = mean(satis_combined), 
     mean_inclus = mean(inclus_combined),
     mean_satis.plus.inclus = mean(satis_and_inclus_combined)
   )
-means.by.team_type
-
-
-
-
+means.by.team
 
 
 

@@ -46,7 +46,6 @@ satis_level.team_type <- ggplot(data = na.omit(all)) +
   theme(axis.text.x = element_text(angle = 60, hjust = 1))
 satis_level.team_type
 
-
 # level faceted rather than colored
 ggplot(na.omit(all)) + 
   geom_bar(aes(x = satis_level_recode,
@@ -66,8 +65,6 @@ incl.mixed.womens <- ggplot(data = all) +
   geom_bar(aes(inclus_mixed), fill = "blue", alpha = 0.5) +
   geom_bar(aes(inclus_women), fill = "red", alpha = 0.5)
 incl.mixed.womens
-
-
 
 # how well are women included by team type
 inclus_women.team_type <- ggplot(data = all) +
@@ -91,15 +88,22 @@ satis_and_inclus_combined.team_type <- ggplot(data = all) +
   facet_grid(. ~ team_type)
 satis_and_inclus_combined.team_type
 
-ggplot(all, aes(x = age, y = satis_and_inclus_combined, colour = team_type)) + 
+# means by team type
+ggplot(means.by.team) +
+  geom_bar(aes(x = team, y = mean_satis.plus.inclus, fill = team_type), stat = "identity") +
+  coord_cartesian(ylim = c(30, 50))
+
+# just womens
+# careful of the nemesis outlier (only nemesis player with age==4)
+ggplot(all[all$team_type == "womens", ],
+       aes(x = as.numeric(age), y = satis_and_inclus_combined, colour = team)) + 
   geom_jitter() +
-  geom_smooth()
+  geom_smooth(method = "lm", se = FALSE)
 
-ggplot(all[all$team_type == "womens", ]) + 
-  geom_jitter(aes(x = age, y = satis_and_inclus_combined, colour = team)) 
-
-ggplot(all) + 
-  geom_bar(aes(x = team_type, y = mean(satis_and_inclus_combined)), stat = "identity") 
+# barchart of mean satis_and_inclus_combined by team type
+# not currently right
+# ggplot(all) + 
+#   geom_bar(aes(x = team_type, y = mean(satis_and_inclus_combined)), stat = "identity") 
 
 
 # -------- age --------
@@ -132,32 +136,40 @@ qplot(age, satis_and_inclus_combined, data = all) +
 
 
 
+# ---- inclusion ----
+
+incl_women_plot <- ggplot(aes(inclus_women), data = na.omit(all)) +
+  geom_bar()
+incl_women_plot
+
+incl_mixed_plot <- ggplot(aes(inclus_mixed), data = na.omit(all)) +
+  geom_bar()
+incl_mixed_plot
+
+incl_UC_plot <- ggplot(aes(inclus_UC), data = na.omit(all)) +
+  geom_bar()
+incl_UC_plot
+
+incl_college_plot <- ggplot(aes(inclus_college), data = na.omit(all)) +
+  geom_bar()
+incl_college_plot
 
 
-# incl_plot <- ggplot(aes(women), data = na.omit(inclusion)) +
-#   geom_bar()
-# incl_plot
-# 
-# incl_plot <- ggplot(aes(mixed), data = na.omit(inclusion)) +
-#   geom_bar()
-# incl_plot
-# 
-# incl_plot <- ggplot(aes(UC), data = na.omit(inclusion)) +
-#   geom_bar()
-# incl_plot
-# 
-# incl_plot <- ggplot(aes(college), data = na.omit(inclusion)) +
-#   geom_bar()
-# incl_plot
-# 
-# incl_plot <- ggplot(aes(college), data = inclusion, na.rm=TRUE) +
-#   geom_bar(fill = "red", position="dodge") +
-#   geom_bar(aes(women), fill = "blue", position="dodge")
-# incl_plot
+inc_blot <- ggplot(data = na.omit(all)) +
+  geom_bar(aes(inclus_women), fill = "red")
+  geom_bar(aes(inclus_mixed), fill = "blue")
+inc_blot
+
+
+
+incl_plot <- ggplot(aes(college), data = inclusion, na.rm=TRUE) +
+  geom_bar(fill = "red", position="dodge") +
+  geom_bar(aes(women), fill = "blue", position="dodge")
+incl_plot
 
 
 inclus_club.women <- ggplot(data = na.omit(all[all$team_type == "womens", ])) +
-  geom_bar(aes(x = satis_club, fill = team))
+  geom_bar(aes(x = conn_club, fill = team))
 inclus_club.women
 
 
