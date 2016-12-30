@@ -75,55 +75,55 @@ inclus_women.team_type
 
 
 
-# ------------- satis_and_inclus_combined -------------
+# ------------- overall -------------
 
 # overall satisfaction and inclusion histogram
-satis_and_inclus_combined.hist <- ggplot(data = all) +
-  geom_bar(aes(satis_and_inclus_combined))
-satis_and_inclus_combined.hist
+overall.hist <- ggplot(data = all) +
+  geom_bar(aes(overall))
+overall.hist
 
 # by team type
-satis_and_inclus_combined.team_type <- ggplot(data = all) +
-  geom_bar(aes(satis_and_inclus_combined)) +
+overall.team_type <- ggplot(data = all) +
+  geom_bar(aes(overall)) +
   facet_grid(. ~ team_type)
-satis_and_inclus_combined.team_type
+overall.team_type
 
 # means by team type
 ggplot(means.by.team) +
-  geom_bar(aes(x = team, y = mean_satis.plus.inclus, fill = team_type), stat = "identity") +
+  geom_bar(aes(x = team, y = mean_overall, fill = team_type), stat = "identity") +
   coord_cartesian(ylim = c(30, 50))
 
 # just womens
 # careful of the nemesis outlier (only nemesis player with age==4)
 ggplot(all[all$team_type == "womens", ],
-       aes(x = as.numeric(age), y = satis_and_inclus_combined, colour = team)) + 
+       aes(x = as.numeric(age), y = overall, colour = team)) + 
   geom_jitter() +
   geom_smooth(method = "lm", se = FALSE)
 
-# barchart of mean satis_and_inclus_combined by team type
+# barchart of mean overall by team type
 # not currently right
 # ggplot(all) + 
-#   geom_bar(aes(x = team_type, y = mean(satis_and_inclus_combined)), stat = "identity") 
+#   geom_bar(aes(x = team_type, y = mean(overall)), stat = "identity") 
 
 
 # -------- age --------
 
 # effect of age on satisfaction and inclusion
-# jittered age (numeric) vs. satis_and_inclus_combined w/ linear regression line superimposed
-qplot(as.numeric(age), satis_and_inclus_combined,
+# jittered age (numeric) vs. overall w/ linear regression line superimposed
+qplot(as.numeric(age), overall,
       data = all) +
   geom_jitter() +
   geom_smooth(method = "lm", se = FALSE)
 
 # same including team type
 # so mixed and no club women are driving the age effect on satisfaction and inclusion
-qplot(as.numeric(age), satis_and_inclus_combined, colour = team_type,
+qplot(as.numeric(age), overall, colour = team_type,
       data = all) +
   geom_jitter() +
   geom_smooth(method = "lm", se = FALSE)
 
-# jittered age (ordinal) vs. satis_and_inclus_combined w/ boxplot superimposed
-qplot(age, satis_and_inclus_combined, data = all) +
+# jittered age (ordinal) vs. overall w/ boxplot superimposed
+qplot(age, overall, data = all) +
   geom_jitter() +
   geom_boxplot(alpha = 0.3)
 

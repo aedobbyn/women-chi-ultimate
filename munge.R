@@ -55,19 +55,28 @@ playing <- playing %>%
 
 
 # satisfaction
-satisfaction <- dat[, 10:15]
+satisfaction <- dat[, 10:11]
 
 # satisfaction also encompasses all the connectedness questions
 
 satisfaction <- satisfaction %>% 
   dplyr::rename(
     satis_amount = `How satisfied are you with the AMOUNT of ultimate you are currently playing?`, 
-    satis_level = `How satisfied are you with the LEVEL of ultimate you are currently playing?`,
+    satis_level = `How satisfied are you with the LEVEL of ultimate you are currently playing?`
+)
+
+
+# connectedness
+connectedness <- dat[, 12:15]
+
+connectedness <- connectedness %>% 
+  dplyr::rename(
     conn_club = `How connected do you feel to the CLUB ultimate community in Chicago?`,
     conn_recreational = `How connected do you feel to the RECREATIONAL ultimate community in Chicago? (e.g. UC leagues, pickup)`,
     conn_college = `How connected do you feel to the COLLEGE ultimate community in Chicago?`,
     conn_youth = `How connected do you feel to the YOUTH ultimate community in Chicago? (e.g. CUJO, YCC, high school, middle school, etc.)`
-)
+  )
+
 
 
 # make development and inclusion tbl
@@ -301,8 +310,9 @@ satisfaction <- satisfaction %>%
   )
 
 
-# deal with rest of satisfaction 
-satis.dict <- hash(c(1:6), c("Disconnected",
+# -------------------- connectedness --------------------
+
+conn.dict <- hash(c(1:6), c("Disconnected",
                              "Somewhat disconnected",
                              "Neutral",
                              "Somewhat connected",
@@ -310,20 +320,20 @@ satis.dict <- hash(c(1:6), c("Disconnected",
                              "Very connected"))
 
 # extract the values
-satis.vals <- values(satis.dict)
+conn.vals <- values(conn.dict)
 
 # set the levels of currently_playing based on 
-satisfaction$conn_club <- factor(satisfaction$conn_club, 
-                                  levels = satis.vals,
+connectedness$conn_club <- factor(connectedness$conn_club, 
+                                  levels = conn.vals,
                                   ordered = TRUE)
-satisfaction$conn_recreational <- factor(satisfaction$conn_recreational, 
-                                  levels = satis.vals,
+connectedness$conn_recreational <- factor(connectedness$conn_recreational, 
+                                  levels = conn.vals,
                                   ordered = TRUE)
-satisfaction$conn_college <- factor(satisfaction$conn_college, 
-                                    levels = satis.vals,
+connectedness$conn_college <- factor(connectedness$conn_college, 
+                                    levels = conn.vals,
                                     ordered = TRUE)
-satisfaction$conn_youth <- factor(satisfaction$conn_youth, 
-                                    levels = satis.vals,
+connectedness$conn_youth <- factor(connectedness$conn_youth, 
+                                    levels = conn.vals,
                                    ordered = TRUE)
 
 
@@ -372,7 +382,7 @@ levels(inclusion$inclus_mixed)[levels(inclusion$inclus_mixed) == "Neutral - I do
 
 
 # combine mini datasets back together in all
-all <- as.tbl(cbind(demographics, playing, satisfaction, inclusion))
+all <- as.tbl(cbind(demographics, playing, satisfaction, connectedness, inclusion))
 
 # make vectors of womens and mixed teams
 womens_teams <- c("Dish", "Frenzy", "Nemesis")
@@ -417,31 +427,35 @@ all$club_or_not <- factor(all$club_or_not)
 # -------- calculate overall happiness --------
 all <- all %>% 
   mutate(
-    satis_combined = (as.numeric(conn_club) + as.numeric(conn_recreational) +
-      as.numeric(conn_college) + as.numeric(conn_youth) + as.numeric(satis_amount_recode) +
-      as.numeric(satis_level_recode)),
+    satis_combined = (as.numeric(satis_amount_recode) + as.numeric(satis_level_recode)),
+    conn_combined = (as.numeric(conn_club) + as.numeric(conn_recreational) +
+                       as.numeric(conn_college) + as.numeric(conn_youth)),
     inclus_combined = (as.numeric(inclus_UC) + as.numeric(inclus_college) + as.numeric(inclus_women) +
       as.numeric(inclus_mixed)),
-    satis_and_inclus_combined = (satis_combined + inclus_combined)
+    overall = (satis_combined + conn_combined + inclus_combined)
   )
 
-summary(all$satis_and_inclus_combined)
+summary(all$overall)
 
 
 
 # ---- what were the *observed* max and min for these combined measures? ----
 
 # satisfaction
-max(all$satis_combined)   # 32
-min(all$satis_combined)   # 9
+max(all$satis_combined)   # 14
+min(all$satis_combined)   # 3
+
+# connectedness
+max(all$conn_combined)   # 18
+min(all$conn_combined)   # 4
 
 # inclusion
 max(all$inclus_combined)  # 20
 min(all$inclus_combined)  # 10
 
 # both
-max(all$satis_and_inclus_combined)  # 50
-min(all$satis_and_inclus_combined)  # 20
+max(all$overall)  # 50
+min(all$overall)  # 20
 
 
 
@@ -450,24 +464,30 @@ min(all$satis_and_inclus_combined)  # 20
 # (theoretical minimum is assigned a 1 in all cases, so least satisfied/included sum will equal
 # the number of variables in satisfaction and inclusion datasets)
 
+# connectedness
+max_conn <- max(as.numeric(all$conn_club)) + max(as.numeric(all$conn_recreational)) +
+  max(as.numeric(all$conn_college)) + max(as.numeric(all$conn_youth))
+max_conn   # 22
+sum(ncol(connectedness))  # 4
+
 # satisfaction
-max_satis <- max(as.numeric(levels(all$conn_club))) + max(as.numeric(all$conn_recreational)) +
+max_satis <- max(as.numeric(all$conn_club)) + max(as.numeric(all$conn_recreational)) +
   max(as.numeric(all$conn_college)) + max(as.numeric(all$conn_youth)) + max(as.numeric(all$satis_amount_recode)) +
   max(as.numeric(all$satis_level_recode))
 max_satis   # 36
-sum(ncol(satisfaction))  # 6
+sum(ncol(satisfaction))  # 2
 
 
-#inclusion
+# inclusion
 max_inclus <- max(as.numeric(all$inclus_UC)) + max(as.numeric(all$inclus_college)) + max(as.numeric(all$inclus_women)) +
                  max(as.numeric(all$inclus_mixed))
 max_inclus   # 20
 sum(ncol(inclusion))   # 4
 
 
-# both
-max_satis + max_inclus # 56
-sum(ncol(satisfaction)) + sum(ncol(inclusion))   # 10
+# overall
+max_satis + max_conn + max_inclus # 78
+sum(ncol(satisfaction)) + sum(ncol(connectedness)) + sum(ncol(inclusion))   # 10
 
 
 # get means by team_type
@@ -475,10 +495,13 @@ means.by.team <- all %>%
   group_by(team_type, team) %>% 
   dplyr::summarise(                        # make sure to include dplyr:: here. not sure which package is masking summarise()
     mean_satis = mean(satis_combined), 
+    mean_conn = mean(conn_combined),
     mean_inclus = mean(inclus_combined),
-    mean_satis.plus.inclus = mean(satis_and_inclus_combined)
+    mean_overall = mean(overall)
   )
 means.by.team
+
+
 
 
 
