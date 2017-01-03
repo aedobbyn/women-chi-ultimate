@@ -77,6 +77,26 @@ m.UC.team_type <- MASS::polr(UC ~ team_type,
 summary(m.UC.team)
 
 
+# ------
+# try anova() to see whether team_type is signif
+library(ordinal)
+
+# with team_type and age predicting satis_level_recode
+m.team_t <- clm(satis_level_recode ~ team_type + age,
+                link = "probit",
+                       data = all)
+
+# take out team type
+m.no.team_t <- clm(satis_level_recode ~ age,
+                   link = "probit",
+                       data = all)
+
+# compare models
+anova(m.team_t, m.no.team_t)
+# model with team type does't predict satisfaction level better than the one without it
+# probit and logit linking functions yield roughly the same chisq
+
+# ------
 
 
 
