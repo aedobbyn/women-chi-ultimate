@@ -1,5 +1,5 @@
 
-
+# discard things in Other
 
 
 library(tidyverse)

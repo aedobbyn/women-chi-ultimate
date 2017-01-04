@@ -46,13 +46,52 @@ satis_level.team_type <- ggplot(data = na.omit(all)) +
   theme(axis.text.x = element_text(angle = 60, hjust = 1))
 satis_level.team_type
 
-# level faceted rather than colored
+# amount faceted rather than colored
+# percentage of total on y axis rather than counts
+ggplot(na.omit(all)) + 
+  geom_bar(aes(x = satis_amount_recode,
+               y = (..count..)/sum(..count..),
+               position = "dodge")) +
+  facet_grid(~ team_type) +
+  theme(axis.text.x = element_text(angle = 60, hjust = 1))
+
+# level faceted
+# percentage of total on y axis 
 ggplot(na.omit(all)) + 
   geom_bar(aes(x = satis_level_recode,
+               y = (..count..)/sum(..count..), 
            position = "dodge")) +
   facet_grid(~ team_type) +
   theme(axis.text.x = element_text(angle = 60, hjust = 1))
 
+
+# ---- satisfaction amount (percentage of subset) among subsets of team_type
+# team_type=='womens'
+ggplot(na.omit(all[all$team_type=="womens", ])) + 
+  geom_bar(aes(x = satis_amount_recode, y = (..count..)/sum(..count..),
+               position = "fill")) +
+  labs(title = "Satisfaction with Amount of Play: Womens") +
+  scale_y_continuous(labels = scales::percent) +
+  scale_x_discrete(drop=FALSE) +     # don't drop unused levels
+  theme(axis.text.x = element_text(angle = 60, hjust = 1))
+
+# team_type=='mixed'
+ggplot(na.omit(all[all$team_type=="mixed", ])) + 
+  geom_bar(aes(x = satis_amount_recode, y = (..count..)/sum(..count..),
+               position = "fill")) +
+  labs(title = "Satisfaction with Amount of Play: Mixed") +
+  scale_y_continuous(labels = scales::percent) +
+  scale_x_discrete(drop=FALSE) +
+  theme(axis.text.x = element_text(angle = 60, hjust = 1))
+
+# team_type=='no_club'
+ggplot(na.omit(all[all$team_type=="no_club", ])) + 
+  geom_bar(aes(x = satis_amount_recode, y = (..count..)/sum(..count..),
+               position = "fill")) +
+  labs(title = "Satisfaction with Amount of Play: Non-Chicago Club Players") +
+  scale_y_continuous(labels = scales::percent) +
+  scale_x_discrete(drop=FALSE) +
+  theme(axis.text.x = element_text(angle = 60, hjust = 1))
 
 
 

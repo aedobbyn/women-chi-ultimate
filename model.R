@@ -8,7 +8,7 @@
 # - - - - omnibus - - - - 
 # what is the effect of all non-ordinal predictors on overall 
 m.big <- lm(overall ~ 
-              age + where_live + team + team_type + 
+              age + team + 
               currently_playing + how_long_play, 
             # start_playing,
             data = all)
@@ -81,7 +81,7 @@ summary(m.UC.team)
 # try anova() to see whether team_type is signif
 library(ordinal)
 
-# with team_type and age predicting satis_level_recode
+# ------- with team_type and age predicting satis_level_recode --------
 m.team_t <- clm(satis_level_recode ~ team_type + age,
                 link = "probit",
                        data = all)
@@ -95,6 +95,18 @@ m.no.team_t <- clm(satis_level_recode ~ age,
 anova(m.team_t, m.no.team_t)
 # model with team type does't predict satisfaction level better than the one without it
 # probit and logit linking functions yield roughly the same chisq
+
+
+# ------- with team_type and age predicting satis_amount_recode ------- 
+m.team_t <- clm(satis_amount_recode ~ team_type + age,
+                link = "probit",
+                data = all)
+m.no.team_t <- clm(satis_amount_recode ~ age,
+                   link = "probit",
+                   data = all)
+anova(m.team_t, m.no.team_t)
+# model with team type DOES predict satisfaction level better than the one without it (p = 0.0072)
+
 
 # ------
 
