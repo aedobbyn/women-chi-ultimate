@@ -1,5 +1,6 @@
 
 source("./munge.R")
+source("./model.R")
 
 
 # -------------------- hists ------------
@@ -29,6 +30,13 @@ age.team_type <-  ggplot(data = all) +
 age.team_type
 
 
+overall.team_type <- ggplot(data = all) +
+  geom_bar(aes(overalle), position = "dodge") +
+  geom_bar(aes(preds.m.big, fill = team_type), position = "dodge", 
+           alpha = 0.5, colour = "black")
+overall.team_type
+
+qplot(preds.m.big)
 
 
 # ----------- satisfaction -----------
@@ -143,6 +151,8 @@ ggplot(all[all$team_type == "womens", ],
 # not currently right
 # ggplot(all) + 
 #   geom_bar(aes(x = team_type, y = mean(overall)), stat = "identity") 
+
+
 
 
 # -------- age --------

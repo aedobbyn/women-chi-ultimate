@@ -3,6 +3,7 @@
 # variable.L is the linear effect of the predictor variable on the response variable. 
 # variable.Q is the quadratic.
 
+# library(MASS)
 
 
 # - - - - omnibus - - - - 
@@ -13,6 +14,8 @@ m.big <- lm(overall ~
             # start_playing,
             data = all)
 summary(m.big)
+
+
 
 # being on a women's or mixed team makes you significantly happier.
 # no other big findings from this
@@ -59,22 +62,24 @@ p.m.inclus_women.team_type <- pnorm(abs(sum.m.inclus_women.team_type[, "t value"
 
 
 # ordinal logistic: does age predict team_type?
-m.team_type.age <- MASS::polr(team_type ~ age,
-                              data = all)
+m.team_type.age <- MASS::polr(team_type ~ age, 
+                              data = all, 
+                              Hess = TRUE)
 summary(m.team_type.age)
 
 
 # probit: does age predict team_type?
 m.club_or_not.age <- glm(club_or_not ~ age,
-                         data = demogr_inclus,
+                         data = all,
                          family=binomial(link="probit"))
 summary(m.club_or_not.age)
 
 
 # ordinal logistic: does team type predict satisfaction with UC?
-m.UC.team_type <- MASS::polr(UC ~ team_type,
-                             data = demogr_inclus)
-summary(m.UC.team)
+m.UC.team_type <- MASS::polr(inclus_UC ~ team_type,
+                             data = all,
+                             Hess = TRUE)
+summary(m.UC.team_type)
 
 
 # ------
@@ -142,6 +147,7 @@ m.overall.team_type <- lm(overall ~ team_type,
 summary(m.overall.team_type)
 
 
+
 # is there a signif difference in combined satisfaction and inclusion scores between womens and mixed players?
 # no, p = 0.841
 womens_and_mixed.m.overall.team_type <- lm(overall ~ team_type,
@@ -175,6 +181,23 @@ m.overall.team <- lm(overall ~ team,
                                             data = all)
 summary(m.overall.team)
 
+
+
+
+# ---- preds ---
+
+# predict overall values for each row based on the model m.big and save them in the object preds.m.big
+preds.m.big <- predict(m.big, na.rm = FALSE)
+# add another element to this vector (the mean) so that we end up with the right number of rows 
+preds.m.big <- c(preds.m.big, mean(preds.m.big))
+# add these predictions as a new column to the df
+all <- cbind(all, preds.m.big)
+
+
+
+# predict overall from just team_type (much less variation here)
+preds_overall.team_type <- predict(m.overall.team_type)
+all <- cbind(all, preds_overall.team_type)
 
 
 
