@@ -1,0 +1,62 @@
+---
+title: "Women in Chicago Ultimate Data Analysis"
+author:
+  name: Ladies of Chicago Ultimate
+output: 
+  html_document:
+    keep_md: true
+    toc: true
+    theme: yeti
+  github_document:
+    toc: true
+---
+
+***
+
+Outline
+=====
+* About:
+    + Survey distributed by Steph Landry
+* Models:
+    + Ordered Logistic/Probit Regressions for ordered categorical variables
+    + OLS regression for summed categorical variables
+* Plots:
+    + Many
+
+***
+
+![](./women_clinic.jpg) 
+
+***
+
+<br /><br /><br />
+
+## Munge
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+
+source("./munge.R")
+
+```
+
+* Break teams into 
++ a variable `team_type` with three levels: mixed, no_club, and womens
++ a variable `club_or_not` with two levels: club and not_club
+
+* When the outcome variable is an ordered factor (e.g., "How satisfied are you with the AMOUNT of ultimate you are currently playing?")
++ Run an ordered probit regressions with some number of predictor variables
+predicting that single outcome variable
+
+* Combine categorical variables into omnibus variables
++ 
+
+
+## Chart
+
+```{r overall.team_type, echo = FALSE}
+overall.team_type <- ggplot(data = all) +
+  geom_bar(aes(overall, fill = team_type), position = "dodge") 
+overall.team_type
+
+```
