@@ -29,13 +29,23 @@ age.team_type <-  ggplot(data = all) +
   geom_bar(aes(age))
 age.team_type
 
-
+# overall satisfacion by team type
 overall.team_type <- ggplot(data = all) +
-  geom_bar(aes(overalle), position = "dodge") +
-  geom_bar(aes(preds.m.big, fill = team_type), position = "dodge", 
-           alpha = 0.5, colour = "black")
+  geom_bar(aes(overall, fill = team_type), position = "dodge") 
 overall.team_type
 
+overall.box <- ggplot(data = all) +
+  geom_boxplot(aes(team, overall), alpha = 0.05, fill = "blue") 
+  # geom_boxplot(aes(team, preds.m.big), alpha = 0.05, fill = "red") +
+  theme_bw()
+overall.box
+
+overall.point <- ggplot(data = all) +
+  geom_jitter(aes(team, overall)) +
+  geom_jitter(aes(team, preds.m.big), alpha = 0.05, colour = "red")
+overall.point
+
+# hist of predictions from m.big
 qplot(preds.m.big)
 
 
