@@ -37,26 +37,26 @@ Outline
 knitr::opts_chunk$set(echo = FALSE)
 
 source("./munge.R")
+# source("./model.R")
 
 ```
 
 * Break teams into 
-+ a variable `team_type` with three levels: mixed, no_club, and womens
-+ a variable `club_or_not` with two levels: club and not_club
+  + a variable `team_type` with three levels: mixed, no_club, and womens
+  + a variable `club_or_not` with two levels: club and not_club
 
 * When the outcome variable is an ordered factor (e.g., "How satisfied are you with the AMOUNT of ultimate you are currently playing?")
-+ Run an ordered probit regressions with some number of predictor variables
+  + Run an ordered probit regressions with some number of predictor variables
 predicting that single outcome variable
 
 * Combine categorical variables into omnibus variables  
-
   + These omnibus variables are more continuous so treat them as 
   + Caveat: while directionality is constant across different variables (i.e., 1 always = bad, disagree), there are different levels for different variables that aren't necessarily comparable. They're ordered in
 a way that makes the most sense, I think, but you could definitely argue for a different ordering. For example, for the question "How satisfied are you with the AMOUNT of ultimate you are currently playing?", is this the right ordering? 
 
 "Not satisfied: wants more" < "Not satisfied: wants less" < "Neutral" < "Other" < "Somewhat satisfied: wants more" < "Somewhat satisfied: wants less" < "Very satisfied"      
 
-¯\_(ツ)_/¯
+`¯\_(ツ)_/¯`
 
           
 
@@ -114,92 +114,107 @@ ggplot(na.omit(all[all$team_type=="no_club", ])) +
 
 ```
 
+## Models
 
-```{r model}
+Omnibus model with 
+```{r m.big, echo=FALSE}
 
-# what is the effect of all non-ordinal predictors on overall 
 m.big <- lm(overall ~ 
-              age + team + 
-              currently_playing + how_long_play, 
-            # start_playing,
+            age + team_type + 
+            currently_playing + 
+            how_long_play + 
+            start_playing +
+            where_live,
             data = all)
+```
+
+``` {r}
 summary(m.big)
+```
 
-# # ordinal probit: does age predict team_type?
-# m.team_type.age <- MASS::polr(team_type ~ age, 
-#                               data = all, 
-#                               Hess = TRUE)
-# summary(m.team_type.age)
-
-
-
+What about the effect of team type on just satisfaction level?
+Make two models, one with team_type as a predictor and one without
+```{r, echo=FALSE}
 library(ordinal)
 
 # ------- with team_type and age predicting satis_level_recode --------
-m.team_t <- clm(satis_level_recode ~ team_type + age,
+m.satis_level_team_t <- clm(satis_level_recode ~ team_type + age,
                 link = "probit",
                        data = all)
 
 # take out team type
-m.no.team_t <- clm(satis_level_recode ~ age,
+m.satis_level_no.team_t <- clm(satis_level_recode ~ age,
                    link = "probit",
                        data = all)
+```
 
+Compare the performance of the models in predicting satisfaction level. The model with team type does't predict satisfaction level better than the one without it (p = 0.6361). So team_type is not a significant predictor of satisfaciton with the level of ultimate you're playing.
+```{r}
 # compare models
-anova(m.team_t, m.no.team_t)
-# model with team type does't predict satisfaction level better than the one without it
-# probit and logit linking functions yield roughly the same chisq
+anova(m.satis_level_team_t, m.satis_level_no.team_t)
 
+```
 
+What about satisfaction with the amount of ultimate you're playing?
+Same procdure.
+
+```{r }
 # ------- with team_type and age predicting satis_amount_recode ------- 
-m.team_t <- clm(satis_amount_recode ~ team_type + age,
+m.sais_amount_team_t <- clm(satis_amount_recode ~ team_type + age,
                 link = "probit",
                 data = all)
-m.no.team_t <- clm(satis_amount_recode ~ age,
+m.sais_amount_no.team_t <- clm(satis_amount_recode ~ age,
                    link = "probit",
                    data = all)
-anova(m.team_t, m.no.team_t)
-# model with team type DOES predict satisfaction level better than the one without it (p = 0.0072)
+```
+
+Model with team type DOES predict satisfaction level better than the one without it (p = 0.0072)
+```{r}
+anova(m.sais_amount_team_t, m.sais_amount_no.team_t)
+```
+
+Okay so there's a there there with `team_type`. So does `team_type` pedict overall satisfaction, inclusion, connection, and all of the above?
 
 
-# ------
+Check out how `team_type` is coded.
+```{r tt_contrasts}
+contrasts(all$team_type)
+```
 
+Both womens and mixed players have overall higher satisfaction and inclusion than non-club players 
 
-
-
-
-
-# ------------------ by team_type ---------------------
-# predict overall satisfaction, inclusion, and both from team type
-# no_club is reference level, coded as 1
-# mixed coded as 2
-# womens coded as 3
-
-# both womens and mixed players have overall higher satisfaction and inclusion than non-club players
-
-# p = 0.0252
+Satisfaction: yes (p = 0.0252)
+```{r}
 m.satis_combined.team_type <- lm(satis_combined ~ team_type,
                        data = all)
 summary(m.satis_combined.team_type)
+```
 
-# p = 1.17e-07
+Connection: yes (p = 1.17e-07)
+```{r}
 m.conn_combined.team_type <- lm(conn_combined ~ team_type,
                                  data = all)
 summary(m.conn_combined.team_type)
+```
 
-# p = 0.00245
+Inclusion: yes (p = 0.00245)
+```{r}
 m.inclus_combined.team_type <- lm(inclus_combined ~ team_type,
                                  data = all)
 summary(m.inclus_combined.team_type)
+```
 
-# p = 2.82e-07
+Overally: yes (p = 2.82e-07)
+```{r}
 m.overall.team_type <- lm(overall ~ team_type,
                                   data = all)
 summary(m.overall.team_type)
+```
 
+Is there a signif difference in combined satisfaction and inclusion scores between womens and mixed players?
+No, p = 0.841
 
-# is there a signif difference in combined satisfaction and inclusion scores between womens and mixed players?
-# no, p = 0.841
+```{r}
 womens_and_mixed.m.overall.team_type <- lm(overall ~ team_type,
                                             data = all[all$team_type %in% c("womens", "mixed"), ])
 summary(womens_and_mixed.m.overall.team_type)
