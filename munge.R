@@ -111,14 +111,14 @@ where_live.vals <- values(where_live.dict)
 # set the levels
 demographics$where_live <- factor(demographics$where_live, 
                                 labels = where_live.vals,
-                                ordered = TRUE)
+                                ordered = FALSE)
 
 # set Chicago as reference level of 1
 new.where_live.dict <- hash(c(2, 1, 3), c("Chicago Suburbs", "Chicago", "Other"))
 
 demographics$where_live <- factor(demographics$where_live,
                                   levels = values(new.where_live.dict),
-                                  ordered = TRUE)
+                                  ordered = FALSE)
 
 
 
@@ -198,8 +198,19 @@ start_playing.vals <- values(start_playing.dict)
 
 # set the levels of currently_playing based on 
 playing$start_playing <- factor(playing$start_playing, 
-                                labels = start_playing.vals) # ordered != TRUE b/c in quant dataset
-# high school is coded as a 2 in between college and post-college, so ordering wouldn't make temporal sense
+                                labels = start_playing.vals) 
+
+
+# reorder and relevel because high school is coded as a 2 in between college and post-college, 
+# so ordering as it is in quant dataset wouldn't make temporal sense
+start_playing_new_vals <- c(1:3)
+start_playing_new_labs <- c("High School", "College", "Post-College")
+
+# relevel and relabel
+playing$start_playing <- factor(playing$start_playing,
+                                          levels = start_playing_new_labs,
+                                          ordered = TRUE)
+
 
 
 
@@ -293,7 +304,7 @@ satis_level_vec <- as.character(c("Not satisfied -- I want to play more competit
                             "Very satisfied -- I have the opportunity to play at the right level of competitiveness for me."))
 
 # make a vector of the levels with "Other" after Neutral. might want to revisit the placement of this
-# b/c if we take it outthere will be a bigger ordinal gap between neutral and somewhat satisfied than 
+# b/c if we take it out there will be a bigger ordinal gap between neutral and somewhat satisfied than 
 # there should be.
 satis_level_vec_plus_other  <- c("Not satisfied -- I want to play more competitively",
                             "Not satisfied -- I want to play less competitively.",
@@ -329,7 +340,7 @@ satisfaction$satis_level_recode <- factor(satisfaction$satis_level_recode,
 
 # drop columns from before recode
 satisfaction <- satisfaction %>% 
-  select(
+  dplyr::select(
     -c(satis_amount, satis_level)
   )
 
@@ -430,7 +441,7 @@ team_type.dict <- hash(c(1:3), c("no_club", "mixed", "womens"))
 team_type.vals <- values(team_type.dict)
 all$team_type <- factor(all$team_type, 
                         levels = team_type.vals,
-                        ordered = TRUE)
+                        ordered = FALSE)
 
 
 # from team_type, make club_or_not column

@@ -5,15 +5,50 @@
 
 # library(MASS)
 
+source("./munge.R")
+
 
 # - - - - omnibus - - - - 
-# what is the effect of all non-ordinal predictors on overall 
+# what is the effect of all predictors on overall?
+# team_type and where_live are not ordered, the rest are
 m.big <- lm(overall ~ 
-              age + team + 
-              currently_playing + how_long_play, 
-            # start_playing,
+            age + team_type + 
+            currently_playing + 
+            how_long_play + 
+            start_playing +
+            where_live,
             data = all)
 summary(m.big)
+
+# all predictors on combined satisfaction
+m.allpreds.satis <- lm(satis_combined ~ 
+                     age + team_type + 
+                     currently_playing + 
+                     how_long_play + 
+                     start_playing +
+                     where_live,
+                   data = all)
+tidy(summary(m.allpreds.satis))
+
+# all predictors on combined connectedness
+m.allpreds.conn <- lm(conn_combined ~ 
+                         age + team_type + 
+                         currently_playing + 
+                         how_long_play + 
+                         start_playing +
+                         where_live,
+                       data = all)
+summary(m.allpreds.conn)
+
+# all predictors on combined inclusion
+m.allpreds.inclus <- lm(inclus_combined ~ 
+                         age + team_type + 
+                         currently_playing + 
+                         how_long_play + 
+                         start_playing +
+                         where_live,
+                       data = all)
+summary(m.allpreds.inclus)
 
 
 

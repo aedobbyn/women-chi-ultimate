@@ -271,7 +271,7 @@ mixed_teams.hist
 
 womens_teams.how_long_play <- 
   ggplot(data = na.omit(all[all$team_type == "womens", ])) +
-  geom_bar(aes(team, fill = how_long_play)) + 
+  geom_bar(aes(team, fill = how_long_play), position = "fill") + 
   theme(axis.text.x = element_text(angle = 60, hjust = 1))
 womens_teams.how_long_play
 
