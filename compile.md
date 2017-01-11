@@ -1,4 +1,5 @@
 # Women in Chicago Ultimate Data Analysis
+Winter 2017  
 
 ***
 
@@ -6,22 +7,21 @@ Outline
 =====
 * Munge
     + When possible, data was pulled straight from the raw data files and assigned codes in R. When not possible, data was pulled from hand-coded data source
-    + Predictor variables: `age`, `where_live`, `team`, `currently_playing`, `how_long_play`, `start_playing`, `first_experience`, `team_type` (derived from team), `club_or_not` (derived from team type)
-    + Response variables: `satis_amount_recode`, `satis_level_recode`, `conn_club`, `conn_recreational`, `conn_college`, `conn_youth`, `inclus_UC`, `inclus_college`, `inclus_women`, `inclus_mixed`, `satis_combined` (sum of satisfaction), `conn_combined` (sum of connectedness), `inclus_combined` (sum of inclusiveness), `overall` (sum of sums)  
-
+    + Predictor variable from raw: `age`, `where_live`, `team`, `currently_playing`, `how_long_play`, `start_playing`, `first_experience`
+    + Predictor variables derived: `team_type` (derived from team), `club_or_not` (derived from team type)
+    + Response variables: `satis_amount_recode`, `satis_level_recode`, `conn_club`, `conn_recreational`, `conn_college`, `conn_youth`, `inclus_UC`, `inclus_college`, `inclus_women`, `inclus_mixed` 
+    + Response variables derived: `satis_combined` (sum of satisfaction), `conn_combined` (sum of connectedness), `inclus_combined` (sum of inclusiveness), `overall` (sum of sums)
 * Plot
-  + Focused on showing differences in the outcome variables depending on `team_type` as that was the best predictor of all the independent variables
-  + A limitation of our data is that we only collected non-continuous data in both predictor and response variables. For that reason, all of the point plots are "jittered" (random noise introduced) so that they're a bit more visually interpretable.
-    
+    + Focused on showing the effect of `team_type` outcome variables as it was the best predictor of all the independent variables
+    + A limitation of our data is that we only collected non-continuous data in both predictor and response variables. For that reason, all of the point plots are "jittered" (random noise introduced) so that they're a bit more visually interpretable. 
 * Model
-  + Ordered Logistic/Probit Regressions for ordered categorical variables
-  + OLS regression for summed categorical variables
-  + Only looking at main effects for now, no interations
-    
+    + Ordered Logistic/Probit Regressions for ordered categorical response variables
+    + OLS regression for summed categorical response variables
+    + Only looking at main effects for now, no interations
 * Main takeaway
-  + `team_type` was a significant predictor of general happiness with ultimate in Chicago. Nothing else was really significant.
-  + Directionality: Non-club players feel less satisfied, connected, and included than club players
-  + There isn't a significant difference between how happy/satisfied women's players and mixed players feel
+    + `team_type` was a significant predictor of general happiness with ultimate in Chicago. Nothing else was really significant.
+    + Directionality: Non-club players feel less satisfied, connected, and included than club players
+    + There isn't a significant difference between how happy/satisfied women's players and mixed players feel
 
 
 ***
@@ -61,11 +61,11 @@ Not satisfied: wants more < Not satisfied: wants less < Neutral < Other < Somewh
 <br /><br /><br />
       
 ***
-## Some Visuals
+## Some Charts
 
-**What people are playing by their team type**
+What people are playing by their team 
 
-Potential problem with the data colleged: many people took the survey after their seasons had ended so what they play in season != what they said they were currently playing (so maybe a reason to distrust `currently_playing`)
+* Note that many people took the survey after their seasons had ended so what they play in season might != what they said they were `currently_playing`
 
 ![](compile_files/figure-html/unnamed-chunk-1-1.png)<!-- -->
 
@@ -74,51 +74,52 @@ Potential problem with the data colleged: many people took the survey after thei
 Satisfaction with amount playing faceted by team type
 ![](compile_files/figure-html/unnamed-chunk-2-1.png)<!-- -->
 
-<br>
-
-Overall satisfaction broken down by team type
-![](compile_files/figure-html/unnamed-chunk-3-1.png)<!-- -->
 
 <br>
 
-Jittered age (ordinal) vs. overall happiness w/ boxplot of overall superimposed
+Jittered `age` (ordinal) vs. overall happiness w/ boxplot of `overall` superimposed
 ![](compile_files/figure-html/overall.team_type-1.png)<!-- -->
 
 
+
+<br><br>
+
 #### Drilling down into team_type
 
-<br>
-
-How long have non-Chicago club players been playing?
-![](compile_files/figure-html/unnamed-chunk-4-1.png)<!-- -->
+Non-Club: How long have non-Chicago club players been playing?
+![](compile_files/figure-html/unnamed-chunk-3-1.png)<!-- -->
 
 Womens: age predicting overall happiness
 
-(Careful of the nemesis outlier (only Nemesis player with `age`==4))
+(Best fit lines are fitted using the linear `method = "lm"`)
+
+![](compile_files/figure-html/unnamed-chunk-4-1.png)<!-- -->
+
+<br>
+
+Mixed: where you started playing predicting overall satisfaction
 ![](compile_files/figure-html/unnamed-chunk-5-1.png)<!-- -->
-
-
-Mixed: how long they've played predicting overall satisfaction
-![](compile_files/figure-html/unnamed-chunk-6-1.png)<!-- -->
 
 
 <br><br>
 
 ### Satisfaction Amount by Team Type
-Focusing on amount rather than level because the model showed `team_type` predicting satisfaction amount but not level. (In other words, what kind of team you're on has an effect on whether you're satisfied with the amount you're playing or not.)
+* Focusing on amount rather than level because the model showed `team_type` predicting satisfaction amount but not level. 
+* (In other words, what kind of team you're on has an effect on whether you're satisfied with the amount you're playing or not.)
+
+![](compile_files/figure-html/unnamed-chunk-6-1.png)<!-- -->
 
 ![](compile_files/figure-html/unnamed-chunk-7-1.png)<!-- -->
 
 ![](compile_files/figure-html/unnamed-chunk-8-1.png)<!-- -->
-
-![](compile_files/figure-html/unnamed-chunk-9-1.png)<!-- -->
 
 <br /><br /><br />
 
 ***
 ## Models
 
-Omnibus model with all predictors predicting the overall measure
+Omnibus model with all predictors predicting the overall measure. (Not including `team` here because it is binned by `team_type`)
+
 
 
 
@@ -164,13 +165,22 @@ Omnibus model with all predictors predicting the overall measure
 ## F-statistic:  3.13 on 20 and 141 DF,  p-value: 4.15e-05
 ```
 
-What about the effect of team type on just satisfaction level?
+* So `team_type` is really the only good predictor
+
+<br><br>
+
+#### Satisfaction Measures
+
+What about the effect of team type on satisfaction of just the **level** of ultimate you're playing?  
+
 * Make two models, one with `team_type` as a predictor and one without
 
 
 <br> 
 
-Compare the performance of the models in predicting satisfaction level. The model with team type does't predict satisfaction level better than the one without it (p = 0.6361). So team_type is not a significant predictor of satisfaciton with the level of ultimate you're playing.
+* Compare the performance of the models in predicting satisfaction level
+* The model with team type does't predict satisfaction level better than the one without it (p = 0.6361). 
+* So team_type is not a significant predictor of satisfaciton with the level of ultimate you're playing.
 
 ```
 ## Likelihood ratio tests of cumulative link models:
@@ -189,7 +199,8 @@ Compare the performance of the models in predicting satisfaction level. The mode
 
 <br> 
 
-What about satisfaction with the amount of ultimate you're playing?
+What about satisfaction with the **amount** of ultimate you're playing?
+
 * Same procdure.
 
 
@@ -220,9 +231,7 @@ Model with team type *does* predict satisfaction level better than the one witho
 Okay so there's a there there with `team_type`. So does `team_type` pedict overall satisfaction, inclusion, connection, and all of the above?
 
 <br>
-*Do womens and mixed players have significantly higher overall satisfaction and inclusion than non-club players?*
-
-<br>
+**Do womens and mixed players have significantly higher overall satisfaction, connectedness, and inclusion than non-club players?**
 
 Satisfaction: yes (p = 0.0252)
 
@@ -296,7 +305,7 @@ Inclusion: yes (p = 0.00245)
 ## F-statistic:  10.3 on 2 and 161 DF,  p-value: 6.156e-05
 ```
 
-Overally: yes (p = 2.82e-07)
+Overall: yes (p = 2.82e-07)
 
 ```
 ## 
@@ -322,7 +331,7 @@ Overally: yes (p = 2.82e-07)
 
 <br>
 
-Is there a signif difference in combined satisfaction and inclusion scores between womens and mixed players?
+Is there a significant difference in combined satisfaction and inclusion scores between womens and mixed players?
 No, p = 0.841
 
 
@@ -347,4 +356,38 @@ No, p = 0.841
 ## Multiple R-squared:  0.0005947,	Adjusted R-squared:  -0.0141 
 ## F-statistic: 0.04047 on 1 and 68 DF,  p-value: 0.8412
 ```
+
+<br>
+
+So, narrowing down to club or not, is playing club at all a significant predictor of overall happiness with ultimate in Chicago?
+
+Yes, p = 2.32e-09
+
+```
+## 
+## Call:
+## lm(formula = overall ~ club_or_not, data = all)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -14.6702  -3.6702  -0.0143   3.4938  15.3298 
+## 
+## Coefficients:
+##                     Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)          40.0143     0.6392  62.597  < 2e-16 ***
+## club_or_notnot_club  -5.3441     0.8443  -6.329 2.32e-09 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 5.348 on 162 degrees of freedom
+## Multiple R-squared:  0.1983,	Adjusted R-squared:  0.1933 
+## F-statistic: 40.06 on 1 and 162 DF,  p-value: 2.315e-09
+```
+
+<br>
+
+![](compile_files/figure-html/unnamed-chunk-20-1.png)<!-- -->
+
+
+<br><br><br>
 

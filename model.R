@@ -190,6 +190,13 @@ womens_and_mixed.m.overall.team_type <- lm(overall ~ team_type,
 summary(womens_and_mixed.m.overall.team_type)
 
 
+# ---- by club_or_not
+
+m.overall.club_or_not <- lm(overall ~ club_or_not,
+                             # family = "binomial",
+                          data = all)
+summary(m.overall.club_or_not)
+
 
 # ------------------ by team ---------------------
 # is one team the most satisfied with amount and level of play?
