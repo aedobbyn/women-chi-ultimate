@@ -4,13 +4,25 @@
 
 Outline
 =====
-* About:
-    + Survey distributed by Steph Landry
-* Models:
-    + Ordered Logistic/Probit Regressions for ordered categorical variables
-    + OLS regression for summed categorical variables
-* Plots:
-    + Many
+* Munge
+    + When possible, data was pulled straight from the raw data files and assigned codes in R. When not possible, data was pulled from hand-coded data source
+    + Predictor variables: `age`, `where_live`, `team`, `currently_playing`, `how_long_play`, `start_playing`, `first_experience`, `team_type` (derived from team), `club_or_not` (derived from team type)
+    + Response variables: `satis_amount_recode`, `satis_level_recode`, `conn_club`, `conn_recreational`, `conn_college`, `conn_youth`, `inclus_UC`, `inclus_college`, `inclus_women`, `inclus_mixed`, `satis_combined` (sum of satisfaction), `conn_combined` (sum of connectedness), `inclus_combined` (sum of inclusiveness), `overall` (sum of sums)  
+
+* Plot
+  + Focused on showing differences in the outcome variables depending on `team_type` as that was the best predictor of all the independent variables
+  + A limitation of our data is that we only collected non-continuous data in both predictor and response variables. For that reason, all of the point plots are "jittered" (random noise introduced) so that they're a bit more visually interpretable.
+    
+* Model
+  + Ordered Logistic/Probit Regressions for ordered categorical variables
+  + OLS regression for summed categorical variables
+  + Only looking at main effects for now, no interations
+    
+* Main takeaway
+  + `team_type` was a significant predictor of general happiness with ultimate in Chicago. Nothing else was really significant.
+  + Directionality: Non-club players feel less satisfied, connected, and included than club players
+  + There isn't a significant difference between how happy/satisfied women's players and mixed players feel
+
 
 ***
 
@@ -20,55 +32,93 @@ Outline
 
 <br /><br /><br />
 
+***
+
 ## Munge
 
 
 
-* Break teams into 
+* Categorize teams into 
   + a variable `team_type` with three levels: mixed, no_club, and womens
   + a variable `club_or_not` with two levels: club and not_club
 
 * When the outcome variable is an ordered factor (e.g., "How satisfied are you with the AMOUNT of ultimate you are currently playing?")
-  + Run an ordered probit regressions with some number of predictor variables
+  + Run an ordered probit regression with some number of predictor variables
 predicting that single outcome variable
 
-* Combine categorical variables into omnibus variables  
-  + These omnibus variables are more continuous so treat them as 
-  + Caveat: while directionality is constant across different variables (i.e., 1 always = bad, disagree), there are different levels for different variables that aren't necessarily comparable. They're ordered in
-a way that makes the most sense, I think, but you could definitely argue for a different ordering. For example, for the question "How satisfied are you with the AMOUNT of ultimate you are currently playing?", is this the right ordering? 
+* Combine ordered categorical predictor variables into omnibus variables and treat them as continuous
+  + The idea with summing ordinal response variables was to introduce more degrees of freedom into the outcome variable so that we could run a more standard linear regression rather than an ordered/logistic probit regression on each outcome variable. It hopefully gives us both more predictive power and a more holistic look at three main categories of response variable (satisfaction, connectedness, and inclusiveness)
 
-"Not satisfied: wants more" < "Not satisfied: wants less" < "Neutral" < "Other" < "Somewhat satisfied: wants more" < "Somewhat satisfied: wants less" < "Very satisfied"      
+Caveat: while directionality is constant across different variables (i.e., 1 always = bad or disagree or whatever), there are different levels for different variables that aren't necessarily comparable. They're ordered in
+a way that makes the most sense, I think, but you could definitely argue for a different ordering. 
+
+For example, for the question "How satisfied are you with the AMOUNT of ultimate you are currently playing?", is this the right ordering? 
+
+Not satisfied: wants more < Not satisfied: wants less < Neutral < Other < Somewhat satisfied: wants more < Somewhat satisfied: wants less < Very satisfied      
 
 `¯\_(ツ)_/¯`
 
-          
-
-
+<br /><br /><br />
+      
+***
 ## Some Visuals
 
-![](compile_files/figure-html/overall.team_type-1.png)<!-- -->![](compile_files/figure-html/overall.team_type-2.png)<!-- -->![](compile_files/figure-html/overall.team_type-3.png)<!-- -->
+**What people are playing by their team type**
 
-```
-## Warning: Ignoring unknown aesthetics: position
-```
+Potential problem with the data colleged: many people took the survey after their seasons had ended so what they play in season != what they said they were currently playing (so maybe a reason to distrust `currently_playing`)
 
-![](compile_files/figure-html/overall.team_type-4.png)<!-- -->
+![](compile_files/figure-html/unnamed-chunk-1-1.png)<!-- -->
 
-```
-## Warning: Ignoring unknown aesthetics: position
-```
+<br>
 
-![](compile_files/figure-html/overall.team_type-5.png)<!-- -->
+Satisfaction with amount playing faceted by team type
+![](compile_files/figure-html/unnamed-chunk-2-1.png)<!-- -->
 
-```
-## Warning: Ignoring unknown aesthetics: position
-```
+<br>
 
-![](compile_files/figure-html/overall.team_type-6.png)<!-- -->
+Overall satisfaction broken down by team type
+![](compile_files/figure-html/unnamed-chunk-3-1.png)<!-- -->
 
+<br>
+
+Jittered age (ordinal) vs. overall happiness w/ boxplot of overall superimposed
+![](compile_files/figure-html/overall.team_type-1.png)<!-- -->
+
+
+#### Drilling down into team_type
+
+<br>
+
+How long have non-Chicago club players been playing?
+![](compile_files/figure-html/unnamed-chunk-4-1.png)<!-- -->
+
+Womens: age predicting overall happiness
+
+(Careful of the nemesis outlier (only Nemesis player with `age`==4))
+![](compile_files/figure-html/unnamed-chunk-5-1.png)<!-- -->
+
+
+Mixed: how long they've played predicting overall satisfaction
+![](compile_files/figure-html/unnamed-chunk-6-1.png)<!-- -->
+
+
+<br><br>
+
+### Satisfaction Amount by Team Type
+Focusing on amount rather than level because the model showed `team_type` predicting satisfaction amount but not level. (In other words, what kind of team you're on has an effect on whether you're satisfied with the amount you're playing or not.)
+
+![](compile_files/figure-html/unnamed-chunk-7-1.png)<!-- -->
+
+![](compile_files/figure-html/unnamed-chunk-8-1.png)<!-- -->
+
+![](compile_files/figure-html/unnamed-chunk-9-1.png)<!-- -->
+
+<br /><br /><br />
+
+***
 ## Models
 
-Omnibus model with 
+Omnibus model with all predictors predicting the overall measure
 
 
 
@@ -115,18 +165,10 @@ Omnibus model with
 ```
 
 What about the effect of team type on just satisfaction level?
-Make two models, one with team_type as a predictor and one without
+* Make two models, one with `team_type` as a predictor and one without
 
-```
-## 
-## Attaching package: 'ordinal'
-```
 
-```
-## The following object is masked from 'package:dplyr':
-## 
-##     slice
-```
+<br> 
 
 Compare the performance of the models in predicting satisfaction level. The model with team type does't predict satisfaction level better than the one without it (p = 0.6361). So team_type is not a significant predictor of satisfaciton with the level of ultimate you're playing.
 
@@ -145,12 +187,16 @@ Compare the performance of the models in predicting satisfaction level. The mode
 ## m.satis_level_team_t        11 404.19 -191.10  0.9048  2     0.6361
 ```
 
+<br> 
+
 What about satisfaction with the amount of ultimate you're playing?
-Same procdure.
+* Same procdure.
 
 
 
-Model with team type DOES predict satisfaction level better than the one without it (p = 0.0072)
+<br>
+
+Model with team type *does* predict satisfaction level better than the one without it (p = 0.0072)
 
 ```
 ## Likelihood ratio tests of cumulative link models:
@@ -169,19 +215,14 @@ Model with team type DOES predict satisfaction level better than the one without
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
+<br>
+
 Okay so there's a there there with `team_type`. So does `team_type` pedict overall satisfaction, inclusion, connection, and all of the above?
 
+<br>
+*Do womens and mixed players have significantly higher overall satisfaction and inclusion than non-club players?*
 
-Check out how `team_type` is coded.
-
-```
-##         mixed womens
-## no_club     0      0
-## mixed       1      0
-## womens      0      1
-```
-
-Both womens and mixed players have overall higher satisfaction and inclusion than non-club players 
+<br>
 
 Satisfaction: yes (p = 0.0252)
 
@@ -278,6 +319,8 @@ Overally: yes (p = 2.82e-07)
 ## Multiple R-squared:  0.1984,	Adjusted R-squared:  0.1884 
 ## F-statistic: 19.92 on 2 and 161 DF,  p-value: 1.861e-08
 ```
+
+<br>
 
 Is there a signif difference in combined satisfaction and inclusion scores between womens and mixed players?
 No, p = 0.841

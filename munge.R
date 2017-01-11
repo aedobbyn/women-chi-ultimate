@@ -32,13 +32,12 @@ dat <- sorted[, names(quant)]
 # ------------------- mini datasets -----------------------
 
 # make demographics tbl
-demographics <- dat[, 2:4]
+demographics <- dat[, c(2, 4)]   # taking where_live (column 3) this from hand-coded quant
 
 # give better var names
 demographics <- demographics %>% 
   dplyr::rename(
   age = `Age:`,
-  # where_live = `Please choose the option that best describes where you currently live.`,  # taking this from hand-coded quant
   can_quote = `May we anonymously quote your answers from this survey?`
 )
 

@@ -15,13 +15,25 @@ output:
 
 Outline
 =====
-* About:
-    + Survey distributed by Steph Landry
-* Models:
-    + Ordered Logistic/Probit Regressions for ordered categorical variables
-    + OLS regression for summed categorical variables
-* Plots:
-    + Many
+* Munge
+    + When possible, data was pulled straight from the raw data files and assigned codes in R. When not possible, data was pulled from hand-coded data source
+    + Predictor variables: `age`, `where_live`, `team`, `currently_playing`, `how_long_play`, `start_playing`, `first_experience`, `team_type` (derived from team), `club_or_not` (derived from team type)
+    + Response variables: `satis_amount_recode`, `satis_level_recode`, `conn_club`, `conn_recreational`, `conn_college`, `conn_youth`, `inclus_UC`, `inclus_college`, `inclus_women`, `inclus_mixed`, `satis_combined` (sum of satisfaction), `conn_combined` (sum of connectedness), `inclus_combined` (sum of inclusiveness), `overall` (sum of sums)  
+
+* Plot
+  + Focused on showing differences in the outcome variables depending on `team_type` as that was the best predictor of all the independent variables
+  + A limitation of our data is that we only collected non-continuous data in both predictor and response variables. For that reason, all of the point plots are "jittered" (random noise introduced) so that they're a bit more visually interpretable.
+    
+* Model
+  + Ordered Logistic/Probit Regressions for ordered categorical variables
+  + OLS regression for summed categorical variables
+  + Only looking at main effects for now, no interations
+    
+* Main takeaway
+  + `team_type` was a significant predictor of general happiness with ultimate in Chicago. Nothing else was really significant.
+  + Directionality: Non-club players feel less satisfied, connected, and included than club players
+  + There isn't a significant difference between how happy/satisfied women's players and mixed players feel
+
 
 ***
 
@@ -31,60 +43,126 @@ Outline
 
 <br /><br /><br />
 
+***
+
 ## Munge
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
 
 source("./munge.R")
 # source("./model.R")
 
 ```
 
-* Break teams into 
+* Categorize teams into 
   + a variable `team_type` with three levels: mixed, no_club, and womens
   + a variable `club_or_not` with two levels: club and not_club
 
 * When the outcome variable is an ordered factor (e.g., "How satisfied are you with the AMOUNT of ultimate you are currently playing?")
-  + Run an ordered probit regressions with some number of predictor variables
+  + Run an ordered probit regression with some number of predictor variables
 predicting that single outcome variable
 
-* Combine categorical variables into omnibus variables  
-  + These omnibus variables are more continuous so treat them as 
-  + Caveat: while directionality is constant across different variables (i.e., 1 always = bad, disagree), there are different levels for different variables that aren't necessarily comparable. They're ordered in
-a way that makes the most sense, I think, but you could definitely argue for a different ordering. For example, for the question "How satisfied are you with the AMOUNT of ultimate you are currently playing?", is this the right ordering? 
+* Combine ordered categorical predictor variables into omnibus variables and treat them as continuous
+  + The idea with summing ordinal response variables was to introduce more degrees of freedom into the outcome variable so that we could run a more standard linear regression rather than an ordered/logistic probit regression on each outcome variable. It hopefully gives us both more predictive power and a more holistic look at three main categories of response variable (satisfaction, connectedness, and inclusiveness)
 
-"Not satisfied: wants more" < "Not satisfied: wants less" < "Neutral" < "Other" < "Somewhat satisfied: wants more" < "Somewhat satisfied: wants less" < "Very satisfied"      
+Caveat: while directionality is constant across different variables (i.e., 1 always = bad or disagree or whatever), there are different levels for different variables that aren't necessarily comparable. They're ordered in
+a way that makes the most sense, I think, but you could definitely argue for a different ordering. 
+
+For example, for the question "How satisfied are you with the AMOUNT of ultimate you are currently playing?", is this the right ordering? 
+
+Not satisfied: wants more < Not satisfied: wants less < Neutral < Other < Somewhat satisfied: wants more < Somewhat satisfied: wants less < Very satisfied      
 
 `¯\_(ツ)_/¯`
 
-          
-
-
+<br /><br /><br />
+      
+***
 ## Some Visuals
 
-```{r overall.team_type, echo = FALSE}
+**What people are playing by their team type**
 
-# jittered age (ordinal) vs. overall w/ boxplot superimposed
-qplot(age, overall, data = all) +
-  geom_jitter() +
-  geom_boxplot(alpha = 0.3)
+Potential problem with the data colleged: many people took the survey after their seasons had ended so what they play in season != what they said they were currently playing (so maybe a reason to distrust `currently_playing`)
 
+```{r}
+currently_playing.hist <- ggplot(data = na.omit(all)) +
+  geom_bar(aes(currently_playing)) + 
+  theme(axis.text.x = element_text(angle = 60, hjust = 1))
+currently_playing.hist
+```
 
+<br>
+
+Satisfaction with amount playing faceted by team type
+```{r}
+ggplot(na.omit(all)) + 
+  geom_bar(aes(x = satis_amount_recode,
+               y = (..count..)/sum(..count..),
+               position = "dodge")) +
+  facet_grid(~ team_type) +
+  theme(axis.text.x = element_text(angle = 60, hjust = 1))
+```
+
+<br>
+
+Overall satisfaction broken down by team type
+```{r}
 overall.team_type <- ggplot(data = all) +
   geom_bar(aes(overall, fill = team_type), position = "dodge") 
 overall.team_type
+```
+
+<br>
+
+Jittered age (ordinal) vs. overall happiness w/ boxplot of overall superimposed
+```{r overall.team_type, echo = FALSE, warning=FALSE, message=FALSE}
+
+qplot(age, overall, data = all) +
+  geom_jitter() +
+  geom_boxplot(alpha = 0.3)
+```
 
 
-womens_teams.how_long_play <- 
-  ggplot(data = na.omit(all[all$team_type == "womens", ])) +
+#### Drilling down into team_type
+
+<br>
+
+How long have non-Chicago club players been playing?
+```{r}
+no_club.how_long_play <- 
+  ggplot(data = na.omit(all[all$team_type == "no_club", ])) +
   geom_bar(aes(team, fill = how_long_play), position = "fill") + 
   theme(axis.text.x = element_text(angle = 60, hjust = 1))
-womens_teams.how_long_play
+no_club.how_long_play
+```
+
+Womens: age predicting overall happiness
+
+(Careful of the nemesis outlier (only Nemesis player with `age`==4))
+```{r}
+ggplot(all[all$team_type == "womens", ],
+       aes(x = as.numeric(age), y = overall, colour = team)) + 
+  geom_jitter() +
+  geom_smooth(method = "lm", se = FALSE)
+```
+
+<br>
+
+Mixed: how long they've played predicting overall satisfaction
+```{r}
+ggplot(all[all$team_type == "mixed", ],
+       aes(x = as.numeric(how_long_play), y = overall, colour = team)) + 
+  geom_jitter() +
+  geom_smooth(method = "lm", se = FALSE)
+```
 
 
+<br><br>
 
-# team_type=='womens'
+### Satisfaction Amount by Team Type
+Focusing on amount rather than level because the model showed `team_type` predicting satisfaction amount but not level. (In other words, what kind of team you're on has an effect on whether you're satisfied with the amount you're playing or not.)
+
+```{r}
 ggplot(na.omit(all[all$team_type=="womens", ])) + 
   geom_bar(aes(x = satis_amount_recode, y = (..count..)/sum(..count..),
                position = "fill")) +
@@ -92,8 +170,9 @@ ggplot(na.omit(all[all$team_type=="womens", ])) +
   scale_y_continuous(labels = scales::percent) +
   scale_x_discrete(drop=FALSE) +     # don't drop unused levels
   theme(axis.text.x = element_text(angle = 60, hjust = 1))
+```
 
-# team_type=='mixed'
+```{r}
 ggplot(na.omit(all[all$team_type=="mixed", ])) + 
   geom_bar(aes(x = satis_amount_recode, y = (..count..)/sum(..count..),
                position = "fill")) +
@@ -101,12 +180,13 @@ ggplot(na.omit(all[all$team_type=="mixed", ])) +
   scale_y_continuous(labels = scales::percent) +
   scale_x_discrete(drop=FALSE) +
   theme(axis.text.x = element_text(angle = 60, hjust = 1))
+```
 
-# team_type=='no_club'
+```{r}
 ggplot(na.omit(all[all$team_type=="no_club", ])) + 
   geom_bar(aes(x = satis_amount_recode, y = (..count..)/sum(..count..),
                position = "fill")) +
-  labs(title = "Satisfaction with Amount of Play: Non-Chicago Club Players") +
+  labs(title = "Satisfaction with Amount of Play: Non-Club Players") +
   scale_y_continuous(labels = scales::percent) +
   scale_x_discrete(drop=FALSE) +
   theme(axis.text.x = element_text(angle = 60, hjust = 1))
@@ -114,9 +194,12 @@ ggplot(na.omit(all[all$team_type=="no_club", ])) +
 
 ```
 
+<br /><br /><br />
+
+***
 ## Models
 
-Omnibus model with 
+Omnibus model with all predictors predicting the overall measure
 ```{r m.big, echo=FALSE}
 
 m.big <- lm(overall ~ 
@@ -132,8 +215,9 @@ m.big <- lm(overall ~
 summary(m.big)
 ```
 
-What about the effect of team type on just satisfaction level?
-Make two models, one with team_type as a predictor and one without
+What about the effect of team type on just satisfaction level?  
+
+* Make two models, one with `team_type` as a predictor and one without
 ```{r, echo=FALSE}
 library(ordinal)
 
@@ -148,15 +232,20 @@ m.satis_level_no.team_t <- clm(satis_level_recode ~ age,
                        data = all)
 ```
 
-Compare the performance of the models in predicting satisfaction level. The model with team type does't predict satisfaction level better than the one without it (p = 0.6361). So team_type is not a significant predictor of satisfaciton with the level of ultimate you're playing.
-```{r}
-# compare models
-anova(m.satis_level_team_t, m.satis_level_no.team_t)
+<br> 
 
+* Compare the performance of the models in predicting satisfaction level
+* The model with team type does't predict satisfaction level better than the one without it (p = 0.6361). 
+* So team_type is not a significant predictor of satisfaciton with the level of ultimate you're playing.
+```{r}
+anova(m.satis_level_team_t, m.satis_level_no.team_t)
 ```
 
+<br> 
+
 What about satisfaction with the amount of ultimate you're playing?
-Same procdure.
+
+* Same procdure.
 
 ```{r }
 # ------- with team_type and age predicting satis_amount_recode ------- 
@@ -168,20 +257,21 @@ m.sais_amount_no.team_t <- clm(satis_amount_recode ~ age,
                    data = all)
 ```
 
-Model with team type DOES predict satisfaction level better than the one without it (p = 0.0072)
+<br>
+
+Model with team type *does* predict satisfaction level better than the one without it (p = 0.0072)
 ```{r}
 anova(m.sais_amount_team_t, m.sais_amount_no.team_t)
 ```
 
+<br>
+
 Okay so there's a there there with `team_type`. So does `team_type` pedict overall satisfaction, inclusion, connection, and all of the above?
 
+<br>
+**Do womens and mixed players have significantly higher overall satisfaction and inclusion than non-club players?**
 
-Check out how `team_type` is coded.
-```{r tt_contrasts}
-contrasts(all$team_type)
-```
-
-Both womens and mixed players have overall higher satisfaction and inclusion than non-club players 
+<br>
 
 Satisfaction: yes (p = 0.0252)
 ```{r}
@@ -211,7 +301,9 @@ m.overall.team_type <- lm(overall ~ team_type,
 summary(m.overall.team_type)
 ```
 
-Is there a signif difference in combined satisfaction and inclusion scores between womens and mixed players?
+<br>
+
+Is there a significant difference in combined satisfaction and inclusion scores between womens and mixed players?
 No, p = 0.841
 
 ```{r}
@@ -220,4 +312,8 @@ womens_and_mixed.m.overall.team_type <- lm(overall ~ team_type,
 summary(womens_and_mixed.m.overall.team_type)
 
 ```
+
+
+
+<br><br><br>
 
