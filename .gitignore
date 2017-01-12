@@ -4,7 +4,6 @@
 .Ruserdata
 *.Rproj
 .httr-oauth
-compile_files/
 .DS_Store
 
 wordcloud.R
