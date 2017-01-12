@@ -29,6 +29,9 @@ quant <- quant %>%
 dat <- sorted[, names(quant)]
 
 
+
+
+
 # ------------------- mini datasets -----------------------
 
 # make demographics tbl
@@ -90,7 +93,6 @@ inclusion <- inclusion %>%
     inclus_women = `Women's club teams support the development and inclusion of women in ultimate.`,
     inclus_mixed = `Mixed club teams support the development and inclusion of women in ultimate.`
 )
-
 
 
 

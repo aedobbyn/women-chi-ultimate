@@ -37,7 +37,7 @@ Outline
 
 ***
 
-![](./clinic.jpg) 
+![](./cujo.jpg) 
 
 ***
 
@@ -56,15 +56,15 @@ source("./munge.R")
 ```
 
 * Categorize teams into 
-  + a variable `team_type` with three levels: mixed, no_club, and womens
-  + a variable `club_or_not` with two levels: club and not_club
+    + a variable `team_type` with three levels: `mixed`, `no_club`, and `womens`. All players not on a womens or mixed team are `no_club` (which is a little misleading because this encompasses non-Chicago club teams)
+    + a variable `club_or_not` with two levels: `club` and `not_club`
 
 * When the outcome variable is an ordered factor (e.g., "How satisfied are you with the AMOUNT of ultimate you are currently playing?")
-  + Run an ordered probit regression with some number of predictor variables
+    + Run an ordered probit regression with some number of predictor variables
 predicting that single outcome variable
 
 * Combine ordered categorical predictor variables into omnibus variables and treat them as continuous
-  + The idea with summing ordinal response variables was to introduce more degrees of freedom into the outcome variable so that we could run a more standard linear regression rather than an ordered/logistic probit regression on each outcome variable. It hopefully gives us both more predictive power and a more holistic look at three main categories of response variable (satisfaction, connectedness, and inclusiveness)
+    + The idea with summing ordinal response variables was to introduce more degrees of freedom into the outcome variable so that we could run a more standard linear regression rather than an ordered/logistic probit regression on each outcome variable. It hopefully gives us both more predictive power and a more holistic look at three main categories of response variable (satisfaction, connectedness, and inclusiveness)
 
 Caveat: while directionality is constant across different variables (i.e., 1 always = bad or disagree or whatever), there are different levels for different variables that aren't necessarily comparable. They're ordered in
 a way that makes the most sense, I think, but you could definitely argue for a different ordering. 
@@ -152,6 +152,7 @@ ggplot(all[all$team_type == "mixed", ],
 ```
 
 
+
 <br><br>
 
 #### Satisfaction Amount by Team Type
@@ -214,6 +215,22 @@ summary(m.big)
 
 * So `team_type` is really the only good predictor
 
+<br>
+
+Drilling down into `team`, what's driving the dissatisfaction among `no_club` players?
+
+* People who don't play any club at all (p = 0.00112)
+```{r}
+m.team <- lm(overall ~ 
+              team,
+            data = all)
+summary(m.team)
+```
+
+<br><br>
+
+* All other models with a single predictor variable predicting `overall` were not significant.
+
 <br><br>
 
 #### Satisfaction Measures
@@ -248,7 +265,7 @@ anova(m.satis_level_team_t, m.satis_level_no.team_t)
 
 What about satisfaction with the **amount** of ultimate you're playing?
 
-* Same procdure.
+* Same procedure
 
 ```{r }
 # ------- with team_type and age predicting satis_amount_recode ------- 
@@ -318,6 +335,21 @@ summary(womens_and_mixed.m.overall.team_type)
 
 So, narrowing down to club or not, is playing club at all a significant predictor of overall happiness with ultimate in Chicago?
 
+```{r}
+library(ggthemes)
+overall.club_or_not <- ggplot() +
+  geom_density(data = all[all$club_or_not=="club", ], aes(overall), position = "dodge",
+           fill = "pink", alpha = 0.5) +
+  geom_density(data = all[all$club_or_not=="not_club", ], aes(overall), position = "dodge",
+           fill = "light blue", alpha = 0.5) +
+  ggtitle("Club participation predicting overall happiness") +
+  labs(caption = "Blue = no club, Pink = club") +
+  theme_few()
+overall.club_or_not
+```
+
+<br>
+
 Yes, p = 2.32e-09
 ```{r}
 m.overall.club_or_not <- lm(overall ~ club_or_not,
@@ -325,21 +357,15 @@ m.overall.club_or_not <- lm(overall ~ club_or_not,
 summary(m.overall.club_or_not)
 ```
 
-<br>
 
-```{r}
-library(ggthemes)
-overall.club_or_not <- ggplot() +
-  geom_density(data = all[all$club_or_not=="club", ], aes(overall), position = "dodge",
-           fill = "red", alpha = 0.5) +
-  geom_density(data = all[all$club_or_not=="not_club", ], aes(overall), position = "dodge",
-           fill = "blue", alpha = 0.5) +
-  ggtitle("Club participation predicting overall happiness") +
-  labs(caption = "Red = no club, Blue = club") +
-  theme_few()
-overall.club_or_not
-```
 
 
 <br><br><br>
+
+
+![](./clinic.jpg) 
+
+
+<br><br><br>
+
 

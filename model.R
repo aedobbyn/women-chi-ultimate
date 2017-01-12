@@ -20,6 +20,19 @@ m.big <- lm(overall ~
             data = all)
 summary(m.big)
 
+# effect of just team on overall
+m.team <- lm(overall ~ 
+              team,
+            data = all)
+summary(m.team)
+
+# try single predictor predicting overall
+m.x <- lm(overall ~ 
+               team,
+             data = all)
+summary(m.x)
+
+
 # all predictors on combined satisfaction
 m.allpreds.satis <- lm(satis_combined ~ 
                      age + team_type + 

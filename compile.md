@@ -26,7 +26,7 @@ Outline
 
 ***
 
-![](./clinic.jpg) 
+![](./cujo.jpg) 
 
 ***
 
@@ -39,15 +39,15 @@ Outline
 
 
 * Categorize teams into 
-  + a variable `team_type` with three levels: mixed, no_club, and womens
-  + a variable `club_or_not` with two levels: club and not_club
+    + a variable `team_type` with three levels: `mixed`, `no_club`, and `womens`. All players not on a womens or mixed team are `no_club` (which is a little misleading because this encompasses non-Chicago club teams)
+    + a variable `club_or_not` with two levels: `club` and `not_club`
 
 * When the outcome variable is an ordered factor (e.g., "How satisfied are you with the AMOUNT of ultimate you are currently playing?")
-  + Run an ordered probit regression with some number of predictor variables
+    + Run an ordered probit regression with some number of predictor variables
 predicting that single outcome variable
 
 * Combine ordered categorical predictor variables into omnibus variables and treat them as continuous
-  + The idea with summing ordinal response variables was to introduce more degrees of freedom into the outcome variable so that we could run a more standard linear regression rather than an ordered/logistic probit regression on each outcome variable. It hopefully gives us both more predictive power and a more holistic look at three main categories of response variable (satisfaction, connectedness, and inclusiveness)
+    + The idea with summing ordinal response variables was to introduce more degrees of freedom into the outcome variable so that we could run a more standard linear regression rather than an ordered/logistic probit regression on each outcome variable. It hopefully gives us both more predictive power and a more holistic look at three main categories of response variable (satisfaction, connectedness, and inclusiveness)
 
 Caveat: while directionality is constant across different variables (i.e., 1 always = bad or disagree or whatever), there are different levels for different variables that aren't necessarily comparable. They're ordered in
 a way that makes the most sense, I think, but you could definitely argue for a different ordering. 
@@ -101,9 +101,10 @@ Mixed: where you started playing predicting overall satisfaction
 ![](compile_files/figure-html/unnamed-chunk-5-1.png)<!-- -->
 
 
+
 <br><br>
 
-### Satisfaction Amount by Team Type
+#### Satisfaction Amount by Team Type
 * Focusing on amount rather than level because the model showed `team_type` predicting satisfaction amount but not level. 
 * (In other words, what kind of team you're on has an effect on whether you're satisfied with the amount you're playing or not.)
 
@@ -167,6 +168,46 @@ Omnibus model with all predictors predicting the overall measure. (Not including
 
 * So `team_type` is really the only good predictor
 
+<br>
+
+Drilling down into `team`, what's driving the dissatisfaction among `no_club` players?
+
+* People who don't play any club at all (p = 0.00112)
+
+```
+## 
+## Call:
+## lm(formula = overall ~ team, data = all)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -14.269  -3.733   0.050   3.483  14.731 
+## 
+## Coefficients:
+##                    Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)         39.1875     1.3490  29.049  < 2e-16 ***
+## teamELevate         -0.2875     2.1752  -0.132  0.89502    
+## teamFrenzy           1.4125     1.9393   0.728  0.46751    
+## teamNo-Club         -4.9183     1.4809  -3.321  0.00112 ** 
+## teamNon-Chicago     -1.4875     2.1752  -0.684  0.49511    
+## teamJabba The Huck   3.8125     3.0165   1.264  0.20819    
+## teamNemesis          1.7014     2.2484   0.757  0.45038    
+## teamOther           -4.3542     2.5832  -1.686  0.09391 .  
+## teamShakedown        0.6458     2.5832   0.250  0.80291    
+## teamStack Cats       0.8125     2.4453   0.332  0.74014    
+## teamUPA             -0.1875     3.3949  -0.055  0.95603    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 5.396 on 153 degrees of freedom
+## Multiple R-squared:  0.2292,	Adjusted R-squared:  0.1788 
+## F-statistic: 4.549 on 10 and 153 DF,  p-value: 1.204e-05
+```
+
+<br><br>
+
+* All other models with a single predictor variable predicting `overall` were not significant.
+
 <br><br>
 
 #### Satisfaction Measures
@@ -201,7 +242,7 @@ What about the effect of team type on satisfaction of just the **level** of ulti
 
 What about satisfaction with the **amount** of ultimate you're playing?
 
-* Same procdure.
+* Same procedure
 
 
 
@@ -361,6 +402,10 @@ No, p = 0.841
 
 So, narrowing down to club or not, is playing club at all a significant predictor of overall happiness with ultimate in Chicago?
 
+![](compile_files/figure-html/unnamed-chunk-20-1.png)<!-- -->
+
+<br>
+
 Yes, p = 2.32e-09
 
 ```
@@ -384,10 +429,15 @@ Yes, p = 2.32e-09
 ## F-statistic: 40.06 on 1 and 162 DF,  p-value: 2.315e-09
 ```
 
-<br>
 
-![](compile_files/figure-html/unnamed-chunk-20-1.png)<!-- -->
 
 
 <br><br><br>
+
+
+![](./clinic.jpg) 
+
+
+<br><br><br>
+
 
