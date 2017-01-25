@@ -554,7 +554,53 @@ means_overall <- means.by.team %>%
 # 
 # 
 # mtcars %>% map_dbl(sum)
+# mtcars %>% map(sum)
 # 
 # bar <- mtcars %>%
 #   group_by(cyl)
 # 
+# 
+# 
+# a <- matrix(1:30, 5, 6)
+# ta <- t(a)
+# 
+# mtcars %>%
+#   split(.$cyl) %>%
+#   map(~ lm(mpg ~ wt, data = .x))
+
+
+
+
+# you have the total number of sets and the increment. how many burpees?
+tally <- function (lim, increment) {
+  count <- 0
+  for (set in 1:lim) {
+    count <- count + increment*set
+  }
+  return(count)
+}
+
+tally(7, 3)
+
+
+# you have the number of reps for the first two sets.
+# the increment is always the same. how many burpees?
+how_sore <- function(max, second) {
+  counter <- max
+  this_set <- max
+  increment <- max - second
+  while (this_set > 0) {
+    this_set <- this_set - increment
+    counter <- counter + this_set
+  }
+  print(paste0("You're doing ", counter, " burpees! o_O"))
+}
+
+how_sore(21, 18)
+
+
+
+
+
+
+
