@@ -58,6 +58,8 @@ Not satisfied: wants more < Not satisfied: wants less < Neutral < Other < Somewh
 
 `¯\_(ツ)_/¯`
 
+Something to try here might be to take out all the Others and relevel. Or combine things like "Not satisfied: wants more" and "Not satisfied: wants less" into the same level.
+
 <br /><br /><br />
       
 ***
@@ -436,6 +438,13 @@ Yes, p = 2.32e-09
 
 
 ![](./clinic.jpg) 
+
+<br><br><br>
+
+
+#### Future directions
+* Merge with overall stats of where people are playing
+* Merge with qualitative dat
 
 
 <br><br><br>

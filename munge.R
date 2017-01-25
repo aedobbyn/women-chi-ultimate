@@ -1,7 +1,4 @@
 
-# discard things in Other
-
-
 library(tidyverse)
 library(readxl)
 library(plyr)
@@ -539,7 +536,25 @@ means.by.team
 
 
 
+# get means for all aggregated variables
+means_overall <- means.by.team %>% 
+  ungroup() %>% 
+  select(
+    3:ncol(.)
+  ) %>% 
+  map_dbl(mean)
 
-
-
-
+# 
+# 1:10 %>%
+#   map(rnorm, mean = 10) %>%
+#   map_dbl(mean)
+# 
+# 1:10 %>%
+#   map(~ rnorm(10, .x))
+# 
+# 
+# mtcars %>% map_dbl(sum)
+# 
+# bar <- mtcars %>%
+#   group_by(cyl)
+# 
