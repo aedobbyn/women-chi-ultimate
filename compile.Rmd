@@ -52,6 +52,7 @@ knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
 
 source("./munge.R")
 # source("./model.R")
+source("./summary_stats.R")
 
 ```
 
@@ -78,6 +79,17 @@ Not satisfied: wants more < Not satisfied: wants less < Neutral < Other < Somewh
 Something to try here might be to take out all the Others and relevel. Or combine things like "Not satisfied: wants more" and "Not satisfied: wants less" into the same level.
 
 <br /><br /><br />
+
+
+***
+## Summary Stats
+
+```{r}
+knitr::kable(n_by_team_type, col.names = c("Team Type", "Number of Respondents"))
+```
+
+<br /><br /><br />
+
       
 ***
 ## Some Charts
@@ -89,7 +101,9 @@ What people are playing by their team
 ```{r}
 currently_playing.team_type <- ggplot(data = na.omit(all)) +
   geom_bar(aes(currently_playing, fill = team)) + 
-  theme(axis.text.x = element_text(angle = 60, hjust = 1))
+  theme(axis.text.x = element_text(angle = 60, hjust = 1)) +
+  ggtitle("Where We Play by Team") +
+  labs(x = "Where Play", y = "Count")
 currently_playing.team_type
 ```
 
@@ -97,12 +111,25 @@ currently_playing.team_type
 
 Satisfaction with amount playing faceted by team type
 ```{r}
+team_type_names <- list(
+  "no_club" = "No Club",
+  "mixed" = "Mixed",
+  "womens" = "Womens"
+)
+
+# function to return the values of facet labels. called inside facet_grid()
+relabel_t_t <- function(variable, value){
+  return(team_type_names[value])
+}
+
 ggplot(na.omit(all)) + 
   geom_bar(aes(x = satis_amount_recode,
                y = (..count..)/sum(..count..),
                position = "dodge")) +
-  facet_grid(~ team_type) +
-  theme(axis.text.x = element_text(angle = 60, hjust = 1))
+  facet_grid(. ~ team_type, labeller = relabel_t_t) +
+  theme(axis.text.x = element_text(angle = 60, hjust = 1)) +
+  ggtitle("Satisfaction with Amount of Play by Team Type") +
+  labs(x = "Satisfaction with Amount of Play", y = "Proportion of Total Sample")
 ```
 
 
@@ -113,7 +140,9 @@ Jittered `age` (ordinal) vs. overall happiness w/ boxplot of `overall` superimpo
 
 qplot(age, overall, data = all) +
   geom_jitter() +
-  geom_boxplot(alpha = 0.3)
+  geom_boxplot(alpha = 0.3) +
+  ggtitle("Overall Happiness by Age Group") +
+  labs(x = "Age (Jittered)", y = "Overall Happiness")
 ```
 
 

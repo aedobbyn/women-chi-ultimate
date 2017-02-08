@@ -4,6 +4,26 @@ source("./model.R")
 
 library(ggthemes)
 
+# ---------- relabeling -------
+
+# make key-value pairs for our current facet labels and what we want to see in the plot
+team_type_names <- list(
+  "no_club" = "No Club",
+  "mixed" = "Mixed",
+  "womens" = "Womens"
+)
+
+# function to return the values of facet labels. called inside facet_grid()
+relabel_t_t <- function(variable, value){
+  return(team_type_names[value])
+}
+
+# relabel <- function(variable, value){
+#   return(variable[value])
+# }
+# can't call relabel(team_type_names) as argment to labeller inside facet_grid() unfortunately
+
+
 # -------------------- hists ------------
 
 # make histogram of age distribution

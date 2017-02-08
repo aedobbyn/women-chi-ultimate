@@ -6,15 +6,28 @@ detach(package:plyr)
 
 # --------------- number of people -------------
 
+# why doesn't this work
+# get_ns <- function(d, g) {
+#   tabl <- d %>%
+#     count_(g)
+#   ggplot(tabl) + geom_bar(aes(grouping_var, n), stat = "identity")
+# }
+# 
+# n_by_age <- get_ns(d = all, g = age)
+
+
+
 # count number of people by team type
 n_by_team_type <- all %>% 
   count(team_type)
 
+team_type_plot <- ggplot(n_by_team_type) + geom_bar(aes(team_type, n), stat = "identity")
+
+# by team
 n_by_team <- all %>% 
   count(team)
 
-ggplot(n_by_team_type) + geom_bar(aes(team_type, n), stat = "identity")
-
+team_plot <- ggplot(n_by_team) + geom_bar(aes(team, n), stat = "identity")
 
 
 
