@@ -61,6 +61,20 @@ Not satisfied: wants more < Not satisfied: wants less < Neutral < Other < Somewh
 Something to try here might be to take out all the Others and relevel. Or combine things like "Not satisfied: wants more" and "Not satisfied: wants less" into the same level.
 
 <br /><br /><br />
+
+
+***
+## Summary Stats
+
+
+Team Type    Number of Respondents
+----------  ----------------------
+no_club                         94
+mixed                           30
+womens                          40
+
+<br /><br /><br />
+
       
 ***
 ## Some Charts
@@ -69,12 +83,12 @@ What people are playing by their team
 
 * Note that many people took the survey after their seasons had ended so what they play in season might != what they said they were `currently_playing`
 
-![](compile_files/figure-html/unnamed-chunk-1-1.png)<!-- -->
+![](compile_files/figure-html/unnamed-chunk-2-1.png)<!-- -->
 
 <br>
 
 Satisfaction with amount playing faceted by team type
-![](compile_files/figure-html/unnamed-chunk-2-1.png)<!-- -->
+![](compile_files/figure-html/unnamed-chunk-3-1.png)<!-- -->
 
 
 <br>
@@ -89,18 +103,18 @@ Jittered `age` (ordinal) vs. overall happiness w/ boxplot of `overall` superimpo
 #### Drilling down into team_type
 
 Non-Club: How long have non-Chicago club players been playing?
-![](compile_files/figure-html/unnamed-chunk-3-1.png)<!-- -->
+![](compile_files/figure-html/unnamed-chunk-4-1.png)<!-- -->
 
 Womens: age predicting overall happiness
 
 (Best fit lines are fitted using the linear `method = "lm"`)
 
-![](compile_files/figure-html/unnamed-chunk-4-1.png)<!-- -->
+![](compile_files/figure-html/unnamed-chunk-5-1.png)<!-- -->
 
 <br>
 
 Mixed: where you started playing predicting overall satisfaction
-![](compile_files/figure-html/unnamed-chunk-5-1.png)<!-- -->
+![](compile_files/figure-html/unnamed-chunk-6-1.png)<!-- -->
 
 
 
@@ -110,11 +124,11 @@ Mixed: where you started playing predicting overall satisfaction
 * Focusing on amount rather than level because the model showed `team_type` predicting satisfaction amount but not level. 
 * (In other words, what kind of team you're on has an effect on whether you're satisfied with the amount you're playing or not.)
 
-![](compile_files/figure-html/unnamed-chunk-6-1.png)<!-- -->
-
 ![](compile_files/figure-html/unnamed-chunk-7-1.png)<!-- -->
 
 ![](compile_files/figure-html/unnamed-chunk-8-1.png)<!-- -->
+
+![](compile_files/figure-html/unnamed-chunk-9-1.png)<!-- -->
 
 <br /><br /><br />
 
@@ -404,7 +418,7 @@ No, p = 0.841
 
 So, narrowing down to club or not, is playing club at all a significant predictor of overall happiness with ultimate in Chicago?
 
-![](compile_files/figure-html/unnamed-chunk-20-1.png)<!-- -->
+![](compile_files/figure-html/unnamed-chunk-21-1.png)<!-- -->
 
 <br>
 
