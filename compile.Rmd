@@ -157,6 +157,7 @@ no_club.how_long_play <-
   ggplot(data = na.omit(all[all$team_type == "no_club", ])) +
   geom_bar(aes(team, fill = how_long_play), position = "fill") + 
   theme(axis.text.x = element_text(angle = 60, hjust = 1)) +
+  scale_y_continuous(labels = scales::percent) +
   ggtitle("Among Non-Chicago Club Players: Length of Time Playing by Team") +
   labs(x = "Team", y = "Percent")
 no_club.how_long_play

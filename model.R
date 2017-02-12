@@ -263,6 +263,9 @@ all <- cbind(all, preds_overall.team_type)
 # remove the one NA case, who dis?
 all_no_na <- all[complete.cases(all), ]
 
+
+
+
 # unsupervised learning ~~~
 # are there two distinct clusters in the data, club and non-club?
 
@@ -283,6 +286,12 @@ table(clusters_three$cluster, all_no_na$team_type)
 # mixed = 1
 # womens = 1
 # so the differentiator is that of 2s, most of them are no_club. 1 is a mixed bag
+
+
+# cbind the cluster portion of these two the df with no NAs
+all_no_na <- data.frame(all_no_na, 
+                        clusters_two = clusters_two$cluster,
+                        clusters_three = clusters_three$cluster)
 
 
 # 
@@ -314,10 +323,57 @@ ggplot(data = all_no_na,
 
 
 
-# cbind the cluster portion of these two the df with no NAs
-all_no_na <- data.frame(all_no_na, 
-                        clusters_two = clusters_two$cluster,
-                        clusters_three = clusters_three$cluster)
+
+
+
+
+
+
+# try the same with no team indicators
+
+all_no_team_indics <- all[complete.cases(all), ] %>% 
+  select(
+    -c(team, team_type)
+  )
+
+
+set.seed(11)
+clusters_two_x <- kmeans(all_no_team_indics$overall, centers = 2, iter.max = 15, nstart = 20)
+clusters_three_x <- kmeans(all_no_team_indics$overall, centers = 3, iter.max = 15, nstart = 20)
+
+
+all_no_team_indics <- data.frame(all_no_team_indics, 
+                        club_or_not = all_no_na$club_or_not,
+                        team_type = all_no_na$team_type,
+                        clusters_two_x = clusters_two$cluster,
+                        clusters_three_x = clusters_three$cluster)
+
+
+
+ggplot(data = all_no_team_indics, 
+       aes(x = team_type, y = overall, colour = factor(clusters_two))) + 
+  geom_jitter() +
+  ggtitle("Unsupervised Clustering of Overall Scores into Two Groups -- No Team Indicators") +
+  labs(x = "Team Type", y = "Overall Happiness") +
+  # geom_boxplot(data = all_no_team_indics, aes(overall)) +
+  theme_minimal()
+
+
+ggplot(data = all_no_team_indics, 
+       aes(x = team_type, y = overall, colour = factor(clusters_three))) + 
+  geom_jitter() +
+  ggtitle("Unsupervised Clustering of Overall Scores into Three Groups -- No Team Indicators") +
+  labs(x = "Team Type", y = "Overall Happiness") +
+  geom_boxplot(data = all_no_team_indics, aes(overall)) +
+  theme_minimal()
+
+
+
+
+
+
+
+
 
 
 # give numeric values that we think correspond to how the algorithm is clustering people

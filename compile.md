@@ -459,6 +459,7 @@ Yes, p = 2.32e-09
 #### Future directions
 * Merge with overall stats of where people are playing
 * Merge with qualitative dat
+* Check goodness of fit of models
 
 
 <br><br><br>
