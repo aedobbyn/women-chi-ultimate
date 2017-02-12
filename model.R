@@ -477,20 +477,30 @@ hc_try_2 <- all %>%
 
 
 scale_vars <- function(dat) {
-  vars <- dat[, 2:3]
-  for (var in vars) {
-    print(var[1])
-    var_scaled <- scale(var)
-    dat <- data.frame(dat, "new" = var_scaled)
+  vars <- dat[, 2:ncol(dat)]
+  # print(names(vars))
+  # var_name <- names(vars[1])
+  for (row in vars) {
+    print(var)
+    # var_name <- names(vars[1])
+    # print(var_name)
+    var_scaled <- scale(row)
+    # print(paste0("scaled", var))
+    dat <- data.frame(dat, var_name = var_scaled)
   }
+  # print(names(vars))
+  names(dat[, 4:5]) <- names(vars)
+  # print(names(dat[, 2:ncol(dat)]))
   dat
 }
+
+scale_vars(hc_try_2)
 
 hc_2 <- scale_vars(hc_try_2)
 
 
 # same as:
-hc <- apply(hc_try_2[, 2:3], 2, scale)
+hc <- apply(hc_try_2[, 2:ncol(hc_try_2)], 2, scale)
 
 
 
