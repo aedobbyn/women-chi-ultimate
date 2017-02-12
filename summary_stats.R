@@ -31,6 +31,19 @@ team_plot <- ggplot(n_by_team) + geom_bar(aes(team, n), stat = "identity")
 
 
 
+
+# ------
+
+
+
+
+
+
+
+
+
+
+
 # -------- calculate overall happiness --------
 all <- all %>% 
   mutate(
