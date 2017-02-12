@@ -260,24 +260,67 @@ all <- cbind(all, preds_overall.team_type)
 
 # ------ kmeans ------
 
+# remove the one NA case, who dis?
 all_no_na <- all[complete.cases(all), ]
 
-# unsupervised learning
+# unsupervised learning ~~~
 # are there two distinct clusters in the data, club and non-club?
 
-# get clusters for overall. take out rows with NAs
-clusters_two <- kmeans(all[complete.cases(all), ]$overall, centers = 2, iter.max = 15)
+# from a dataset without NAs, cluster people based on their "overall" in first
+# two, then three clusters
+# this returns an objet of class kmeans. do str(clusters_two) to see what's in here.
+set.seed(10)
+clusters_two <- kmeans(all[complete.cases(all), ]$overall, centers = 2, iter.max = 15, nstart = 20)
+clusters_three <- kmeans(all[complete.cases(all), ]$overall, centers = 3, iter.max = 15, nstart = 20)
 
-clusters_three <- kmeans(all[complete.cases(all), ]$overall, centers = 3, iter.max = 15)
 
-# rbind the cluster portion of these two the df with no NAs
+table(clusters_two$cluster, all_no_na$club_or_not)
+# so club got looped into mostly 2, and not_club is mostly 1
+
+table(clusters_three$cluster, all_no_na$team_type)
+# based on this
+# no_club = 1 and 3
+# mixed = 1
+# womens = 1
+# so the differentiator is that of 2s, most of them are no_club. 1 is a mixed bag
+
+
+# 
+clusters_two$cluster <- as.factor(clusters_two$cluster)
+ggplot(data = all_no_na, 
+       aes(club_or_not, overall, color = factor(clusters_two))) + 
+  geom_point() +
+  ggtitle("Unsupervised Clustering of Overall Scores into Three Groups") +
+  labs(x = "Team Type", y = "Overall Happiness")
+
+
+
+# not jittered, two clusters
+ggplot(data = all_no_na, 
+       aes(x = team_type, y = overall, colour = clusters_three)) + 
+  geom_point() +
+  ggtitle("Unsupervised Clustering of Overall Scores into Three Groups") +
+  labs(x = "Team Type", y = "Overall Happiness")
+
+
+# jittered
+ggplot(data = all_no_na, 
+       aes(x = team_type, y = overall, colour = factor(clusters_three))) + 
+  geom_jitter() +
+  ggtitle("Unsupervised Clustering of Overall Scores into Three Groups") +
+  labs(x = "Team Type", y = "Overall Happiness") +
+  theme_minimal()
+
+
+
+
+# cbind the cluster portion of these two the df with no NAs
 all_no_na <- data.frame(all_no_na, 
                         clusters_two = clusters_two$cluster,
                         clusters_three = clusters_three$cluster)
 
 
-# split by actual club and no club
-
+# give numeric values that we think correspond to how the algorithm is clustering people
 all_no_na_2 <- all_no_na %>% 
   mutate(
     club_or_not_num = ifelse(club_or_not == "not_club", 1, 2),   # not_club = 1, club = 2
@@ -286,8 +329,15 @@ all_no_na_2 <- all_no_na %>%
   )
 
 
+# compare how well kmeans did compard to actual
+
+all_no_na_4 <- all_no_na %>% 
+  mutate(
+    good
 
 
+
+# same as above for not_club or club, just more programmatically (& verbose :/)
 real_cluster <- function(dat) {
   for (i in seq_along(dat[["club_or_not"]])) {
     if (dat[["club_or_not"]][i] == "not_club") {
