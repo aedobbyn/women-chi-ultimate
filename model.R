@@ -257,3 +257,56 @@ all <- cbind(all, preds_overall.team_type)
 
 
 
+
+# ------ kmeans ------
+
+all_no_na <- all[complete.cases(all), ]
+
+# unsupervised learning
+# are there two distinct clusters in the data, club and non-club?
+
+# get clusters for overall. take out rows with NAs
+clusters_two <- kmeans(all[complete.cases(all), ]$overall, centers = 2, iter.max = 15)
+
+clusters_three <- kmeans(all[complete.cases(all), ]$overall, centers = 3, iter.max = 15)
+
+# rbind the cluster portion of these two the df with no NAs
+all_no_na <- data.frame(all_no_na, 
+                        clusters_two = clusters_two$cluster,
+                        clusters_three = clusters_three$cluster)
+
+
+# split by actual club and no club
+
+all_no_na_2 <- all_no_na %>% 
+  mutate(
+    club_or_not_num = ifelse(club_or_not == "not_club", 1, 2),   # not_club = 1, club = 2
+    team_type_num = ifelse(team_type == "no_club", 
+                           2, ifelse(team_type == "womens", 3, 1))   # mixed = 1, no_club = 2, womens = 3
+  )
+
+
+
+
+real_cluster <- function(dat) {
+  for (i in seq_along(dat[["club_or_not"]])) {
+    if (dat[["club_or_not"]][i] == "not_club") {
+      dat[["club_or_not_num"]][i] <- 1
+    } else if (dat[["club_or_not"]][i] == "club") {
+      dat[["club_or_not_num"]][i] <- 2
+    }
+  }
+  as.tbl(data.frame(dat, dat[["club_or_not_num"]]))
+}
+
+all_no_na_3 <- real_cluster(all_no_na)
+
+
+
+
+
+
+
+
+
+

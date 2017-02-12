@@ -122,7 +122,7 @@ relabel_t_t <- function(variable, value){
   return(team_type_names[value])
 }
 
-ggplot(na.omit(all)) + 
+ggplot(na.omit(all)) +
   geom_bar(aes(x = satis_amount_recode,
                y = (..count..)/sum(..count..),
                position = "dodge")) +
@@ -156,7 +156,9 @@ Non-Club: How long have non-Chicago club players been playing?
 no_club.how_long_play <- 
   ggplot(data = na.omit(all[all$team_type == "no_club", ])) +
   geom_bar(aes(team, fill = how_long_play), position = "fill") + 
-  theme(axis.text.x = element_text(angle = 60, hjust = 1))
+  theme(axis.text.x = element_text(angle = 60, hjust = 1)) +
+  ggtitle("Among Non-Chicago Club Players: Length of Time Playing by Team") +
+  labs(x = "Team", y = "Percent")
 no_club.how_long_play
 ```
 
@@ -402,6 +404,7 @@ summary(m.overall.club_or_not)
 #### Future directions
 * Merge with overall stats of where people are playing
 * Merge with qualitative dat
+* Check goodness of fit of models
 
 
 <br><br><br>
