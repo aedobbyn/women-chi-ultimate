@@ -8,6 +8,9 @@
 # into three groups --> clusters will mainly represent the three team_types
 # Dependent variable = overall
 
+# get a dataset with only complete cases
+all_no_na <- all[complete.cases(all), ]
+
 # remove the one row with a missing value
 # keep only predictor vars (not outcome vars) that aren't team and team_type (because that's what we think
 # will determine in some part which clusters people fall into)

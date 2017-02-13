@@ -228,6 +228,177 @@ ggplot(na.omit(all[all$team_type=="no_club", ])) +
 <br /><br /><br />
 
 ***
+## Cluster Analyses
+
+
+### K-Means clustering
+
+Dependent variable here is `overall` happiness.
+
+Hypothesis: 
+* Unsupervised clustering into two groups --> fault line will be the `club` vs. `no_club` divide. 
+* Into three groups --> clusters will mainly represent the three `team_type`s
+
+Setup:
+* Pare down the data to only the outcome variable, `overall`, and the predictor variables `age`, `where_live`, `currently_playing`, `how_long_play`, `start_playing`, and `first_experience`. So we take out `team`, `team_type`, and `club_or_not` because these are implicated in the hypothesis
+* Set a kmeans algorithm on the new data
+  + Tell the algorithm we want it to cluster the data into two clusters based on the outcome variable
+  + Glue this output (a series of 1 and 2s depending on which cluster each row was assigned to) along with the team varibles we took out all back together
+  
+
+```{r setup, include=FALSE}
+
+# get a dataset with only complete cases
+all_no_na <- all[complete.cases(all), ]
+
+# remove the one row with a missing value
+# keep only predictor vars (not outcome vars) that aren't team and team_type (because that's what we think
+# will determine in some part which clusters people fall into)
+cluster_dat <- all[complete.cases(all), ] %>% 
+  select(
+    age, where_live, currently_playing, how_long_play, start_playing, first_experience,
+    overall
+  )
+
+# from the pared dataset, cluster people based on their "overall" ratings in first
+# two, then three clusters.
+# this returns an objet of class kmeans. do str(clusters_two) to see what's in here.
+set.seed(10) # for reproducibility
+clusters_two <- kmeans(cluster_dat$overall, centers = 2, iter.max = 15, nstart = 20)
+clusters_three <- kmeans(cluster_dat$overall, centers = 3, iter.max = 15, nstart = 20)
+
+
+# cbind the cluster portion of these two the df with no NAs, plus the variables that had team indicators (i.e.,
+# club_or_not, team_type, and team) that we had taken out originally
+cluster_dat <- as_tibble(data.frame(cluster_dat, 
+                          club_or_not = all_no_na$club_or_not,
+                          team_type = all_no_na$team_type,
+                          team = all_no_na$team,
+                          clusters_two = factor(clusters_two$cluster),
+                          clusters_three = factor(clusters_three$cluster)))
+
+```
+
+A plot of how `team_type` falls into the two clusters. Data is jittered for interpretability (otherwise would fall perfectly onto 1 or 2)
+```{r}
+ggplot(data = cluster_dat, 
+       aes(x = clusters_two, y = overall, colour = team_type)) + 
+  geom_jitter() +
+  ggtitle("Unsupervised Clustering of Overall Scores into Two Groups -- No Team Indicators") +
+  labs(x = "Cluster", y = "Overall Happiness") +
+  theme_minimal()
+```
+
+
+The same with boxplots overlaid
+```{r}
+ggplot(data = cluster_dat, 
+       aes(x = clusters_two, y = overall, colour = team_type)) + 
+  geom_jitter() +
+  ggtitle("Unsupervised Clustering of Overall Scores into Two Groups -- No Team Indicators") +
+  labs(x = "Cluster", y = "Overall Happiness") +
+  geom_boxplot(alpha = 0.3) +
+  theme_minimal()
+```
+
+
+With team as the grouper
+```{r}
+ggplot(data = cluster_dat, 
+       aes(x = clusters_two, y = overall, colour = team)) + 
+  geom_jitter() +
+  ggtitle("Unsupervised Clustering of Overall Scores into Two Groups -- No Team Indicators") +
+  labs(x = "Cluster", y = "Overall Happiness") +
+  # geom_boxplot(data = all_no_team_indics, aes(overall)) +
+  theme_minimal()
+```
+
+Colored by cluster
+```{r}
+ggplot(data = cluster_dat,    
+       aes(x = team_type, y = overall, colour = clusters_two)) + 
+  geom_jitter() +
+  ggtitle("Unsupervised Clustering of Overall Scores into Two Groups", subtitle = "No Team Indicators") +
+  labs(x = "Team Type", y = "Overall Happiness") +
+  # geom_boxplot(alpha = 0.3) +
+  theme_minimal()
+```
+
+Colored by cluster
+```{r}
+ggplot(data = cluster_dat, 
+       aes(x = team_type, y = overall, colour = clusters_three)) + 
+  geom_jitter() +
+  ggtitle("Unsupervised Clustering of Overall Scores into Three Groups -- No Team Indicators") +
+  labs(x = "Team Type", y = "Overall Happiness") +
+  geom_boxplot(data = all_no_team_indics, aes(overall)) +
+  theme_minimal()
+```
+
+
+
+<br /><br />
+
+### Hierarchical Clustering
+
+* Dependent vars: satisfaction amount and satisfaction level
+* Grouping vars: `team`, `team_type`, or `where_live`
+* Distance = Euclidian
+* Method = centroid
+
+
+```{r}
+hc <- all %>%
+  group_by(team) %>% 
+  summarise(
+    s_amount = mean(as.numeric(satis_amount_recode)), 
+    s_level = mean(as.numeric(satis_level_recode))
+  )
+
+# put team names as rownames and take out the team column
+hc <- data.frame(hc)
+rownames(hc) <- hc[["team"]]
+hc <- as_tibble(hc[, 2:ncol(hc)])
+
+# scale the variables of interest (everything except team, which was included in the group_by)
+scale_vars <- function(dat) {
+  vars <- dat[, 1:ncol(dat)]
+  for (row in vars) {
+    var_scaled <- scale(row)
+    dat <- data.frame(dat, var_scaled = var_scaled)
+  }
+  dat
+}
+hc <- scale_vars(hc)
+
+# change the new names to something meaningful (try to get this in the function)
+names(hc)[3:4] <- c("s_amount_scaled", "s_level_scaled")
+
+hc_dist <- dist(hc[3:4])
+hc_fit <- hclust(hc_dist, method = "centroid")
+
+```
+
+Plot the heirarchy
+```{r}
+plot(hc_fit, hang = -1, cex = 0.8, srt = 60,
+     main = paste0("Cluster based on Satisfaction Amount and Satisfaction Level Per Team"),
+     xlab = "Groups", 
+     ylab = "")
+```
+
+Optimal number of clusters?
+```{r}
+# get optimal number of clusters
+num_clust <- NbClust(hc[3:4], min.nc = 2,
+                     max.nc = 8,   # set max number of clusters to less than number of groups
+                     method = "centroid")
+```
+
+
+<br /><br /><br />
+
+***
 ## Models
 
 Omnibus model with all predictors predicting the overall measure. (Not including `team` here because it is binned by `team_type`)
