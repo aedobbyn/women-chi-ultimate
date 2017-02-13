@@ -133,6 +133,85 @@ Mixed: where you started playing predicting overall satisfaction
 <br /><br /><br />
 
 ***
+## Cluster Analyses
+
+
+### K-Means clustering
+
+Dependent variable here is `overall` happiness.
+
+Hypothesis: 
+
+* Unsupervised clustering into two groups --> fault line will be the `club` vs. `no_club` divide. 
+* Into three groups --> clusters will mainly represent the three `team_type`s
+
+Setup:
+
+* Pare down the data to only the outcome variable, `overall`, and the predictor variables `age`, `where_live`, `currently_playing`, `how_long_play`, `start_playing`, and `first_experience`. So we take out `team`, `team_type`, and `club_or_not` because these are implicated in the hypothesis
+* Set a kmeans algorithm on the new data  
+  + Tell the algorithm we want it to cluster the data into two clusters based on the outcome variable
+  + Glue this output (a series of 1 and 2s depending on which cluster each row was assigned to) along with the team varibles we took out all back together
+* Data is jittered for interpretability
+  
+
+
+
+
+
+Colored by two clusters.
+
+![](compile_files/figure-html/unnamed-chunk-10-1.png)<!-- -->
+
+
+Colored by three clusters.
+
+![](compile_files/figure-html/unnamed-chunk-11-1.png)<!-- -->
+
+A plot of how `team_type` falls into the two clusters. 
+![](compile_files/figure-html/unnamed-chunk-12-1.png)<!-- -->
+
+
+The same with boxplots overlaid
+
+![](compile_files/figure-html/unnamed-chunk-13-1.png)<!-- -->
+
+
+A plot of how `club_or_not` falls into the three clusters.
+
+![](compile_files/figure-html/unnamed-chunk-14-1.png)<!-- -->
+
+With team as the grouper
+
+![](compile_files/figure-html/unnamed-chunk-15-1.png)<!-- -->
+
+
+
+
+<br /><br />
+
+### Hierarchical Clustering
+
+* Dependent vars: satisfaction amount and satisfaction level
+* Grouping vars: `team`, `team_type`, or `where_live`
+* Distance = Euclidian
+* Method = centroid
+
+
+
+
+Plot the heirarchy
+![](compile_files/figure-html/unnamed-chunk-17-1.png)<!-- -->
+
+
+<br>
+
+Optimal number of clusters? Depends on many factors, but somewhere around 3 or 4, usually.
+
+
+
+<br /><br /><br />
+
+***
 ## Models
 
 Omnibus model with all predictors predicting the overall measure. (Not including `team` here because it is binned by `team_type`)
@@ -418,7 +497,7 @@ No, p = 0.841
 
 So, narrowing down to club or not, is playing club at all a significant predictor of overall happiness with ultimate in Chicago?
 
-![](compile_files/figure-html/unnamed-chunk-21-1.png)<!-- -->
+![](compile_files/figure-html/unnamed-chunk-30-1.png)<!-- -->
 
 <br>
 

@@ -236,17 +236,20 @@ ggplot(na.omit(all[all$team_type=="no_club", ])) +
 Dependent variable here is `overall` happiness.
 
 Hypothesis: 
+
 * Unsupervised clustering into two groups --> fault line will be the `club` vs. `no_club` divide. 
 * Into three groups --> clusters will mainly represent the three `team_type`s
 
 Setup:
+
 * Pare down the data to only the outcome variable, `overall`, and the predictor variables `age`, `where_live`, `currently_playing`, `how_long_play`, `start_playing`, and `first_experience`. So we take out `team`, `team_type`, and `club_or_not` because these are implicated in the hypothesis
-* Set a kmeans algorithm on the new data
+* Set a kmeans algorithm on the new data  
   + Tell the algorithm we want it to cluster the data into two clusters based on the outcome variable
   + Glue this output (a series of 1 and 2s depending on which cluster each row was assigned to) along with the team varibles we took out all back together
+* Data is jittered for interpretability
   
 
-```{r setup, include=FALSE}
+```{r kmenas_setup, include=FALSE}
 
 # get a dataset with only complete cases
 all_no_na <- all[complete.cases(all), ]
@@ -279,61 +282,80 @@ cluster_dat <- as_tibble(data.frame(cluster_dat,
 
 ```
 
-A plot of how `team_type` falls into the two clusters. Data is jittered for interpretability (otherwise would fall perfectly onto 1 or 2)
+
+
+Colored by two clusters.
+
+```{r}
+ggplot(data = cluster_dat,    
+       aes(x = team_type, y = overall, colour = clusters_two)) + 
+  geom_jitter() +
+  ggtitle("Unsupervised Clustering of Overall Scores into Two Groups") +
+  labs(x = "Team Type", y = "Overall Happiness") +
+  # geom_boxplot(alpha = 0.3) +
+  theme_minimal()
+```
+
+
+Colored by three clusters.
+
+```{r}
+ggplot(data = cluster_dat,    
+       aes(x = team_type, y = overall, colour = clusters_three)) + 
+  geom_jitter() +
+  ggtitle("Unsupervised Clustering of Overall Scores into Three Groups") +
+  labs(x = "Team Type", y = "Overall Happiness") +
+  # geom_boxplot(alpha = 0.3) +
+  theme_minimal()
+```
+
+A plot of how `team_type` falls into the two clusters. 
 ```{r}
 ggplot(data = cluster_dat, 
        aes(x = clusters_two, y = overall, colour = team_type)) + 
   geom_jitter() +
-  ggtitle("Unsupervised Clustering of Overall Scores into Two Groups -- No Team Indicators") +
+  ggtitle("Unsupervised Clustering of Overall Scores into Two Groups") +
   labs(x = "Cluster", y = "Overall Happiness") +
   theme_minimal()
 ```
 
 
 The same with boxplots overlaid
+
 ```{r}
 ggplot(data = cluster_dat, 
        aes(x = clusters_two, y = overall, colour = team_type)) + 
   geom_jitter() +
-  ggtitle("Unsupervised Clustering of Overall Scores into Two Groups -- No Team Indicators") +
+  ggtitle("Unsupervised Clustering of Overall Scores into Two Groups") +
   labs(x = "Cluster", y = "Overall Happiness") +
   geom_boxplot(alpha = 0.3) +
   theme_minimal()
 ```
 
 
+A plot of how `club_or_not` falls into the three clusters.
+
+```{r}
+ggplot(data = cluster_dat, 
+       aes(x = clusters_three, y = overall, colour = club_or_not)) + 
+  geom_jitter() +
+  ggtitle("Unsupervised Clustering of Overall Scores into Two Groups") +
+  labs(x = "Cluster", y = "Overall Happiness") +
+  theme_minimal()
+```
+
 With team as the grouper
+
 ```{r}
 ggplot(data = cluster_dat, 
        aes(x = clusters_two, y = overall, colour = team)) + 
   geom_jitter() +
-  ggtitle("Unsupervised Clustering of Overall Scores into Two Groups -- No Team Indicators") +
+  ggtitle("Unsupervised Clustering of Overall Scores into Two Groups") +
   labs(x = "Cluster", y = "Overall Happiness") +
   # geom_boxplot(data = all_no_team_indics, aes(overall)) +
   theme_minimal()
 ```
 
-Colored by cluster
-```{r}
-ggplot(data = cluster_dat,    
-       aes(x = team_type, y = overall, colour = clusters_two)) + 
-  geom_jitter() +
-  ggtitle("Unsupervised Clustering of Overall Scores into Two Groups", subtitle = "No Team Indicators") +
-  labs(x = "Team Type", y = "Overall Happiness") +
-  # geom_boxplot(alpha = 0.3) +
-  theme_minimal()
-```
-
-Colored by cluster
-```{r}
-ggplot(data = cluster_dat, 
-       aes(x = team_type, y = overall, colour = clusters_three)) + 
-  geom_jitter() +
-  ggtitle("Unsupervised Clustering of Overall Scores into Three Groups -- No Team Indicators") +
-  labs(x = "Team Type", y = "Overall Happiness") +
-  geom_boxplot(data = all_no_team_indics, aes(overall)) +
-  theme_minimal()
-```
 
 
 
@@ -387,12 +409,15 @@ plot(hc_fit, hang = -1, cex = 0.8, srt = 60,
      ylab = "")
 ```
 
-Optimal number of clusters?
+
+<br>
+
+Optimal number of clusters? Depends on many factors, but somewhere around 3 or 4, usually.
 ```{r}
-# get optimal number of clusters
-num_clust <- NbClust(hc[3:4], min.nc = 2,
-                     max.nc = 8,   # set max number of clusters to less than number of groups
-                     method = "centroid")
+# # get optimal number of clusters
+# num_clust <- NbClust(hc[3:4], min.nc = 2,
+#                      max.nc = 8,   # set max number of clusters to less than number of groups
+#                      method = "centroid")
 ```
 
 
