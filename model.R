@@ -467,7 +467,7 @@ plot(hc_fit, hang = -1, cex = 0.8)
 
 
 
-hc_try_2 <- all %>%
+hc <- all %>%
   group_by(team) %>% 
   summarise(
     # age, where_live, currently_playing, how_long_play, start_playing, first_experience,
@@ -475,32 +475,83 @@ hc_try_2 <- all %>%
     s_level = mean(as.numeric(satis_level_recode))
   )
 
+# put team names as rownames and take out the team column
+hc <- data.frame(hc)
+rownames(hc) <- hc$team
+hc <- as_tibble(hc[, 2:ncol(hc)])
 
+
+# scale the variables of interest (everything except team, which was included in the group_by)
 scale_vars <- function(dat) {
-  vars <- dat[, 2:ncol(dat)]
-  # print(names(vars))
-  # var_name <- names(vars[1])
+  vars <- dat[, 1:ncol(dat)]
   for (row in vars) {
-    print(var)
-    # var_name <- names(vars[1])
-    # print(var_name)
     var_scaled <- scale(row)
-    # print(paste0("scaled", var))
-    dat <- data.frame(dat, var_name = var_scaled)
+    dat <- data.frame(dat, var_scaled = var_scaled)
   }
-  # print(names(vars))
-  names(dat[, 4:5]) <- names(vars)
-  # print(names(dat[, 2:ncol(dat)]))
   dat
 }
 
-scale_vars(hc_try_2)
+hc <- scale_vars(hc)
 
-hc_2 <- scale_vars(hc_try_2)
+# change the new names to something meaningful (try to get this in the function)
+names(hc)[3:4] <- c("s_amount_scaled", "s_level_scaled")
 
 
-# same as:
-hc <- apply(hc_try_2[, 2:ncol(hc_try_2)], 2, scale)
+
+hc_dist <- dist(hc[3:4])
+hc_fit <- hclust(hc_dist, method = "centroid")
+
+plot(hc_fit, hang = -1, cex = 0.8,
+     main = "Cluster based on Satisfaction Amount and Satisfaction Scores Per Team")
+
+
+
+
+
+
+
+
+
+
+
+
+
+hc_team_type <- all %>%
+  group_by(team_type) %>% 
+  summarise(
+    # age, where_live, currently_playing, how_long_play, start_playing, first_experience,
+    s_amount = mean(as.numeric(satis_amount_recode)), 
+    s_level = mean(as.numeric(satis_level_recode))
+  )
+
+# put team names as rownames and take out the team column
+hc_team_type <- data.frame(hc_team_type)
+rownames(hc_team_type) <- hc_team_type$team
+hc_team_type <- as_tibble(hc_team_type[, 2:ncol(hc_team_type)])
+
+
+# scale the variables of interest (everything except team, which was included in the group_by)
+scale_vars <- function(dat) {
+  vars <- dat[, 1:ncol(dat)]
+  for (row in vars) {
+    var_scaled <- scale(row)
+    dat <- data.frame(dat, var_scaled = var_scaled)
+  }
+  dat
+}
+
+hc_team_type <- scale_vars(hc_team_type)
+
+# change the new names to something meaningful (try to get this in the function)
+names(hc_team_type)[3:4] <- c("s_amount_scaled", "s_level_scaled")
+
+
+
+hc_team_type_dist <- dist(hc_team_type[3:4])
+hc_team_type_fit <- hclust(hc_team_type_dist, method = "centroid")
+
+plot(hc_team_type_fit, hang = -1, cex = 0.8,
+     main = "Cluster based on Satisfaction Amount and Satisfaction Scores Per Team Type")
 
 
 
