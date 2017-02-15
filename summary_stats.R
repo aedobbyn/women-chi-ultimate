@@ -7,13 +7,14 @@ detach(package:plyr)
 # --------------- number of people -------------
 
 # why doesn't this work
-# get_ns <- function(d, g) {
-#   tabl <- d %>%
-#     count_(g)
-#   ggplot(tabl) + geom_bar(aes(grouping_var, n), stat = "identity")
-# }
-# 
-# n_by_age <- get_ns(d = all, g = age)
+get_ns <- function(d, g) {
+  tabl <- d %>%
+    count_(g);
+  print(tabl)
+  ggplot(d) + geom_bar(aes_string(g), stat = "count")
+}
+
+n_by_age <- get_ns(d = all, g = "age")
 
 
 
@@ -35,11 +36,25 @@ team_plot <- ggplot(n_by_team) + geom_bar(aes(team, n), stat = "identity")
 # ------
 
 
+get_table <- function(summarise_this) {
+  all %>%  count_(summarise_this)
+}
+
+get_table("club_or_not")
+
+do_both <- function(summarise_this) {
+  tabl <- all %>%  count_(summarise_this)
+  print(tabl)
+  ggplot(data = na.omit(all), aes_string(summarise_this)) + geom_bar(position = "dodge")
+}
+
+graph_table("team_type")
 
 
-
-
-
+# club or not barchart
+club.or.not <- ggplot(aes(team_type), data = na.omit(all)) +
+  geom_bar(position = "dodge")
+club.or.not
 
 
 

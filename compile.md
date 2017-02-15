@@ -79,16 +79,24 @@ womens                          40
 ***
 ## Some Charts
 
+Basic breakdowns
+
+
+![](compile_files/figure-html/unnamed-chunk-2-1.png)<!-- -->![](compile_files/figure-html/unnamed-chunk-2-2.png)<!-- -->
+
+![](compile_files/figure-html/unnamed-chunk-3-1.png)<!-- -->
+
+
 What people are playing by their team 
 
 * Note that many people took the survey after their seasons had ended so what they play in season might != what they said they were `currently_playing`
 
-![](compile_files/figure-html/unnamed-chunk-2-1.png)<!-- -->
+![](compile_files/figure-html/unnamed-chunk-4-1.png)<!-- -->
 
 <br>
 
 Satisfaction with amount playing faceted by team type
-![](compile_files/figure-html/unnamed-chunk-3-1.png)<!-- -->
+![](compile_files/figure-html/unnamed-chunk-5-1.png)<!-- -->
 
 
 <br>
@@ -103,18 +111,18 @@ Jittered `age` (ordinal) vs. overall happiness w/ boxplot of `overall` superimpo
 #### Drilling down into team_type
 
 Non-Club: How long have non-Chicago club players been playing?
-![](compile_files/figure-html/unnamed-chunk-4-1.png)<!-- -->
+![](compile_files/figure-html/unnamed-chunk-6-1.png)<!-- -->
 
 Womens: age predicting overall happiness
 
 (Best fit lines are fitted using the linear `method = "lm"`)
 
-![](compile_files/figure-html/unnamed-chunk-5-1.png)<!-- -->
+![](compile_files/figure-html/unnamed-chunk-7-1.png)<!-- -->
 
 <br>
 
 Mixed: where you started playing predicting overall satisfaction
-![](compile_files/figure-html/unnamed-chunk-6-1.png)<!-- -->
+![](compile_files/figure-html/unnamed-chunk-8-1.png)<!-- -->
 
 
 
@@ -124,11 +132,11 @@ Mixed: where you started playing predicting overall satisfaction
 * Focusing on amount rather than level because the model showed `team_type` predicting satisfaction amount but not level. 
 * (In other words, what kind of team you're on has an effect on whether you're satisfied with the amount you're playing or not.)
 
-![](compile_files/figure-html/unnamed-chunk-7-1.png)<!-- -->
-
-![](compile_files/figure-html/unnamed-chunk-8-1.png)<!-- -->
-
 ![](compile_files/figure-html/unnamed-chunk-9-1.png)<!-- -->
+
+![](compile_files/figure-html/unnamed-chunk-10-1.png)<!-- -->
+
+![](compile_files/figure-html/unnamed-chunk-11-1.png)<!-- -->
 
 <br /><br /><br />
 
@@ -160,29 +168,33 @@ Setup:
 
 Colored by two clusters.
 
-![](compile_files/figure-html/unnamed-chunk-10-1.png)<!-- -->
-
-
-Colored by three clusters.
-
-![](compile_files/figure-html/unnamed-chunk-11-1.png)<!-- -->
-
-A plot of how `team_type` falls into the two clusters. 
 ![](compile_files/figure-html/unnamed-chunk-12-1.png)<!-- -->
 
-
-The same with boxplots overlaid
+Colored by two clusters.
 
 ![](compile_files/figure-html/unnamed-chunk-13-1.png)<!-- -->
 
 
-A plot of how `club_or_not` falls into the three clusters.
+Colored by three clusters.
 
 ![](compile_files/figure-html/unnamed-chunk-14-1.png)<!-- -->
 
+A plot of how `team_type` falls into the two clusters. 
+![](compile_files/figure-html/unnamed-chunk-15-1.png)<!-- -->
+
+
+The same with boxplots overlaid
+
+![](compile_files/figure-html/unnamed-chunk-16-1.png)<!-- -->
+
+
+A plot of how `club_or_not` falls into the three clusters.
+
+![](compile_files/figure-html/unnamed-chunk-17-1.png)<!-- -->
+
 With team as the grouper
 
-![](compile_files/figure-html/unnamed-chunk-15-1.png)<!-- -->
+![](compile_files/figure-html/unnamed-chunk-18-1.png)<!-- -->
 
 
 
@@ -199,8 +211,10 @@ With team as the grouper
 
 
 
+
+
 Plot the heirarchy
-![](compile_files/figure-html/unnamed-chunk-17-1.png)<!-- -->
+![](compile_files/figure-html/unnamed-chunk-20-1.png)<!-- -->
 
 
 <br>
@@ -497,7 +511,7 @@ No, p = 0.841
 
 So, narrowing down to club or not, is playing club at all a significant predictor of overall happiness with ultimate in Chicago?
 
-![](compile_files/figure-html/unnamed-chunk-30-1.png)<!-- -->
+![](compile_files/figure-html/unnamed-chunk-33-1.png)<!-- -->
 
 <br>
 

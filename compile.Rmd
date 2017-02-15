@@ -94,6 +94,24 @@ knitr::kable(n_by_team_type, col.names = c("Team Type", "Number of Respondents")
 ***
 ## Some Charts
 
+Basic breakdowns
+
+
+```{r}
+graph_table <- function(summarise_this) {
+  ggplot(data = na.omit(all), aes_string(summarise_this)) + geom_bar(position = "dodge")
+}
+
+graph_table("team_type")
+graph_table("club_or_not")
+
+```
+
+```{r}
+graph_table("team")
+```
+
+
 What people are playing by their team 
 
 * Note that many people took the survey after their seasons had ended so what they play in season might != what they said they were `currently_playing`
@@ -288,6 +306,18 @@ Colored by two clusters.
 
 ```{r}
 ggplot(data = cluster_dat,    
+       aes(x = club_or_not, y = overall, colour = clusters_two)) + 
+  geom_jitter() +
+  ggtitle("Unsupervised Clustering of Overall Scores into Two Groups") +
+  labs(x = "Team Type", y = "Overall Happiness") +
+  # geom_boxplot(alpha = 0.3) +
+  theme_minimal()
+```
+
+Colored by two clusters.
+
+```{r}
+ggplot(data = cluster_dat,    
        aes(x = team_type, y = overall, colour = clusters_two)) + 
   geom_jitter() +
   ggtitle("Unsupervised Clustering of Overall Scores into Two Groups") +
@@ -398,8 +428,9 @@ names(hc)[3:4] <- c("s_amount_scaled", "s_level_scaled")
 
 hc_dist <- dist(hc[3:4])
 hc_fit <- hclust(hc_dist, method = "centroid")
-
 ```
+
+
 
 Plot the heirarchy
 ```{r}
