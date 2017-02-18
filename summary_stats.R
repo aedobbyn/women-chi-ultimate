@@ -49,6 +49,28 @@ get_table("currently_playing")
 
 
 
+# capitalize levels for 
+simpleCap <- function(x) {
+  s <- strsplit(x, " ")[[1]]
+  paste(toupper(substring(s, 1,1)), substring(s, 2),
+        sep="", collapse=" ")
+}
+
+capitalize_this <- function(var) {
+  for (lev in var) {
+    if (grepl(pattern = "_", x = lev) == TRUE) {
+      lev <- simpleCap(gsub(x = lev, pattern = "_", replacement = " "))
+    } else {
+      lev <- capitalize(lev)
+    }
+    lev <- capitalize(lev)
+    print(lev)
+  }
+}
+
+capitalize_this(levels(all[["club_or_not"]]))
+
+
 # get number of participants in each category and plot them
 get_summaries <- function(summarise_this) {
   tabl <- all %>%  count_(summarise_this)
@@ -60,7 +82,7 @@ get_summaries("age")
 
 
 # club or not barchart
-club.or.not <- ggplot(aes(team_type), data = na.omit(all)) +
+club.or.not <- ggplot(aes(club_or_not), data = na.omit(all)) +
   geom_bar(position = "dodge")
 club.or.not
 
