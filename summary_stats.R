@@ -40,15 +40,23 @@ get_table <- function(summarise_this) {
   all %>%  count_(summarise_this)
 }
 
+get_table("team")
+get_table("team_type")
 get_table("club_or_not")
+get_table("age")
+get_table("where_live")
+get_table("currently_playing")
 
-do_both <- function(summarise_this) {
+
+
+# get number of participants in each category and plot them
+get_summaries <- function(summarise_this) {
   tabl <- all %>%  count_(summarise_this)
   print(tabl)
   ggplot(data = na.omit(all), aes_string(summarise_this)) + geom_bar(position = "dodge")
 }
 
-graph_table("team_type")
+get_summaries("age")
 
 
 # club or not barchart
@@ -59,18 +67,6 @@ club.or.not
 
 
 
-# -------- calculate overall happiness --------
-all <- all %>% 
-  mutate(
-    satis_combined = (as.numeric(satis_amount_recode) + as.numeric(satis_level_recode)),
-    conn_combined = (as.numeric(conn_club) + as.numeric(conn_recreational) +
-                       as.numeric(conn_college) + as.numeric(conn_youth)),
-    inclus_combined = (as.numeric(inclus_UC) + as.numeric(inclus_college) + as.numeric(inclus_women) +
-                         as.numeric(inclus_mixed)),
-    overall = (satis_combined + conn_combined + inclus_combined)
-  )
-
-summary(all$overall)
 
 
 

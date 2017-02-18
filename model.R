@@ -260,4 +260,57 @@ all <- cbind(all, preds_overall.team_type)
 
 
 
+# 
+m.big <- lm(overall ~ 
+age + team_type + 
+  currently_playing + 
+  how_long_play + 
+  start_playing +
+  where_live, data = all)
+summary(m.big)
+
+
+
+# is m.big normally distrubuted? ish
+ggplot(data = all) +
+  geom_bar(aes(overall))
+
+
+# residuals of m.big also pretty normally distributed
+qplot(residuals(m.big))
+
+
+# model just team type's effect on overall
+m.pared <- lm(overall ~ team_type, data = all)
+
+# compare AIC of model with all predictors to model with just team_type
+AIC(m.big, m.pared)
+
+
+library(leaps)
+leaps <- regsubsets(overall ~ 
+                      age + team_type + 
+                      currently_playing + 
+                      how_long_play + 
+                      start_playing +
+                      where_live, data = all, nbest = 3)
+
+plot(leaps, scale = "adjr2")
+
+leaps <- regsubsets(overall ~ 
+                      team + 
+                      where_live, data = all, nbest = 3)
+
+plot(leaps, scale = "adjr2")
+
+
+
+
+library(car)
+subsets(leaps, statistic = "cp")
+abline(1, 1, lty = 2, col = "red")
+
+
+
+
 
