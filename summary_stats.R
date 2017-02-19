@@ -1,32 +1,28 @@
 # summary stats
 
 
-# variables considered
-
+## variables considered
 # predictors
+predictor_names <- names(dat[, 2:9])
+predictor_vars <- c(names(demographics), names(playing))
+predictor_tbl <- as_tibble(predictor_vars, predictor_names)
 
-# l <- list(a = 1, b = 2, c = 3)
-# 
-# t <- table(l)
-# 
-# foo <- names(
-#   dat[, 5:9]
-# )
-# 
-# bar <- names(playing)
-# 
-# t <- hash(foo, bar)
-# t_1 <- table(t)
-# 
 
+# outcomes
+outcome_names <- names(dat[, 10:ncol(dat)])
+outcome_vars <- c(names(satisfaction),
+         names(connectedness), names(inclusion))
+outcome_tbl <- as_tibble(outcome_vars, outcome_names)
+
+
+
+source("./munge.R")
 
 # make sure we're only using dplyr
 detach(package:plyr)
 
 
 # --------------- number of people -------------
-
-# why doesn't this work
 get_ns <- function(d, g) {
   tabl <- d %>%
     count_(g);
