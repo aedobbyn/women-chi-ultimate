@@ -1,5 +1,7 @@
 
-
+# Unsupervised cluster analyses: are there natural clusters in the data? How do they map
+# to our hypothesis that the two clusters to be found are based on whether you play club
+# or not?
 
 
 # ------ kmeans ------

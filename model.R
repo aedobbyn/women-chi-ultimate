@@ -242,50 +242,42 @@ summary(m.overall.team)
 # ---- preds ---
 
 # predict overall values for each row based on the model m.big and save them in the object preds.m.big
-preds.m.big <- predict(m.big, na.rm = FALSE)
-# add another element to this vector (the mean) so that we end up with the right number of rows 
-preds.m.big <- c(preds.m.big, mean(preds.m.big))
+preds.m.big <- predict(m.big, na.rm = TRUE)
+# add two elements to this vector (the mean) so that we end up with the right number of rows: this is a
+# bandaid for now and should find an actual fix 
+preds.m.big <- c(preds.m.big, mean(preds.m.big), mean(preds.m.big))
 # add these predictions as a new column to the df
 all <- cbind(all, preds.m.big)
 
-
-
-# predict overall from just team_type (much less variation here)
+# predict overall from just team_type
 preds_overall.team_type <- predict(m.overall.team_type)
 all <- cbind(all, preds_overall.team_type)
 
 
 
 
-
-
-
-# 
-m.big <- lm(overall ~ 
-age + team_type + 
-  currently_playing + 
-  how_long_play + 
-  start_playing +
-  where_live, data = all)
-summary(m.big)
-
-
-
-# is m.big normally distrubuted? ish
+# ------- check assumptions -----------
+# is m.big normally distrubuted? kind of, also a little bimodal which we'd expect from club vs. no_club
+# hypothesis
 ggplot(data = all) +
   geom_bar(aes(overall))
 
-
-# residuals of m.big also pretty normally distributed
+# residuals of m.big pretty normally distributed, good enough for OLS
 qplot(residuals(m.big))
 
-
 # model just team type's effect on overall
-m.pared <- lm(overall ~ team_type, data = all)
+m.pared <- lm(overall ~ club_or_not, data = all)
 
 # compare AIC of model with all predictors to model with just team_type
 AIC(m.big, m.pared)
+# so model with only club_or_not as predictor does better than model with all predictors
 
+
+
+
+
+
+# ---- all subsets: which predictors are best left in / taken out of model?
 
 library(leaps)
 leaps <- regsubsets(overall ~ 
@@ -302,8 +294,6 @@ leaps <- regsubsets(overall ~
                       where_live, data = all, nbest = 3)
 
 plot(leaps, scale = "adjr2")
-
-
 
 
 library(car)
