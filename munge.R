@@ -4,6 +4,7 @@ library(tidyverse)
 library(readxl)
 library(googlesheets)
 library(hash)
+library(knitr)
 
 sorted <- read_excel("women_chicago_ultimate_raw.xlsx", sheet = 1, skip = 1)
 raw <- read_excel("women_chicago_ultimate_raw.xlsx", sheet = 2, skip = 0)

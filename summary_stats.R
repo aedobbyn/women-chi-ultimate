@@ -1,5 +1,25 @@
 # summary stats
 
+
+# variables considered
+
+# predictors
+
+# l <- list(a = 1, b = 2, c = 3)
+# 
+# t <- table(l)
+# 
+# foo <- names(
+#   dat[, 5:9]
+# )
+# 
+# bar <- names(playing)
+# 
+# t <- hash(foo, bar)
+# t_1 <- table(t)
+# 
+
+
 # make sure we're only using dplyr
 detach(package:plyr)
 
@@ -56,7 +76,7 @@ simpleCap <- function(x) {
         sep="", collapse=" ")
 }
 
-capitalize_this <- function(var) {
+capitalize_this <- function(var, ...) {
   for (lev in var) {
     if (grepl(pattern = "_", x = lev) == TRUE) {
       lev <- simpleCap(gsub(x = lev, pattern = "_", replacement = " "))
@@ -64,11 +84,28 @@ capitalize_this <- function(var) {
       lev <- capitalize(lev)
     }
     lev <- capitalize(lev)
-    print(lev)
   }
+  lev
 }
 
-capitalize_this(levels(all[["club_or_not"]]))
+# 
+# 
+# 
+# capitalize_this(levels(all[["club_or_not"]]))
+# capitalize_this(all$club_or_not[1])
+# 
+# get_summaries(capitalize_this(all[["club_or_not"]]))
+
+
+
+get_summaries <- function(summarise_this) {
+  tabl <- all %>%  count_(summarise_this)
+  print(tabl)
+  ggplot(data = na.omit(all), aes_string(summarise_this)) + geom_bar(position = "dodge")
+}
+
+get_summaries("age")
+
 
 
 # get number of participants in each category and plot them

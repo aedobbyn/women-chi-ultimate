@@ -84,6 +84,14 @@ Something to try here might be to take out all the Others and relevel. Or combin
 ***
 ## Summary Stats
 
+Variables considered, first 5 responses shown
+
+```{r}
+knitr::kable(head(dat[, 1:ncol(dat)]))
+```
+
+Team type
+
 ```{r}
 knitr::kable(n_by_team_type, col.names = c("Team Type", "Number of Respondents"))
 ```
