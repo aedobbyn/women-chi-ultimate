@@ -39,30 +39,6 @@ capitalize_this_tbl <- function(df, vec) {
   out
 }
 
-# capitalize_this_tbl2 <- function(df, vec) {
-#   df2 <- as_tibble(df) %>% mutate(bar = vec)
-#   out <- vector()
-#   for (i in df[[bar]]) {
-#     if (grepl(pattern = "_", x = i) == TRUE) {
-#       i <- simpleCap(gsub(x = i, pattern = "_", replacement = " "))
-#     } else {
-#       i <- capitalize(i)
-#     }
-#     out <- c(out, i)
-#   }
-#   out
-#   # cbind(df2, out)
-# }
-# 
-# foo <- as_tibble(all) %>%
-#   select(team_type, team) %>% 
-#   mutate(
-#     bar = team_type
-#   )
-# foo
-# capitalize_this_tbl2(foo, "team_type")
-
-
 
 # --- examples
 # capitalize_this(head(all$team_type))
@@ -100,24 +76,29 @@ get_table("currently_playing")
 
 
 
-# --------------- number of people -------------
+
+# --------------- table and a graph -------------
 
 # get number of participants in each category and plot them
-get_ns <- function(d, g) {
+get_summaries <- function(d, var) {
   tabl <- d %>%
-    count_(g);
+    count_(var);
+  print(tabl)
   # cap_tbl <- capitalize_this_tbl(tabl, "team_type")
-  ggplot(d) + geom_bar(aes_string(g), stat = "count") + theme_minimal() +
-    ggtitle(paste0("Breakdown by ", g %>% capitalize_this(.)))
+  ggplot(d) + geom_bar(aes_string(var), stat = "count") + theme_minimal() +
+    ggtitle(paste0("Breakdown by ", capitalize_this(var))) +
+    labs(x = capitalize_this(var), y = "Count")
+  # ggplot(tabl) + geom_bar(aes_string(capitalize_this(var), n), stat = "identity")
 }
 
-get_ns(d = all, g = "team_type")
+get_summaries(d = all, var = "club_or_not")
+get_summaries(d = all, var = "where_live")
+get_summaries(d = all, var = "how_long_play")
+get_summaries(d = all, var = "team")
 
 
-n_by_age <- get_ns(d = all, g = "age")
+n_by_age <- get_summaries(d = all, var = "age")
 n_by_age
-
-get_ns(d = all, g = "team_type")
 
 
 
@@ -220,4 +201,9 @@ means_overall
 # club.or.not <- ggplot(aes(club_or_not), data = na.omit(all)) +
 #   geom_bar(position = "dodge")
 # club.or.not
+
+
+
+
+
 

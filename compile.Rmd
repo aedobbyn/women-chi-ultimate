@@ -626,13 +626,11 @@ So, narrowing down to club or not, is playing club at all a significant predicto
 ```{r}
 library(ggthemes)
 overall.club_or_not <- ggplot() +
-  geom_density(data = all[all$club_or_not=="club", ], aes(overall), position = "dodge",
-           fill = "pink", alpha = 0.5) +
-  geom_density(data = all[all$club_or_not=="not_club", ], aes(overall), position = "dodge",
-           fill = "light blue", alpha = 0.5) +
+  geom_density(data = all_present, aes(x = overall, fill = `Club or Not`), position = "dodge",
+               alpha = 0.5) +
   ggtitle("Club participation predicting overall happiness") +
-  labs(caption = "Blue = no club, Pink = club") +
-  theme_few()
+  labs(x = "Overall Happiness", y = "Density") +
+  theme_minimal()
 overall.club_or_not
 ```
 

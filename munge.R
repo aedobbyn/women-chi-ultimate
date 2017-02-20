@@ -477,3 +477,14 @@ summary(all$overall)
 
 
 
+# ------ for presenting graphs with capitalized things
+
+all_present <- all %>% 
+  rename(
+    `Club or Not` = club_or_not,
+    `Team Type` = team_type
+  )
+
+levels(all_present$`Club or Not`) <- c("Club", "Not Club")
+levels(all_present$`Team Type`) <- c("No Club", "Mixed", "Womens")
+

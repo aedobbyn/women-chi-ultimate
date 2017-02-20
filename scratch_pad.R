@@ -83,3 +83,40 @@
 
 
 
+
+
+
+
+# capitalize_this_tbl2 <- function(df, vec) {
+#   df2 <- as_tibble(df) %>% mutate(bar = vec)
+#   out <- vector()
+#   for (i in df[[bar]]) {
+#     if (grepl(pattern = "_", x = i) == TRUE) {
+#       i <- simpleCap(gsub(x = i, pattern = "_", replacement = " "))
+#     } else {
+#       i <- capitalize(i)
+#     }
+#     out <- c(out, i)
+#   }
+#   out
+#   # cbind(df2, out)
+# }
+# 
+# foo <- as_tibble(all) %>%
+#   select(team_type, team) %>% 
+#   mutate(
+#     bar = team_type
+#   )
+# foo
+# capitalize_this_tbl2(foo, "team_type")
+
+
+
+
+# foo <- get_table("team_type")
+# ggplot(foo) + geom_bar(aes(capitalize_this(team_type), n, label = n), stat = "identity") + theme_minimal() +
+#   ggtitle(paste0("Breakdown by Team Type")) +
+#   labs(x = "Team Type", y = "Count") +
+#   geom_text(aes(team_type, y=n), position=position_dodge(width=0.9), vjust=-0.25)
+
+
