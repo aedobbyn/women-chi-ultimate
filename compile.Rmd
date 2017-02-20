@@ -99,6 +99,16 @@ First 5 responses shown
 knitr::kable(head(dat[, 1:ncol(dat)]))
 ```
 
+
+Outcome vars: means by team ordered by overall
+
+```{r}
+
+kable(means.by.team)
+
+```
+
+
 Team type
 
 ```{r}

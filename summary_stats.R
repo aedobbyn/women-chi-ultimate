@@ -1,7 +1,78 @@
 # summary stats
 
+source("./munge.R")
 
-## variables considered
+# make sure we're only using dplyr
+detach(package:plyr)
+
+
+# function for capitalizing words in vector separated by underscores
+simpleCap <- function(x) {
+  s <- strsplit(x, " ")[[1]]
+  paste(toupper(substring(s, 1,1)), substring(s, 2),
+        sep="", collapse=" ")
+}
+capitalize_this <- function(vec, ...) {
+  out <- vector()
+  for (i in vec) {
+    if (grepl(pattern = "_", x = i) == TRUE) {
+      i <- simpleCap(gsub(x = i, pattern = "_", replacement = " "))
+    } else {
+      i <- capitalize(i)
+    }
+    out <- c(out, i)
+  }
+  out
+}
+
+# for tibbles
+capitalize_this_tbl <- function(df, vec) {
+  out <- vector()
+  for (i in df[[vec]]) {
+    if (grepl(pattern = "_", x = i) == TRUE) {
+      i <- simpleCap(gsub(x = i, pattern = "_", replacement = " "))
+    } else {
+      i <- capitalize(i)
+    }
+    out <- c(out, i)
+  }
+  out
+}
+
+# capitalize_this_tbl2 <- function(df, vec) {
+#   df2 <- as_tibble(df) %>% mutate(bar = vec)
+#   out <- vector()
+#   for (i in df[[bar]]) {
+#     if (grepl(pattern = "_", x = i) == TRUE) {
+#       i <- simpleCap(gsub(x = i, pattern = "_", replacement = " "))
+#     } else {
+#       i <- capitalize(i)
+#     }
+#     out <- c(out, i)
+#   }
+#   out
+#   # cbind(df2, out)
+# }
+# 
+# foo <- as_tibble(all) %>%
+#   select(team_type, team) %>% 
+#   mutate(
+#     bar = team_type
+#   )
+# foo
+# capitalize_this_tbl2(foo, "team_type")
+
+
+
+# --- examples
+# capitalize_this(head(all$team_type))
+# capitalize_this(head(all[, 20]))
+# capitalize_this(names(all))
+# capitalize_this_tbl(df = get_table("team_type"), vec = "team_type")
+
+
+
+## -------- variables considered ----------
 # predictors
 predictor_names <- names(dat[, 2:9])
 predictor_vars <- c(names(demographics), names(playing))
@@ -16,111 +87,37 @@ outcome_tbl <- as_tibble(outcome_vars, outcome_names)
 
 
 
-source("./munge.R")
-
-# make sure we're only using dplyr
-detach(package:plyr)
-
-
-# --------------- number of people -------------
-get_ns <- function(d, g) {
-  tabl <- d %>%
-    count_(g);
-  print(tabl)
-  ggplot(d) + geom_bar(aes_string(g), stat = "count")
-}
-
-n_by_age <- get_ns(d = all, g = "age")
-
-
-
-# count number of people by team type
-n_by_team_type <- all %>% 
-  count(team_type)
-
-team_type_plot <- ggplot(n_by_team_type) + geom_bar(aes(team_type, n), stat = "identity")
-
-# by team
-n_by_team <- all %>% 
-  count(team)
-
-team_plot <- ggplot(n_by_team) + geom_bar(aes(team, n), stat = "identity")
-
-
-
-
 # ------
-
-
+# get just a table of counts per group for a certain variable
 get_table <- function(summarise_this) {
   all %>%  count_(summarise_this)
 }
 
-get_table("team")
-get_table("team_type")
-get_table("club_or_not")
 get_table("age")
+get_table("team_type")
 get_table("where_live")
 get_table("currently_playing")
 
 
 
-# capitalize levels for 
-simpleCap <- function(x) {
-  s <- strsplit(x, " ")[[1]]
-  paste(toupper(substring(s, 1,1)), substring(s, 2),
-        sep="", collapse=" ")
-}
-
-capitalize_this <- function(var, ...) {
-  for (lev in var) {
-    if (grepl(pattern = "_", x = lev) == TRUE) {
-      lev <- simpleCap(gsub(x = lev, pattern = "_", replacement = " "))
-    } else {
-      lev <- capitalize(lev)
-    }
-    lev <- capitalize(lev)
-  }
-  lev
-}
-
-# 
-# 
-# 
-# capitalize_this(levels(all[["club_or_not"]]))
-# capitalize_this(all$club_or_not[1])
-# 
-# get_summaries(capitalize_this(all[["club_or_not"]]))
-
-
-
-get_summaries <- function(summarise_this) {
-  tabl <- all %>%  count_(summarise_this)
-  print(tabl)
-  ggplot(data = na.omit(all), aes_string(summarise_this)) + geom_bar(position = "dodge")
-}
-
-get_summaries("age")
-
-
+# --------------- number of people -------------
 
 # get number of participants in each category and plot them
-get_summaries <- function(summarise_this) {
-  tabl <- all %>%  count_(summarise_this)
-  print(tabl)
-  ggplot(data = na.omit(all), aes_string(summarise_this)) + geom_bar(position = "dodge")
+get_ns <- function(d, g) {
+  tabl <- d %>%
+    count_(g);
+  # cap_tbl <- capitalize_this_tbl(tabl, "team_type")
+  ggplot(d) + geom_bar(aes_string(g), stat = "count") + theme_minimal() +
+    ggtitle(paste0("Breakdown by ", g %>% capitalize_this(.)))
 }
 
-get_summaries("age")
+get_ns(d = all, g = "team_type")
 
 
-# club or not barchart
-club.or.not <- ggplot(aes(club_or_not), data = na.omit(all)) +
-  geom_bar(position = "dodge")
-club.or.not
+n_by_age <- get_ns(d = all, g = "age")
+n_by_age
 
-
-
+get_ns(d = all, g = "team_type")
 
 
 
@@ -180,13 +177,13 @@ sum(ncol(satisfaction)) + sum(ncol(connectedness)) + sum(ncol(inclusion))   # 10
 means.by.team <- all %>% 
   group_by(team_type, team) %>% 
   dplyr::summarise(                        # make sure to include dplyr:: here. not sure which package is masking summarise()
-    mean_satis = mean(satis_combined), 
-    mean_conn = mean(conn_combined),
-    mean_inclus = mean(inclus_combined),
-    mean_overall = mean(overall)
-  )
+    mean_satis = round(mean(satis_combined), digits = 2), 
+    mean_conn = round(mean(conn_combined), digits = 2),
+    mean_inclus = round(mean(inclus_combined), digits = 2),
+    mean_overall = round(mean(overall), digits = 2)
+  ) %>% 
+  arrange(mean_overall)
 means.by.team
-
 
 
 # get means for all aggregated variables
@@ -196,6 +193,7 @@ means_overall <- means.by.team %>%
     3:ncol(.)
   ) %>% 
   map_dbl(mean)
+means_overall
 
 
 
@@ -203,4 +201,23 @@ means_overall <- means.by.team %>%
 
 
 
+
+# ----- if need to do by hand --------
+# # count number of people by team type
+# n_by_team_type <- all %>% 
+#   count(team_type)
+# 
+# team_type_plot <- ggplot(n_by_team_type) + geom_bar(aes(team_type, n), stat = "identity")
+# 
+# # by team
+# n_by_team <- all %>% 
+#   count(team)
+# 
+# team_plot <- ggplot(n_by_team) + geom_bar(aes(team, n), stat = "identity")
+
+
+# club or not barchart
+# club.or.not <- ggplot(aes(club_or_not), data = na.omit(all)) +
+#   geom_bar(position = "dodge")
+# club.or.not
 
