@@ -52,14 +52,14 @@ capitalize_this_tbl <- function(df, vec) {
 # predictors
 predictor_names <- names(dat[, 2:9])
 predictor_vars <- c(names(demographics), names(playing))
-predictor_tbl <- as_tibble(predictor_vars, predictor_names)
+predictor_tbl <- data.frame(Variable = predictor_vars, Name = predictor_names)
 
 
 # outcomes
 outcome_names <- names(dat[, 10:ncol(dat)])
 outcome_vars <- c(names(satisfaction),
          names(connectedness), names(inclusion))
-outcome_tbl <- as_tibble(outcome_vars, outcome_names)
+outcome_tbl <- data.frame(Variable = outcome_vars, Name = outcome_names)
 
 
 
@@ -163,7 +163,15 @@ means.by.team <- all %>%
     mean_inclus = round(mean(inclus_combined), digits = 2),
     mean_overall = round(mean(overall), digits = 2)
   ) %>% 
-  arrange(mean_overall)
+  arrange(mean_overall) %>% 
+  rename(
+    `Team Type` = team_type,
+    Team = team,
+    `Mean Satisfaction` = mean_satis,
+    `Mean Connectedness` = mean_conn,
+    `Mean Inclusion` = mean_inclus,
+    `Mean Overall` = mean_overall
+  )
 means.by.team
 
 
