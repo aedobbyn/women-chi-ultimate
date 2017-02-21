@@ -16,38 +16,25 @@ all_no_na <- all[complete.cases(all), ]
 # remove the one row with a missing value
 # keep only predictor vars (not outcome vars) that aren't team and team_type (because that's what we think
 # will determine in some part which clusters people fall into)
-cluster_dat <- all[complete.cases(all), ] %>% 
+dat_for_clustering <- all[complete.cases(all), ] %>% 
   select(
     age, where_live, currently_playing, how_long_play, start_playing, first_experience,
     overall
   )
 
-cluster_dat <- as_tibble(cluster_dat)
+dat_for_clustering <- as_tibble(cluster_dat)
 
-# scale the data?
-# take out outliers?
-
-numberize <- function(dat) {
-  for (c in names(dat[1:3])) {
-    dat2 <- data.frame(dat[["overall"]])
-    dat2[[c]] <- as.numeric(dat[[c]])
-    # print(dat2)
-    dat2 <- as_tibble(data.frame(cbind(dat2, dat2[[c]])))
-    print(dat2)
-  }
-  dat2
-}
-
-numberize(cluster_dat)
-
+# scale the data
+numeric_dat <- as_tibble(sapply(cluster_dat, as.numeric))
+scaled_dat <- as_tibble(scale(numeric_dat))
 
 
 # from the pared dataset, cluster people based on their "overall" ratings in first
 # two, then three clusters.
 # this returns an objet of class kmeans. do str(clusters_two) to see what's in here.
 set.seed(10) # for reproducibility
-clusters_two <- kmeans(cluster_dat$overall, centers = 2, iter.max = 15, nstart = 20)
-clusters_three <- kmeans(cluster_dat$overall, centers = 3, iter.max = 15, nstart = 20)
+clusters_two <- kmeans(scaled_dat$overall, centers = 2, iter.max = 15, nstart = 20)
+clusters_three <- kmeans(scaled_dat$overall, centers = 3, iter.max = 15, nstart = 20)
 
 
 # look at a table of dat broken into two clusters compared to club or not
@@ -63,7 +50,7 @@ table(clusters_three$cluster, all_no_na$team_type)
 
 # cbind the cluster portion of these two the df with no NAs, plus the variables that had team indicators (i.e.,
 # club_or_not, team_type, and team) that we had taken out originally
-cluster_dat <- as_tibble(data.frame(cluster_dat, 
+cluster_dat <- as_tibble(data.frame(scaled_dat, 
                           club_or_not = all_no_na$club_or_not,
                           team_type = all_no_na$team_type,
                           team = all_no_na$team,
@@ -129,7 +116,6 @@ ggplot(data = cluster_dat,
   geom_jitter() +
   ggtitle("Unsupervised Clustering of Overall Scores into Three Groups -- No Team Indicators") +
   labs(x = "Team Type", y = "Overall Happiness") +
-  geom_boxplot(data = all_no_team_indics, aes(overall)) +
   theme_minimal()
 
 
@@ -165,8 +151,7 @@ real_cluster <- function(dat) {
 }
 
 all_no_na_3 <- real_cluster(all_no_na)
-
-
+all_no_na_3
 
 
 
@@ -274,6 +259,56 @@ plot(hc_fit, hang = -1, cex = 0.8, srt = 60,
 num_clust <- NbClust(hc[3:4], min.nc = 2,
                      max.nc = 8,   # set max number of clusters to less than number of groups
                      method = "centroid")
+
+
+
+
+
+
+
+do_cluster_inclusion <- function(grouping_var) {
+  hc <- all %>%
+    na.omit(.) %>% 
+    group_by_(grouping_var) %>% 
+    summarise(
+      inclus_mean = mean(as.numeric(inclus_combined)), 
+      conn_mean = mean(as.numeric(conn_combined))
+    )
+  
+  # put team names as rownames and take out the team column
+  hc <- data.frame(hc)
+  rownames(hc) <- hc[[grouping_var]]
+  hc <- as_tibble(hc[, 2:ncol(hc)])
+  
+  # scale the variables of interest (everything except team, which was included in the group_by)
+  scale_vars <- function(dat) {
+    vars <- dat[, 1:ncol(dat)]
+    for (row in vars) {
+      var_scaled <- scale(row)
+      dat <- data.frame(dat, var_scaled = var_scaled)
+    }
+    dat
+  }
+  hc <- scale_vars(hc)
+  
+  # change the new names to something meaningful (try to get this in the function)
+  names(hc)[3:4] <- c("inclus_mean", "conn_mean")
+  
+  hc_dist <- dist(hc[3:4])
+  hc_fit <- hclust(hc_dist, method = "centroid")
+  
+  # plot the cluster
+  plot(hc_fit, hang = -1, cex = 0.8, srt = 60,
+       main = paste0("Cluster based on Inclusion \n and Connectedness Per ", capitalize_this(grouping_var)),
+       xlab = "Groups", 
+       ylab = "")
+}
+
+do_cluster_inclusion("age")
+do_cluster_inclusion("team_type")
+do_cluster_inclusion("start_playing")
+do_cluster_inclusion("currently_playing")
+
 
 
 
