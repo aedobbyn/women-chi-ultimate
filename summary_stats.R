@@ -167,10 +167,10 @@ means.by.team <- all_present %>%
   arrange(mean_overall) %>% 
   rename(
     Team = team,
-    `Mean Satisfaction` = mean_satis,
-    `Mean Connectedness` = mean_conn,
-    `Mean Inclusion` = mean_inclus,
-    `Mean Overall` = mean_overall
+    `Satisfaction` = mean_satis,
+    `Connectedness` = mean_conn,
+    `Inclusion` = mean_inclus,
+    `Overall` = mean_overall
   )
 
 

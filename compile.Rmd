@@ -66,6 +66,7 @@ predicting that single outcome variable
 
 * Combine ordered categorical predictor variables into omnibus variables and treat them as continuous
     + The idea with summing ordinal response variables was to introduce more degrees of freedom into the outcome variable so that we could run a more standard linear regression rather than an ordered/logistic probit regression on each outcome variable. It hopefully gives us both more predictive power and a more holistic look at three main categories of response variable (satisfaction, connectedness, and inclusiveness)
+    + These are: `satis_combined`, `conn_combined`, `inclus_combined`, and their sum, `overall`
 
 Caveat: while directionality is constant across different variables (i.e., 1 always = bad or disagree or whatever), there are different levels for different variables that aren't necessarily comparable. They're ordered in
 a way that makes the most sense, I think, but you could definitely argue for a different ordering. 
@@ -84,23 +85,35 @@ Something to try here might be to take out all the Others and relevel. Or combin
 ***
 ## Summary Stats
 
-Variables considered
-
-```{r}
-kable(predictor_tbl)
-
-kable(outcome_tbl)
-
-```
-
-First 3 responses shown
+<br>
+Snapshot of the top of the data:
 
 ```{r}
 knitr::kable(dat[1:3, 1:ncol(dat)])
 ```
 
+<br>
 
-Outcome vars: means by team ordered by overall
+*What were the variables considered?*
+
+**Predictor variables**
+```{r}
+kable(predictor_tbl)
+```
+
+<br>
+
+**Outcome variables**
+```{r}
+kable(outcome_tbl)
+```
+
+<br>
+
+*Outcome variable summary*
+
+* Means by team of the omnibus variables `satis_combined`, `conn_combined`, `inclus_combined`, ordered by their sum, `overall`
+* For a sneak peek of the main finding, check that team type column
 
 ```{r}
 
@@ -109,11 +122,6 @@ kable(means.by.team)
 ```
 
 
-Team type
-
-```{r}
-knitr::kable(n_by_team_type, col.names = c("Team Type", "Number of Respondents"))
-```
 
 <br /><br /><br />
 
@@ -121,7 +129,7 @@ knitr::kable(n_by_team_type, col.names = c("Team Type", "Number of Respondents")
 ***
 ## Some Charts
 
-* Histograms of some predictor variables
+Have some histograms of some predictor variables:
 
 
 ```{r}
@@ -144,7 +152,9 @@ get_summaries(d = all, var = "club_or_not")
 
 <br><br><br>
 
-### A smattering of other charts
+***
+
+## A smattering of other charts
 * These are just examples of the types of graphs we could make, depending on what people are interested in looking at -- they're not necessarily particularly meaningful in and of themselves
 
 <br><br>
@@ -158,7 +168,8 @@ currently_playing.team_type <- ggplot(data = na.omit(all)) +
   geom_bar(aes(currently_playing, fill = team)) + 
   theme(axis.text.x = element_text(angle = 60, hjust = 1)) +
   ggtitle("Where We Play by Team") +
-  labs(x = "Where Play", y = "Count")
+  labs(x = "Where Play", y = "Count") +
+  theme_minimal()
 currently_playing.team_type
 ```
 
@@ -172,14 +183,15 @@ qplot(age, overall, data = all) +
   geom_jitter() +
   geom_boxplot(alpha = 0.3) +
   ggtitle("Overall Happiness by Age Group") +
-  labs(x = "Age (Jittered)", y = "Overall Happiness")
+  labs(x = "Age (Jittered)", y = "Overall Happiness") +
+  theme_minimal()
 ```
 
 
 
 <br><br>
 
-#### Drilling down into team_type
+### Drilling down into team_type
 
 **Non-Club: How long have non-Chicago club players been playing?**
 ```{r}
@@ -189,9 +201,12 @@ no_club.how_long_play <-
   theme(axis.text.x = element_text(angle = 60, hjust = 1)) +
   scale_y_continuous(labels = scales::percent) +
   ggtitle("Among Non-Chicago Club Players: Length of Time Playing by Team") +
-  labs(x = "Team", y = "Percent")
+  labs(x = "Team", y = "Percent") +
+  theme_minimal()
 no_club.how_long_play
 ```
+
+<br>
 
 **Womens: age predicting overall happiness**
 
@@ -202,7 +217,8 @@ no_club.how_long_play
 ggplot(all[all$team_type == "womens", ],
        aes(x = as.numeric(age), y = overall, colour = team)) + 
   geom_jitter() +
-  geom_smooth(method = "lm", se = FALSE)
+  geom_smooth(method = "lm", se = FALSE) +
+  theme_minimal()
 ```
 
 <br>
@@ -212,15 +228,18 @@ ggplot(all[all$team_type == "womens", ],
 ggplot(all[all$team_type == "mixed", ],
        aes(x = as.numeric(start_playing), y = overall, colour = team)) + 
   geom_jitter() +
-  geom_smooth(method = "lm", se = FALSE)
+  geom_smooth(method = "lm", se = FALSE) +
+  theme_minimal()
 ```
 
-
+<br><br>
 
 ***
 ## Cluster Analyses
 
-* Are there clusters present in the data that reflect the hypothesis?
+Can we suss out some clusters with k-means (less greedy) or heirarhical clustering (more greedy)?
+
+<br>
 
 ### K-Means clustering
 
@@ -239,6 +258,8 @@ Setup:
   + Glue this output (a series of 1 and 2s depending on which cluster each row was assigned to) along with the team varibles we took out all back together
 * Data is jittered for interpretability
   
+
+<br>
 
 ```{r kmenas_setup, include=FALSE}
 
@@ -274,6 +295,7 @@ cluster_dat <- as_tibble(data.frame(cluster_dat,
 ```
 
 
+<br>
 
 Colored by two clusters.
 
@@ -303,7 +325,7 @@ ggplot(data = cluster_dat,
 
 <br> 
 
-The same with boxplots overlaid
+Wooo box plots
 
 ```{r}
 ggplot(data = cluster_dat, 
@@ -375,7 +397,7 @@ do_cluster_inclus_conn <- function(grouping_var) {
   
   # plot the cluster
   plot(hc_fit, hang = -1, cex = 0.8, srt = 60,
-       main = paste0("Hierarchical Cluster based on \n Inclusion and Connectedness Per ", capitalize_this(grouping_var), "Group"),
+       main = paste0("Hierarchical Cluster based on \n Inclusion and Connectedness Per ", capitalize_this(grouping_var), " Group"),
        xlab = "Groups", 
        ylab = "")
 }
@@ -423,8 +445,8 @@ do_cluster_satis <- function(grouping_var) {
   
   # plot the cluster
   plot(hc_fit, hang = -1, cex = 0.8, srt = 60,
-       main = paste0("Hierarchical Cluster based on \n 
-                     Satisfaction Amount and Satisfaction Level Per ", 
+       main = paste0("Hierarchical Cluster based on Satisfaction
+                     \n Amount and Satisfaction Level Per ", 
                      capitalize_this(grouping_var)),
        xlab = "Groups", 
        ylab = "")
@@ -437,26 +459,15 @@ do_cluster_satis("team")
 
 
 
-<br>
-
-
-
-* When we cluster by team type, we get the same answers: womens and mixed team players are closer to each other on measures of happiness than they are to non-club players
-
-```{r}
-do_cluster_inclus_conn("team_type")
-
-do_cluster_satis("team_type")
-
-
-```
-
 
 
 <br /><br /><br />
+<br /><br />
+
 
 ***
 ## Models
+<br />
 
 Omnibus model with all predictors predicting the overall measure. (Not including `team` here because it is binned by `team_type`)
 
@@ -478,9 +489,21 @@ summary(m.big)
 ```
 
 * So `team_type` is really the only good predictor
-* Stepwise and all subsets regression analyses confirms this
+* Stepwise and all subsets regression analyses confirms this (not shown here yet)
 
 <br>
+Are there patterns in how the happiness scores of players in each team type cluster?
+
+
+* Yes: when we cluster by team type, we get the same answer, even when outcome variables are not combined into an overall score: womens and mixed team players are closer to each other on measures of happiness than they are to non-club players
+
+```{r}
+do_cluster_inclus_conn("team_type")
+do_cluster_satis("team_type")
+```
+
+
+<br><br>
 
 Drilling down into `team`, what's driving the dissatisfaction among `no_club` players?
 
@@ -549,11 +572,11 @@ Model with team type *does* predict satisfaction level better than the one witho
 anova(m.sais_amount_team_t, m.sais_amount_no.team_t)
 ```
 
+
 <br> 
-And it's borne out in this graph
+* And that difference is borne out in this graph (check that leftmost bar)
 <br>
 
-**Satisfaction with amount playing faceted by team type**
 ```{r}
 team_type_names <- list(
   "no_club" = "No Club",
@@ -581,6 +604,9 @@ ggplot(na.omit(all)) +
 
 Okay so there's a there there with `team_type`. So does `team_type` pedict overall satisfaction, inclusion, connection, and all of the above?
 
+<br>
+
+***
 <br>
 **Do womens and mixed players have significantly higher overall satisfaction, connectedness, and inclusion than non-club players?**
 
@@ -614,6 +640,7 @@ summary(m.overall.team_type)
 
 <br>
 
+
 Is there a significant difference in combined satisfaction and inclusion scores between womens and mixed players?
 No, p = 0.841
 
@@ -625,6 +652,8 @@ summary(womens_and_mixed.m.overall.team_type)
 ```
 
 <br>
+
+***
 
 So, narrowing down to club or not, is playing club at all a significant predictor of overall happiness with ultimate in Chicago?
 
@@ -648,6 +677,7 @@ m.overall.club_or_not <- lm(overall ~ club_or_not,
 summary(m.overall.club_or_not)
 ```
 
+***
 
 
 
@@ -660,8 +690,8 @@ summary(m.overall.club_or_not)
 
 
 #### Future directions
-* Merge with overall stats of where people are playing
-* Merge with qualitative dat
+* Merge with Ultimate Chicago stats of where people are playing based on league, college, and club data
+* Merge with qualitative data
 * Check goodness of fit of models
 * NLP on free responses
 

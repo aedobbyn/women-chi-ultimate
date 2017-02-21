@@ -48,6 +48,7 @@ predicting that single outcome variable
 
 * Combine ordered categorical predictor variables into omnibus variables and treat them as continuous
     + The idea with summing ordinal response variables was to introduce more degrees of freedom into the outcome variable so that we could run a more standard linear regression rather than an ordered/logistic probit regression on each outcome variable. It hopefully gives us both more predictive power and a more holistic look at three main categories of response variable (satisfaction, connectedness, and inclusiveness)
+    + These are: `satis_combined`, `conn_combined`, `inclus_combined`, and their sum, `overall`
 
 Caveat: while directionality is constant across different variables (i.e., 1 always = bad or disagree or whatever), there are different levels for different variables that aren't necessarily comparable. They're ordered in
 a way that makes the most sense, I think, but you could definitely argue for a different ordering. 
@@ -66,8 +67,21 @@ Something to try here might be to take out all the Others and relevel. Or combin
 ***
 ## Summary Stats
 
-Variables considered
+<br>
+Snapshot of the top of the data:
 
+
+Particiapnt:   Age:    Please choose the option that best describes where you currently live.   May we anonymously quote your answers from this survey?              Do you currently play or practice with a Chicago-based club team?   Please indicate the ultimate you are playing (or registered for) right now:   How long have you been playing ultimate?   At what point in your life did you start playing ultimate?   What best describes your first ultimate experience?     How satisfied are you with the AMOUNT of ultimate you are currently playing?                                   How satisfied are you with the LEVEL of ultimate you are currently playing?                                                     How connected do you feel to the CLUB ultimate community in Chicago?   How connected do you feel to the RECREATIONAL ultimate community in Chicago? (e.g. UC leagues, pickup)   How connected do you feel to the COLLEGE ultimate community in Chicago?   How connected do you feel to the YOUTH ultimate community in Chicago? (e.g. CUJO, YCC, high school, middle school, etc.)   Ultimate Chicago supports the development and inclusion of women in ultimate.   College ultimate teams support the development and inclusion of women in ultimate.   Women's club teams support the development and inclusion of women in ultimate.   Mixed club teams support the development and inclusion of women in ultimate. 
+-------------  ------  -----------------------------------------------------------------------  -------------------------------------------------------------------  ------------------------------------------------------------------  ----------------------------------------------------------------------------  -----------------------------------------  -----------------------------------------------------------  ------------------------------------------------------  -------------------------------------------------------------------------------------------------------------  ------------------------------------------------------------------------------------------------------------------------------  ---------------------------------------------------------------------  -------------------------------------------------------------------------------------------------------  ------------------------------------------------------------------------  -------------------------------------------------------------------------------------------------------------------------  ------------------------------------------------------------------------------  -----------------------------------------------------------------------------------  -------------------------------------------------------------------------------  -----------------------------------------------------------------------------
+A              18-22   I live in Chicago.                                                       Yes, you may anonymously quote my answers to further this project.   Frenzy                                                              Women's Club, College women's                                                 <1 year                                    College                                                      College women's team                                    Somewhat satisfied -- I sometimes wish I could play more, but overall I'm happy with the amount that I play.   Somewhat satisfied -- I sometimes wish I could play more competitively, but overall I'm satisfied with the level that I play.   Somewhat connected                                                     Neutral                                                                                                  Somewhat connected                                                        Disconnected                                                                                                               Neutral - I don't have an opinion here.                                         Agree                                                                                Agree                                                                            Somewhat disagree                                                            
+B              37+     I live in a Chicago suburb.                                              Yes, you may anonymously quote my answers to further this project.   UPA                                                                 Mixed Club                                                                    10+ years                                  Post-college                                                 Recreational league (e.g. an Ultimate Chicago league)   Very satisfied -- I'm playing just the right amount                                                            Very satisfied -- I have the opportunity to play at the right level of competitiveness for me.                                  Somewhat connected                                                     Somewhat disconnected                                                                                    Disconnected                                                              Somewhat connected                                                                                                         Agree                                                                           Neutral - I don't have an opinion here.                                              Agree                                                                            Neutral - I don't have an opinion                                            
+C              31-36   I live in Chicago.                                                       Yes, you may anonymously quote my answers to further this project.   I don't play on a Chicago-based club team.                          UC Fall League (Mixed)                                                        5-10 years                                 Post-college                                                 Recreational league (e.g. an Ultimate Chicago league)   Neutral -- I don't have strong feelings about the amount of ultimate I'm playing.                              Somewhat satisfied -- I sometimes wish I could play more competitively, but overall I'm satisfied with the level that I play.   Disconnected                                                           Somewhat connected                                                                                       Disconnected                                                              Disconnected                                                                                                               Somewhat Agree                                                                  Neutral - I don't have an opinion here.                                              Neutral - I don't have an opinion here.                                          Neutral - I don't have an opinion                                            
+
+<br>
+
+*What were the variables considered?*
+
+**Predictor variables**
 
 Variable            Name                                                                        
 ------------------  ----------------------------------------------------------------------------
@@ -80,7 +94,9 @@ how_long_play       How long have you been playing ultimate?
 start_playing       At what point in your life did you start playing ultimate?                  
 first_experience    What best describes your first ultimate experience?                         
 
+<br>
 
+**Outcome variables**
 
 Variable              Name                                                                                                                     
 --------------------  -------------------------------------------------------------------------------------------------------------------------
@@ -95,42 +111,29 @@ inclus_college        College ultimate teams support the development and inclusi
 inclus_women          Women's club teams support the development and inclusion of women in ultimate.                                           
 inclus_mixed          Mixed club teams support the development and inclusion of women in ultimate.                                             
 
-First 3 responses shown
+<br>
+
+*Outcome variable summary*
+
+* Means by team of the omnibus variables `satis_combined`, `conn_combined`, `inclus_combined`, ordered by their sum, `overall`
+* For a sneak peek of the main finding, check that team type column
 
 
-Particiapnt:   Age:    Please choose the option that best describes where you currently live.   May we anonymously quote your answers from this survey?              Do you currently play or practice with a Chicago-based club team?   Please indicate the ultimate you are playing (or registered for) right now:   How long have you been playing ultimate?   At what point in your life did you start playing ultimate?   What best describes your first ultimate experience?     How satisfied are you with the AMOUNT of ultimate you are currently playing?                                   How satisfied are you with the LEVEL of ultimate you are currently playing?                                                     How connected do you feel to the CLUB ultimate community in Chicago?   How connected do you feel to the RECREATIONAL ultimate community in Chicago? (e.g. UC leagues, pickup)   How connected do you feel to the COLLEGE ultimate community in Chicago?   How connected do you feel to the YOUTH ultimate community in Chicago? (e.g. CUJO, YCC, high school, middle school, etc.)   Ultimate Chicago supports the development and inclusion of women in ultimate.   College ultimate teams support the development and inclusion of women in ultimate.   Women's club teams support the development and inclusion of women in ultimate.   Mixed club teams support the development and inclusion of women in ultimate. 
--------------  ------  -----------------------------------------------------------------------  -------------------------------------------------------------------  ------------------------------------------------------------------  ----------------------------------------------------------------------------  -----------------------------------------  -----------------------------------------------------------  ------------------------------------------------------  -------------------------------------------------------------------------------------------------------------  ------------------------------------------------------------------------------------------------------------------------------  ---------------------------------------------------------------------  -------------------------------------------------------------------------------------------------------  ------------------------------------------------------------------------  -------------------------------------------------------------------------------------------------------------------------  ------------------------------------------------------------------------------  -----------------------------------------------------------------------------------  -------------------------------------------------------------------------------  -----------------------------------------------------------------------------
-A              18-22   I live in Chicago.                                                       Yes, you may anonymously quote my answers to further this project.   Frenzy                                                              Women's Club, College women's                                                 <1 year                                    College                                                      College women's team                                    Somewhat satisfied -- I sometimes wish I could play more, but overall I'm happy with the amount that I play.   Somewhat satisfied -- I sometimes wish I could play more competitively, but overall I'm satisfied with the level that I play.   Somewhat connected                                                     Neutral                                                                                                  Somewhat connected                                                        Disconnected                                                                                                               Neutral - I don't have an opinion here.                                         Agree                                                                                Agree                                                                            Somewhat disagree                                                            
-B              37+     I live in a Chicago suburb.                                              Yes, you may anonymously quote my answers to further this project.   UPA                                                                 Mixed Club                                                                    10+ years                                  Post-college                                                 Recreational league (e.g. an Ultimate Chicago league)   Very satisfied -- I'm playing just the right amount                                                            Very satisfied -- I have the opportunity to play at the right level of competitiveness for me.                                  Somewhat connected                                                     Somewhat disconnected                                                                                    Disconnected                                                              Somewhat connected                                                                                                         Agree                                                                           Neutral - I don't have an opinion here.                                              Agree                                                                            Neutral - I don't have an opinion                                            
-C              31-36   I live in Chicago.                                                       Yes, you may anonymously quote my answers to further this project.   I don't play on a Chicago-based club team.                          UC Fall League (Mixed)                                                        5-10 years                                 Post-college                                                 Recreational league (e.g. an Ultimate Chicago league)   Neutral -- I don't have strong feelings about the amount of ultimate I'm playing.                              Somewhat satisfied -- I sometimes wish I could play more competitively, but overall I'm satisfied with the level that I play.   Disconnected                                                           Somewhat connected                                                                                       Disconnected                                                              Disconnected                                                                                                               Somewhat Agree                                                                  Neutral - I don't have an opinion here.                                              Neutral - I don't have an opinion here.                                          Neutral - I don't have an opinion                                            
+Team Type   Team              Satisfaction   Connectedness   Inclusion   Overall
+----------  ---------------  -------------  --------------  ----------  --------
+No Club     No-Club                   9.92            9.03       15.32     34.27
+No Club     Other                    11.00           10.00       13.83     34.83
+No Club     Non-Chicago              11.10           10.40       16.20     37.70
+Mixed       ELevate                  11.00           10.60       17.30     38.90
+Mixed       UPA                      13.33           10.67       15.00     39.00
+Womens      Dish                     10.75           12.31       16.12     39.19
+Mixed       Shakedown                11.67           10.00       18.17     39.83
+Mixed       Stack Cats               10.86           11.71       17.43     40.00
+Womens      Frenzy                   11.40           12.00       17.20     40.60
+Womens      Nemesis                  11.78           12.22       16.89     40.89
+Mixed       Jabba The Huck           11.75           13.50       17.75     43.00
 
 
-Outcome vars: means by team ordered by overall
-
-
-Team Type   Team              Mean Satisfaction   Mean Connectedness   Mean Inclusion   Mean Overall
-----------  ---------------  ------------------  -------------------  ---------------  -------------
-No Club     No-Club                        9.92                 9.03            15.32          34.27
-No Club     Other                         11.00                10.00            13.83          34.83
-No Club     Non-Chicago                   11.10                10.40            16.20          37.70
-Mixed       ELevate                       11.00                10.60            17.30          38.90
-Mixed       UPA                           13.33                10.67            15.00          39.00
-Womens      Dish                          10.75                12.31            16.12          39.19
-Mixed       Shakedown                     11.67                10.00            18.17          39.83
-Mixed       Stack Cats                    10.86                11.71            17.43          40.00
-Womens      Frenzy                        11.40                12.00            17.20          40.60
-Womens      Nemesis                       11.78                12.22            16.89          40.89
-Mixed       Jabba The Huck                11.75                13.50            17.75          43.00
-
-
-Team type
-
-
-Team Type    Number of Respondents
-----------  ----------------------
-no_club                         94
-mixed                           30
-womens                          40
 
 <br /><br /><br />
 
@@ -138,7 +141,7 @@ womens                          40
 ***
 ## Some Charts
 
-* Histograms of some predictor variables
+Have some histograms of some predictor variables:
 
 
 ![](compile_files/figure-html/unnamed-chunk-5-1.png)<!-- -->![](compile_files/figure-html/unnamed-chunk-5-2.png)<!-- -->![](compile_files/figure-html/unnamed-chunk-5-3.png)<!-- -->![](compile_files/figure-html/unnamed-chunk-5-4.png)<!-- -->![](compile_files/figure-html/unnamed-chunk-5-5.png)<!-- -->
@@ -146,7 +149,9 @@ womens                          40
 
 <br><br><br>
 
-### A smattering of other charts
+***
+
+## A smattering of other charts
 * These are just examples of the types of graphs we could make, depending on what people are interested in looking at -- they're not necessarily particularly meaningful in and of themselves
 
 <br><br>
@@ -167,10 +172,12 @@ womens                          40
 
 <br><br>
 
-#### Drilling down into team_type
+### Drilling down into team_type
 
 **Non-Club: How long have non-Chicago club players been playing?**
 ![](compile_files/figure-html/unnamed-chunk-7-1.png)<!-- -->
+
+<br>
 
 **Womens: age predicting overall happiness**
 
@@ -183,12 +190,14 @@ womens                          40
 **Mixed: where you started playing predicting overall satisfaction**
 ![](compile_files/figure-html/unnamed-chunk-9-1.png)<!-- -->
 
-
+<br><br>
 
 ***
 ## Cluster Analyses
 
-* Are there clusters present in the data that reflect the hypothesis?
+Can we suss out some clusters with k-means (less greedy) or heirarhical clustering (more greedy)?
+
+<br>
 
 ### K-Means clustering
 
@@ -208,9 +217,12 @@ Setup:
 * Data is jittered for interpretability
   
 
+<br>
 
 
 
+
+<br>
 
 Colored by two clusters.
 
@@ -224,7 +236,7 @@ Colored by three clusters.
 
 <br> 
 
-The same with boxplots overlaid
+Wooo box plots
 
 ![](compile_files/figure-html/unnamed-chunk-12-1.png)<!-- -->
 
@@ -259,20 +271,15 @@ These age clusters seem to make pretty good sense. Try a similar clustering stra
 
 
 
-<br>
-
-
-
-* When we cluster by team type, we get the same answers: womens and mixed team players are closer to each other on measures of happiness than they are to non-club players
-
-![](compile_files/figure-html/unnamed-chunk-16-1.png)<!-- -->![](compile_files/figure-html/unnamed-chunk-16-2.png)<!-- -->
-
 
 
 <br /><br /><br />
+<br /><br />
+
 
 ***
 ## Models
+<br />
 
 Omnibus model with all predictors predicting the overall measure. (Not including `team` here because it is binned by `team_type`)
 
@@ -324,9 +331,18 @@ Omnibus model with all predictors predicting the overall measure. (Not including
 ```
 
 * So `team_type` is really the only good predictor
-* Stepwise and all subsets regression analyses confirms this
+* Stepwise and all subsets regression analyses confirms this (not shown here yet)
 
 <br>
+Are there patterns in how the happiness scores of players in each team type cluster?
+
+
+* Yes: when we cluster by team type, we get the same answer, even when outcome variables are not combined into an overall score: womens and mixed team players are closer to each other on measures of happiness than they are to non-club players
+
+![](compile_files/figure-html/unnamed-chunk-17-1.png)<!-- -->![](compile_files/figure-html/unnamed-chunk-17-2.png)<!-- -->
+
+
+<br><br>
 
 Drilling down into `team`, what's driving the dissatisfaction among `no_club` players?
 
@@ -425,11 +441,11 @@ Model with team type *does* predict satisfaction level better than the one witho
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
+
 <br> 
-And it's borne out in this graph
+* And that difference is borne out in this graph (check that leftmost bar)
 <br>
 
-**Satisfaction with amount playing faceted by team type**
 ![](compile_files/figure-html/unnamed-chunk-23-1.png)<!-- -->
 
 
@@ -437,6 +453,9 @@ And it's borne out in this graph
 
 Okay so there's a there there with `team_type`. So does `team_type` pedict overall satisfaction, inclusion, connection, and all of the above?
 
+<br>
+
+***
 <br>
 **Do womens and mixed players have significantly higher overall satisfaction, connectedness, and inclusion than non-club players?**
 
@@ -538,6 +557,7 @@ Overall: yes (p = 2.82e-07)
 
 <br>
 
+
 Is there a significant difference in combined satisfaction and inclusion scores between womens and mixed players?
 No, p = 0.841
 
@@ -565,6 +585,8 @@ No, p = 0.841
 ```
 
 <br>
+
+***
 
 So, narrowing down to club or not, is playing club at all a significant predictor of overall happiness with ultimate in Chicago?
 
@@ -595,6 +617,7 @@ Yes, p = 2.32e-09
 ## F-statistic: 40.06 on 1 and 162 DF,  p-value: 2.315e-09
 ```
 
+***
 
 
 
@@ -607,8 +630,8 @@ Yes, p = 2.32e-09
 
 
 #### Future directions
-* Merge with overall stats of where people are playing
-* Merge with qualitative dat
+* Merge with Ultimate Chicago stats of where people are playing based on league, college, and club data
+* Merge with qualitative data
 * Check goodness of fit of models
 * NLP on free responses
 
