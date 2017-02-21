@@ -26,10 +26,10 @@ dat_for_clustering <- all[complete.cases(all), ] %>%
     overall
   )
 
-dat_for_clustering <- as_tibble(cluster_dat)
+dat_for_clustering <- as_tibble(dat_for_clustering)
 
 # scale the data
-numeric_dat <- as_tibble(sapply(cluster_dat, as.numeric))
+numeric_dat <- as_tibble(sapply(dat_for_clustering, as.numeric))
 scaled_dat <- as_tibble(scale(numeric_dat))
 
 
@@ -222,17 +222,17 @@ do_cluster_satis("team_type")
 
 # --------------- if need to do this outside the function with team as the grouper -----------
 
-hc <- all %>%
+hc_team <- all %>%
   group_by(team) %>% 
   summarise(
     s_amount = mean(as.numeric(satis_amount_recode)), 
     s_level = mean(as.numeric(satis_level_recode))
   )
 
-# put team names as rownames and take out the team column
-hc <- data.frame(hc)
-rownames(hc) <- hc[["team"]]
-hc <- as_tibble(hc[, 2:ncol(hc)])
+# put team names as rownames and take out the team column so that rows in plot will have team names
+hc_team <- data.frame(hc_team)
+rownames(hc_team) <- hc_team[["team"]]
+hc_team <- as_tibble(hc_team[, 2:ncol(hc_team)])
 
 # scale the variables of interest (everything except team, which was included in the group_by)
 scale_vars <- function(dat) {
@@ -243,22 +243,22 @@ scale_vars <- function(dat) {
   }
   dat
 }
-hc <- scale_vars(hc)
+hc_team <- scale_vars(hc_team)
 
 # change the new names to something meaningful (try to get this in the function)
-names(hc)[3:4] <- c("s_amount_scaled", "s_level_scaled")
+names(hc_team)[3:4] <- c("s_amount_scaled", "s_level_scaled")
 
-hc_dist <- dist(hc[3:4])
-hc_fit <- hclust(hc_dist, method = "centroid")
+hc_team_dist <- dist(hc_team[3:4])
+hc_team_fit <- hclust(hc_team_dist, method = "centroid")
 
 # plot the cluster
-plot(hc_fit, hang = -1, cex = 0.8, srt = 60,
+plot(hc_team_fit, hang = -1, cex = 0.8, srt = 60,
      main = paste0("Cluster based on Satisfaction Amount and Satisfaction Level Per Team"),
      xlab = "Groups", 
      ylab = "")
 
 # get optimal number of clusters
-num_clust <- NbClust(hc[3:4], min.nc = 2,
+num_clust <- NbClust(hc_team[3:4], min.nc = 2,
                      max.nc = 8,   # set max number of clusters to less than number of groups
                      method = "centroid")
 
@@ -309,6 +309,109 @@ do_cluster_inclus_conn("age")
 do_cluster_inclus_conn("team_type")
 do_cluster_inclus_conn("start_playing")
 do_cluster_inclus_conn("currently_playing")
+
+
+
+
+
+
+
+
+
+# -- cluster w/ more 
+
+scaled_dat
+
+
+# dat_cluster <- function(grouping_var, dat) {
+#   hc <- dat %>%
+#     na.omit(.)
+#     # group_by_(grouping_var) %>% 
+#     # summarise(
+#     #   inclus_mean = mean(as.numeric(inclus_combined)), 
+#     #   conn_mean = mean(as.numeric(conn_combined))
+#     # )
+#   
+#   # put grouping var names as rownames and take out the grouping var column
+#   hc <- data.frame(hc)
+#   rownames(hc) <- hc[[grouping_var]]
+#   hc <- as_tibble(hc[, 2:ncol(hc)])
+#   
+#   # scale the variables of interest (everything except team, which was included in the group_by)
+#   scale_vars <- function(dat) {
+#     vars <- dat[, 1:ncol(dat)]
+#     for (row in vars) {
+#       var_scaled <- scale(row)
+#       dat <- data.frame(dat, var_scaled = var_scaled)
+#     }
+#     dat
+#   }
+#   hc <- scale_vars(hc)
+#   
+#   # change the new names to something meaningful (try to get this in the function)
+#   names(hc)[3:4] <- c("inclus_mean", "conn_mean")
+#   
+#   hc_dist <- dist(hc[3:4])
+#   hc_fit <- hclust(hc_dist, method = "centroid")
+#   
+#   # plot the cluster
+#   plot(hc_fit, hang = -1, cex = 0.8, srt = 60,
+#        main = paste0("Hierarchical Cluster based on \n Inclusion and Connectedness Per ", capitalize_this(grouping_var)),
+#        xlab = "Groups", 
+#        ylab = "")
+# }
+# 
+# 
+# 
+# dat_cluster()
+
+
+
+
+
+
+
+
+
+
+
+hc_team <- scaled_dat %>%
+  na.omit(.)
+
+# put team names as rownames and take out the team column so that rows in plot will have team names
+# hc_team <- data.frame(hc_team)
+# rownames(hc_team) <- hc_team[["team"]]
+# hc_team <- as_tibble(hc_team[, 2:ncol(hc_team)])
+
+# scale the variables of interest (everything except team, which was included in the group_by)
+# scale_vars <- function(dat) {
+#   vars <- dat[, 1:ncol(dat)]
+#   for (row in vars) {
+#     var_scaled <- scale(row)
+#     dat <- data.frame(dat, var_scaled = var_scaled)
+#   }
+#   dat
+# }
+# hc_team <- scale_vars(hc_team)
+
+# change the new names to something meaningful (try to get this in the function)
+# names(hc_team)[3:4] <- c("s_amount_scaled", "s_level_scaled")
+
+hc_team_dist <- dist(hc_team[1:(nrow(hc_team) - 1)])
+hc_team_fit <- hclust(hc_team_dist, method = "centroid")
+
+# plot the cluster
+plot(hc_team_fit, hang = -1, cex = 0.8, srt = 60,
+     main = paste0("Cluster based on Satisfaction Amount and Satisfaction Level Per Team"),
+     xlab = "Groups", 
+     ylab = "")
+
+# get optimal number of clusters
+num_clust <- NbClust(hc_team[3:4], min.nc = 2,
+                     max.nc = 8,   # set max number of clusters to less than number of groups
+                     method = "centroid")
+
+
 
 
 
