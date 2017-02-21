@@ -70,7 +70,8 @@ get_table <- function(summarise_this) {
 }
 
 get_table("age")
-get_table("team_type")
+n_by_team_type <- get_table("team_type")
+n_by_team_type
 get_table("where_live")
 get_table("currently_playing")
 
@@ -155,8 +156,8 @@ sum(ncol(satisfaction)) + sum(ncol(connectedness)) + sum(ncol(inclusion))   # 10
 
 
 # get means by team_type
-means.by.team <- all %>% 
-  group_by(team_type, team) %>% 
+means.by.team <- all_present %>% 
+  group_by(`Team Type`, team) %>% 
   dplyr::summarise(                        # make sure to include dplyr:: here. not sure which package is masking summarise()
     mean_satis = round(mean(satis_combined), digits = 2), 
     mean_conn = round(mean(conn_combined), digits = 2),
@@ -165,14 +166,13 @@ means.by.team <- all %>%
   ) %>% 
   arrange(mean_overall) %>% 
   rename(
-    `Team Type` = team_type,
     Team = team,
     `Mean Satisfaction` = mean_satis,
     `Mean Connectedness` = mean_conn,
     `Mean Inclusion` = mean_inclus,
     `Mean Overall` = mean_overall
   )
-means.by.team
+
 
 
 # get means for all aggregated variables

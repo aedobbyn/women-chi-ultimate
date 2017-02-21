@@ -22,9 +22,24 @@ cluster_dat <- all[complete.cases(all), ] %>%
     overall
   )
 
+cluster_dat <- as_tibble(cluster_dat)
 
 # scale the data?
 # take out outliers?
+
+numberize <- function(dat) {
+  for (c in names(dat[1:3])) {
+    dat2 <- data.frame(dat[["overall"]])
+    dat2[[c]] <- as.numeric(dat[[c]])
+    # print(dat2)
+    dat2 <- as_tibble(data.frame(cbind(dat2, dat2[[c]])))
+    print(dat2)
+  }
+  dat2
+}
+
+numberize(cluster_dat)
+
 
 
 # from the pared dataset, cluster people based on their "overall" ratings in first
