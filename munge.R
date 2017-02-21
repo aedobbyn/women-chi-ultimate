@@ -488,3 +488,24 @@ all_present <- all %>%
 levels(all_present$`Club or Not`) <- c("Club", "Not Club")
 levels(all_present$`Team Type`) <- c("No Club", "Mixed", "Womens")
 
+
+
+
+# function for capitalizing words in vector separated by underscores
+simpleCap <- function(x) {
+  s <- strsplit(x, " ")[[1]]
+  paste(toupper(substring(s, 1,1)), substring(s, 2),
+        sep="", collapse=" ")
+}
+capitalize_this <- function(vec, ...) {
+  out <- vector()
+  for (i in vec) {
+    if (grepl(pattern = "_", x = i) == TRUE) {
+      i <- simpleCap(gsub(x = i, pattern = "_", replacement = " "))
+    } else {
+      i <- capitalize(i)
+    }
+    out <- c(out, i)
+  }
+  out
+}

@@ -121,25 +121,35 @@ knitr::kable(n_by_team_type, col.names = c("Team Type", "Number of Respondents")
 ***
 ## Some Charts
 
-Basic breakdowns
+* Histograms of some predictor variables
 
 
 ```{r}
-graph_table <- function(summarise_this) {
-  ggplot(data = na.omit(all), aes_string(summarise_this)) + geom_bar(position = "dodge")
+get_summaries <- function(d, var) {
+  tabl <- d %>%
+    count_(var);
+  ggplot(d) + geom_bar(aes_string(var), stat = "count") + theme_minimal() +
+    ggtitle(paste0("Breakdown by ", capitalize_this(var))) +
+    labs(x = capitalize_this(var), y = "Count")
 }
 
-graph_table("team_type")
-graph_table("club_or_not")
+get_summaries(d = all, var = "where_live")
+get_summaries(d = all, var = "how_long_play")
+get_summaries(d = all, var = "team")
+get_summaries(d = all, var = "team_type")
+get_summaries(d = all, var = "club_or_not")
 
 ```
 
-```{r}
-graph_table("team")
-```
 
+<br><br><br>
 
-What people are playing by their team 
+### A smattering of other charts
+* These are just examples of the types of graphs we could make, depending on what people are interested in looking at -- they're not necessarily particularly meaningful in and of themselves
+
+<br><br>
+
+**What people are playing by their team** 
 
 * Note that many people took the survey after their seasons had ended so what they play in season might != what they said they were `currently_playing`
 
@@ -152,35 +162,10 @@ currently_playing.team_type <- ggplot(data = na.omit(all)) +
 currently_playing.team_type
 ```
 
-<br>
-
-Satisfaction with amount playing faceted by team type
-```{r}
-team_type_names <- list(
-  "no_club" = "No Club",
-  "mixed" = "Mixed",
-  "womens" = "Womens"
-)
-
-# function to return the values of facet labels. called inside facet_grid()
-relabel_t_t <- function(variable, value){
-  return(team_type_names[value])
-}
-
-ggplot(na.omit(all)) +
-  geom_bar(aes(x = satis_amount_recode,
-               y = (..count..)/sum(..count..),
-               position = "dodge")) +
-  facet_grid(. ~ team_type, labeller = relabel_t_t) +
-  theme(axis.text.x = element_text(angle = 60, hjust = 1)) +
-  ggtitle("Satisfaction with Amount of Play by Team Type") +
-  labs(x = "Satisfaction with Amount of Play", y = "Proportion of Total Sample")
-```
-
 
 <br>
 
-Jittered `age` (ordinal) vs. overall happiness w/ boxplot of `overall` superimposed
+**Jittered `age` (ordinal) vs. overall happiness w/ boxplot of `overall` superimposed**
 ```{r overall.team_type, echo = FALSE, warning=FALSE, message=FALSE}
 
 qplot(age, overall, data = all) +
@@ -196,7 +181,7 @@ qplot(age, overall, data = all) +
 
 #### Drilling down into team_type
 
-Non-Club: How long have non-Chicago club players been playing?
+**Non-Club: How long have non-Chicago club players been playing?**
 ```{r}
 no_club.how_long_play <- 
   ggplot(data = na.omit(all[all$team_type == "no_club", ])) +
@@ -208,7 +193,7 @@ no_club.how_long_play <-
 no_club.how_long_play
 ```
 
-Womens: age predicting overall happiness
+**Womens: age predicting overall happiness**
 
 (Best fit lines are fitted using the linear `method = "lm"`)
 
@@ -222,7 +207,7 @@ ggplot(all[all$team_type == "womens", ],
 
 <br>
 
-Mixed: where you started playing predicting overall satisfaction
+**Mixed: where you started playing predicting overall satisfaction**
 ```{r}
 ggplot(all[all$team_type == "mixed", ],
        aes(x = as.numeric(start_playing), y = overall, colour = team)) + 
@@ -232,53 +217,14 @@ ggplot(all[all$team_type == "mixed", ],
 
 
 
-<br><br>
-
-#### Satisfaction Amount by Team Type
-* Focusing on amount rather than level because the model showed `team_type` predicting satisfaction amount but not level. 
-* (In other words, what kind of team you're on has an effect on whether you're satisfied with the amount you're playing or not.)
-
-```{r}
-ggplot(na.omit(all[all$team_type=="womens", ])) + 
-  geom_bar(aes(x = satis_amount_recode, y = (..count..)/sum(..count..),
-               position = "fill")) +
-  labs(title = "Satisfaction with Amount of Play: Womens") +
-  scale_y_continuous(labels = scales::percent) +
-  scale_x_discrete(drop=FALSE) +     # don't drop unused levels
-  theme(axis.text.x = element_text(angle = 60, hjust = 1))
-```
-
-```{r}
-ggplot(na.omit(all[all$team_type=="mixed", ])) + 
-  geom_bar(aes(x = satis_amount_recode, y = (..count..)/sum(..count..),
-               position = "fill")) +
-  labs(title = "Satisfaction with Amount of Play: Mixed") +
-  scale_y_continuous(labels = scales::percent) +
-  scale_x_discrete(drop=FALSE) +
-  theme(axis.text.x = element_text(angle = 60, hjust = 1))
-```
-
-```{r}
-ggplot(na.omit(all[all$team_type=="no_club", ])) + 
-  geom_bar(aes(x = satis_amount_recode, y = (..count..)/sum(..count..),
-               position = "fill")) +
-  labs(title = "Satisfaction with Amount of Play: Non-Club Players") +
-  scale_y_continuous(labels = scales::percent) +
-  scale_x_discrete(drop=FALSE) +
-  theme(axis.text.x = element_text(angle = 60, hjust = 1))
-
-
-```
-
-<br /><br /><br />
-
 ***
 ## Cluster Analyses
 
+* Are there clusters present in the data that reflect the hypothesis?
 
 ### K-Means clustering
 
-Dependent variable here is `overall` happiness.
+* Dependent variable here is `overall` happiness.
 
 Hypothesis: 
 
@@ -341,18 +287,7 @@ ggplot(data = cluster_dat,
   theme_minimal()
 ```
 
-Colored by two clusters.
-
-```{r}
-ggplot(data = cluster_dat,    
-       aes(x = team_type, y = overall, colour = clusters_two)) + 
-  geom_jitter() +
-  ggtitle("Unsupervised Clustering of Overall Scores into Two Groups") +
-  labs(x = "Team Type", y = "Overall Happiness") +
-  # geom_boxplot(alpha = 0.3) +
-  theme_minimal()
-```
-
+<br>
 
 Colored by three clusters.
 
@@ -366,16 +301,7 @@ ggplot(data = cluster_dat,
   theme_minimal()
 ```
 
-A plot of how `team_type` falls into the two clusters. 
-```{r}
-ggplot(data = cluster_dat, 
-       aes(x = clusters_two, y = overall, colour = team_type)) + 
-  geom_jitter() +
-  ggtitle("Unsupervised Clustering of Overall Scores into Two Groups") +
-  labs(x = "Cluster", y = "Overall Happiness") +
-  theme_minimal()
-```
-
+<br> 
 
 The same with boxplots overlaid
 
@@ -390,16 +316,7 @@ ggplot(data = cluster_dat,
 ```
 
 
-A plot of how `club_or_not` falls into the three clusters.
-
-```{r}
-ggplot(data = cluster_dat, 
-       aes(x = clusters_three, y = overall, colour = club_or_not)) + 
-  geom_jitter() +
-  ggtitle("Unsupervised Clustering of Overall Scores into Two Groups") +
-  labs(x = "Cluster", y = "Overall Happiness") +
-  theme_minimal()
-```
+<br>
 
 With team as the grouper
 
@@ -420,63 +337,120 @@ ggplot(data = cluster_dat,
 
 ### Hierarchical Clustering
 
-* Dependent vars: satisfaction amount and satisfaction level
-* Grouping vars: `team`, `team_type`, or `where_live`
-* Distance = Euclidian
-* Method = centroid
+* Dependent vars: inclusion and connectedness
+* Grouping var: `age`
 
 
 ```{r}
-hc <- all %>%
-  group_by(team) %>% 
-  summarise(
-    s_amount = mean(as.numeric(satis_amount_recode)), 
-    s_level = mean(as.numeric(satis_level_recode))
-  )
-
-# put team names as rownames and take out the team column
-hc <- data.frame(hc)
-rownames(hc) <- hc[["team"]]
-hc <- as_tibble(hc[, 2:ncol(hc)])
-
-# scale the variables of interest (everything except team, which was included in the group_by)
-scale_vars <- function(dat) {
-  vars <- dat[, 1:ncol(dat)]
-  for (row in vars) {
-    var_scaled <- scale(row)
-    dat <- data.frame(dat, var_scaled = var_scaled)
+do_cluster_inclus_conn <- function(grouping_var) {
+  hc <- all %>%
+    na.omit(.) %>% 
+    group_by_(grouping_var) %>% 
+    summarise(
+      inclus_mean = mean(as.numeric(inclus_combined)), 
+      conn_mean = mean(as.numeric(conn_combined))
+    )
+  
+  # put grouping var names as rownames and take out the grouping var column
+  hc <- data.frame(hc)
+  rownames(hc) <- hc[[grouping_var]]
+  hc <- as_tibble(hc[, 2:ncol(hc)])
+  
+  # scale the variables of interest (everything except team, which was included in the group_by)
+  scale_vars <- function(dat) {
+    vars <- dat[, 1:ncol(dat)]
+    for (row in vars) {
+      var_scaled <- scale(row)
+      dat <- data.frame(dat, var_scaled = var_scaled)
+    }
+    dat
   }
-  dat
+  hc <- scale_vars(hc)
+  
+  # change the new names to something meaningful
+  names(hc)[3:4] <- c("inclus_mean", "conn_mean")
+  
+  hc_dist <- dist(hc[3:4])
+  hc_fit <- hclust(hc_dist, method = "centroid")
+  
+  # plot the cluster
+  plot(hc_fit, hang = -1, cex = 0.8, srt = 60,
+       main = paste0("Hierarchical Cluster based on \n Inclusion and Connectedness Per ", capitalize_this(grouping_var), "Group"),
+       xlab = "Groups", 
+       ylab = "")
 }
-hc <- scale_vars(hc)
 
-# change the new names to something meaningful (try to get this in the function)
-names(hc)[3:4] <- c("s_amount_scaled", "s_level_scaled")
-
-hc_dist <- dist(hc[3:4])
-hc_fit <- hclust(hc_dist, method = "centroid")
+do_cluster_inclus_conn("age")
 ```
 
+<br><br><br>
 
+These age clusters seem to make pretty good sense. Try a similar clustering strategy based on team.
 
-Plot the heirarchy
+* Dependent vars: satisfaction amount and satisfaction level
+* Grouping var: `team`
+
 ```{r}
-plot(hc_fit, hang = -1, cex = 0.8, srt = 60,
-     main = paste0("Cluster based on Satisfaction Amount and Satisfaction Level Per Team"),
-     xlab = "Groups", 
-     ylab = "")
+do_cluster_satis <- function(grouping_var) {
+  hc <- all %>%
+    group_by_(grouping_var) %>% 
+    summarise(
+      s_amount = mean(as.numeric(satis_amount_recode)), 
+      s_level = mean(as.numeric(satis_level_recode))
+    )
+  
+  # put team names as rownames and take out the team column
+  hc <- data.frame(hc)
+  rownames(hc) <- hc[[grouping_var]]
+  hc <- as_tibble(hc[, 2:ncol(hc)])
+  
+  # scale the variables of interest (everything except team, which was included in the group_by)
+  scale_vars <- function(dat) {
+    vars <- dat[, 1:ncol(dat)]
+    for (row in vars) {
+      var_scaled <- scale(row)
+      dat <- data.frame(dat, var_scaled = var_scaled)
+    }
+    dat
+  }
+  hc <- scale_vars(hc)
+  
+  # change the new names to something meaningful
+  names(hc)[3:4] <- c("s_amount_scaled", "s_level_scaled")
+  
+  hc_dist <- dist(hc[3:4])
+  hc_fit <- hclust(hc_dist, method = "centroid")
+  
+  # plot the cluster
+  plot(hc_fit, hang = -1, cex = 0.8, srt = 60,
+       main = paste0("Hierarchical Cluster based on \n 
+                     Satisfaction Amount and Satisfaction Level Per ", 
+                     capitalize_this(grouping_var)),
+       xlab = "Groups", 
+       ylab = "")
+}
+
+# cluster based on factor variables we think might predict differences in satisfaction amount and level
+do_cluster_satis("team")
+
 ```
+
 
 
 <br>
 
-Optimal number of clusters? Depends on many factors, but somewhere around 3 or 4, usually.
+
+
+* When we cluster by team type, we get the same answers: womens and mixed team players are closer to each other on measures of happiness than they are to non-club players
+
 ```{r}
-# # get optimal number of clusters
-# num_clust <- NbClust(hc[3:4], min.nc = 2,
-#                      max.nc = 8,   # set max number of clusters to less than number of groups
-#                      method = "centroid")
+do_cluster_inclus_conn("team_type")
+
+do_cluster_satis("team_type")
+
+
 ```
+
 
 
 <br /><br /><br />
@@ -485,6 +459,8 @@ Optimal number of clusters? Depends on many factors, but somewhere around 3 or 4
 ## Models
 
 Omnibus model with all predictors predicting the overall measure. (Not including `team` here because it is binned by `team_type`)
+
+* Throw all the predictors in and see what comes out significant
 
 ```{r m.big, echo=FALSE}
 
@@ -502,6 +478,7 @@ summary(m.big)
 ```
 
 * So `team_type` is really the only good predictor
+* Stepwise and all subsets regression analyses confirms this
 
 <br>
 
@@ -571,6 +548,34 @@ Model with team type *does* predict satisfaction level better than the one witho
 ```{r}
 anova(m.sais_amount_team_t, m.sais_amount_no.team_t)
 ```
+
+<br> 
+And it's borne out in this graph
+<br>
+
+**Satisfaction with amount playing faceted by team type**
+```{r}
+team_type_names <- list(
+  "no_club" = "No Club",
+  "mixed" = "Mixed",
+  "womens" = "Womens"
+)
+
+# function to return the values of facet labels. called inside facet_grid()
+relabel_t_t <- function(variable, value){
+  return(team_type_names[value])
+}
+
+ggplot(na.omit(all)) +
+  geom_bar(aes(x = satis_amount_recode,
+               y = (..count..)/sum(..count..),
+               position = "dodge")) +
+  facet_grid(. ~ team_type, labeller = relabel_t_t) +
+  theme(axis.text.x = element_text(angle = 60, hjust = 1)) +
+  ggtitle("Satisfaction with Amount of Play by Team Type") +
+  labs(x = "Satisfaction with Amount of Play", y = "Proportion of Total Sample")
+```
+
 
 <br>
 
@@ -658,6 +663,7 @@ summary(m.overall.club_or_not)
 * Merge with overall stats of where people are playing
 * Merge with qualitative dat
 * Check goodness of fit of models
+* NLP on free responses
 
 
 <br><br><br>

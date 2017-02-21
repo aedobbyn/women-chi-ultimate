@@ -138,29 +138,29 @@ womens                          40
 ***
 ## Some Charts
 
-Basic breakdowns
+* Histograms of some predictor variables
 
 
-![](compile_files/figure-html/unnamed-chunk-5-1.png)<!-- -->![](compile_files/figure-html/unnamed-chunk-5-2.png)<!-- -->
+![](compile_files/figure-html/unnamed-chunk-5-1.png)<!-- -->![](compile_files/figure-html/unnamed-chunk-5-2.png)<!-- -->![](compile_files/figure-html/unnamed-chunk-5-3.png)<!-- -->![](compile_files/figure-html/unnamed-chunk-5-4.png)<!-- -->![](compile_files/figure-html/unnamed-chunk-5-5.png)<!-- -->
+
+
+<br><br><br>
+
+### A smattering of other charts
+* These are just examples of the types of graphs we could make, depending on what people are interested in looking at -- they're not necessarily particularly meaningful in and of themselves
+
+<br><br>
+
+**What people are playing by their team** 
+
+* Note that many people took the survey after their seasons had ended so what they play in season might != what they said they were `currently_playing`
 
 ![](compile_files/figure-html/unnamed-chunk-6-1.png)<!-- -->
 
 
-What people are playing by their team 
-
-* Note that many people took the survey after their seasons had ended so what they play in season might != what they said they were `currently_playing`
-
-![](compile_files/figure-html/unnamed-chunk-7-1.png)<!-- -->
-
 <br>
 
-Satisfaction with amount playing faceted by team type
-![](compile_files/figure-html/unnamed-chunk-8-1.png)<!-- -->
-
-
-<br>
-
-Jittered `age` (ordinal) vs. overall happiness w/ boxplot of `overall` superimposed
+**Jittered `age` (ordinal) vs. overall happiness w/ boxplot of `overall` superimposed**
 ![](compile_files/figure-html/overall.team_type-1.png)<!-- -->
 
 
@@ -169,43 +169,30 @@ Jittered `age` (ordinal) vs. overall happiness w/ boxplot of `overall` superimpo
 
 #### Drilling down into team_type
 
-Non-Club: How long have non-Chicago club players been playing?
-![](compile_files/figure-html/unnamed-chunk-9-1.png)<!-- -->
+**Non-Club: How long have non-Chicago club players been playing?**
+![](compile_files/figure-html/unnamed-chunk-7-1.png)<!-- -->
 
-Womens: age predicting overall happiness
+**Womens: age predicting overall happiness**
 
 (Best fit lines are fitted using the linear `method = "lm"`)
 
-![](compile_files/figure-html/unnamed-chunk-10-1.png)<!-- -->
+![](compile_files/figure-html/unnamed-chunk-8-1.png)<!-- -->
 
 <br>
 
-Mixed: where you started playing predicting overall satisfaction
-![](compile_files/figure-html/unnamed-chunk-11-1.png)<!-- -->
+**Mixed: where you started playing predicting overall satisfaction**
+![](compile_files/figure-html/unnamed-chunk-9-1.png)<!-- -->
 
 
-
-<br><br>
-
-#### Satisfaction Amount by Team Type
-* Focusing on amount rather than level because the model showed `team_type` predicting satisfaction amount but not level. 
-* (In other words, what kind of team you're on has an effect on whether you're satisfied with the amount you're playing or not.)
-
-![](compile_files/figure-html/unnamed-chunk-12-1.png)<!-- -->
-
-![](compile_files/figure-html/unnamed-chunk-13-1.png)<!-- -->
-
-![](compile_files/figure-html/unnamed-chunk-14-1.png)<!-- -->
-
-<br /><br /><br />
 
 ***
 ## Cluster Analyses
 
+* Are there clusters present in the data that reflect the hypothesis?
 
 ### K-Means clustering
 
-Dependent variable here is `overall` happiness.
+* Dependent variable here is `overall` happiness.
 
 Hypothesis: 
 
@@ -227,33 +214,26 @@ Setup:
 
 Colored by two clusters.
 
-![](compile_files/figure-html/unnamed-chunk-15-1.png)<!-- -->
+![](compile_files/figure-html/unnamed-chunk-10-1.png)<!-- -->
 
-Colored by two clusters.
-
-![](compile_files/figure-html/unnamed-chunk-16-1.png)<!-- -->
-
+<br>
 
 Colored by three clusters.
 
-![](compile_files/figure-html/unnamed-chunk-17-1.png)<!-- -->
+![](compile_files/figure-html/unnamed-chunk-11-1.png)<!-- -->
 
-A plot of how `team_type` falls into the two clusters. 
-![](compile_files/figure-html/unnamed-chunk-18-1.png)<!-- -->
-
+<br> 
 
 The same with boxplots overlaid
 
-![](compile_files/figure-html/unnamed-chunk-19-1.png)<!-- -->
+![](compile_files/figure-html/unnamed-chunk-12-1.png)<!-- -->
 
 
-A plot of how `club_or_not` falls into the three clusters.
-
-![](compile_files/figure-html/unnamed-chunk-20-1.png)<!-- -->
+<br>
 
 With team as the grouper
 
-![](compile_files/figure-html/unnamed-chunk-21-1.png)<!-- -->
+![](compile_files/figure-html/unnamed-chunk-13-1.png)<!-- -->
 
 
 
@@ -262,23 +242,30 @@ With team as the grouper
 
 ### Hierarchical Clustering
 
+* Dependent vars: inclusion and connectedness
+* Grouping var: `age`
+
+
+![](compile_files/figure-html/unnamed-chunk-14-1.png)<!-- -->
+
+<br><br><br>
+
+These age clusters seem to make pretty good sense. Try a similar clustering strategy based on team.
+
 * Dependent vars: satisfaction amount and satisfaction level
-* Grouping vars: `team`, `team_type`, or `where_live`
-* Distance = Euclidian
-* Method = centroid
+* Grouping var: `team`
 
+![](compile_files/figure-html/unnamed-chunk-15-1.png)<!-- -->
 
-
-
-
-
-Plot the heirarchy
-![](compile_files/figure-html/unnamed-chunk-23-1.png)<!-- -->
 
 
 <br>
 
-Optimal number of clusters? Depends on many factors, but somewhere around 3 or 4, usually.
+
+
+* When we cluster by team type, we get the same answers: womens and mixed team players are closer to each other on measures of happiness than they are to non-club players
+
+![](compile_files/figure-html/unnamed-chunk-16-1.png)<!-- -->![](compile_files/figure-html/unnamed-chunk-16-2.png)<!-- -->
 
 
 
@@ -288,6 +275,8 @@ Optimal number of clusters? Depends on many factors, but somewhere around 3 or 4
 ## Models
 
 Omnibus model with all predictors predicting the overall measure. (Not including `team` here because it is binned by `team_type`)
+
+* Throw all the predictors in and see what comes out significant
 
 
 
@@ -335,6 +324,7 @@ Omnibus model with all predictors predicting the overall measure. (Not including
 ```
 
 * So `team_type` is really the only good predictor
+* Stepwise and all subsets regression analyses confirms this
 
 <br>
 
@@ -434,6 +424,14 @@ Model with team type *does* predict satisfaction level better than the one witho
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
+
+<br> 
+And it's borne out in this graph
+<br>
+
+**Satisfaction with amount playing faceted by team type**
+![](compile_files/figure-html/unnamed-chunk-23-1.png)<!-- -->
+
 
 <br>
 
@@ -570,7 +568,7 @@ No, p = 0.841
 
 So, narrowing down to club or not, is playing club at all a significant predictor of overall happiness with ultimate in Chicago?
 
-![](compile_files/figure-html/unnamed-chunk-36-1.png)<!-- -->
+![](compile_files/figure-html/unnamed-chunk-29-1.png)<!-- -->
 
 <br>
 
@@ -612,6 +610,7 @@ Yes, p = 2.32e-09
 * Merge with overall stats of where people are playing
 * Merge with qualitative dat
 * Check goodness of fit of models
+* NLP on free responses
 
 
 <br><br><br>

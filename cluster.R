@@ -1,4 +1,8 @@
 
+source("./munge.R")
+
+
+
 # Unsupervised cluster analyses: are there natural clusters in the data? How do they map
 # to our hypothesis that the two clusters to be found are based on whether you play club
 # or not?
@@ -124,7 +128,7 @@ ggplot(data = cluster_dat,
 
 
 
-# -------- validate --------
+# -------- validate: not done yet --------
 
 # give numeric values that we think correspond to how the algorithm is clustering people
 all_no_na_2 <- all_no_na %>% 
@@ -136,7 +140,6 @@ all_no_na_2 <- all_no_na %>%
 
 
 # compare how well kmeans did compared to actual
-
 
 # same as above for not_club or club, just more programmatically (& verbose :/)
 real_cluster <- function(dat) {
@@ -162,11 +165,10 @@ all_no_na_3
 # Grouping vars: team, team_type, or where_live
 
 
-do_cluster <- function(grouping_var) {
+do_cluster_satis <- function(grouping_var) {
   hc <- all %>%
     group_by_(grouping_var) %>% 
     summarise(
-      # age, where_live, currently_playing, how_long_play, start_playing, first_experience,
       s_amount = mean(as.numeric(satis_amount_recode)), 
       s_level = mean(as.numeric(satis_level_recode))
     )
@@ -203,7 +205,7 @@ do_cluster <- function(grouping_var) {
   # only run this if there are enough groups to cluster on (i.e., more than 3)
   library(NbClust)
   if (nrow(hc) > 3) {
-    num_clust <- NbClust(hc[3:4], min.nc = 2, 
+    num_clust <- NbClust(hc[3:4], min.nc = 2,
                          max.nc = max(6, (nrow(hc) - 4)),   # set max number of clusters to less than number of groups
                          method = "average")
     # depends on what method used and what the max.nc is set to
@@ -211,9 +213,9 @@ do_cluster <- function(grouping_var) {
 }
 
 # cluster based on factor variables we think might predict differences in satisfaction amount and level
-do_cluster("where_live")
-do_cluster("team")
-do_cluster("team_type")
+do_cluster_satis("where_live")
+do_cluster_satis("team")
+do_cluster_satis("team_type")
 
 
 
@@ -264,9 +266,8 @@ num_clust <- NbClust(hc[3:4], min.nc = 2,
 
 
 
-
-
-do_cluster_inclusion <- function(grouping_var) {
+# cluster based on mean inclusion and connectedness
+do_cluster_inclus_conn <- function(grouping_var) {
   hc <- all %>%
     na.omit(.) %>% 
     group_by_(grouping_var) %>% 
@@ -275,7 +276,7 @@ do_cluster_inclusion <- function(grouping_var) {
       conn_mean = mean(as.numeric(conn_combined))
     )
   
-  # put team names as rownames and take out the team column
+  # put grouping var names as rownames and take out the grouping var column
   hc <- data.frame(hc)
   rownames(hc) <- hc[[grouping_var]]
   hc <- as_tibble(hc[, 2:ncol(hc)])
@@ -299,15 +300,15 @@ do_cluster_inclusion <- function(grouping_var) {
   
   # plot the cluster
   plot(hc_fit, hang = -1, cex = 0.8, srt = 60,
-       main = paste0("Cluster based on Inclusion \n and Connectedness Per ", capitalize_this(grouping_var)),
+       main = paste0("Hierarchical Cluster based on \n Inclusion and Connectedness Per ", capitalize_this(grouping_var)),
        xlab = "Groups", 
        ylab = "")
 }
 
-do_cluster_inclusion("age")
-do_cluster_inclusion("team_type")
-do_cluster_inclusion("start_playing")
-do_cluster_inclusion("currently_playing")
+do_cluster_inclus_conn("age")
+do_cluster_inclus_conn("team_type")
+do_cluster_inclus_conn("start_playing")
+do_cluster_inclus_conn("currently_playing")
 
 
 
