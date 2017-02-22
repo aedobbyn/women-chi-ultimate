@@ -22,11 +22,14 @@ all_no_na <- all[complete.cases(all), ]
 # will determine in some part which clusters people fall into)
 dat_for_clustering <- all[complete.cases(all), ] %>% 
   select(
-    age, where_live, currently_playing, how_long_play, start_playing, first_experience,
-    overall
+    # age, where_live, currently_playing, how_long_play, start_playing, first_experience, overall
+    -c(team, team_type, club_or_not,
+       satis_combined, conn_combined, inclus_combined, overall)
   )
 
 dat_for_clustering <- as_tibble(dat_for_clustering)
+
+foo <- paste0(names(dat_for_clustering))
 
 # scale the data
 numeric_dat <- as_tibble(sapply(dat_for_clustering, as.numeric))
@@ -37,8 +40,8 @@ scaled_dat <- as_tibble(scale(numeric_dat))
 # two, then three clusters.
 # this returns an objet of class kmeans. do str(clusters_two) to see what's in here.
 set.seed(10) # for reproducibility
-clusters_two <- kmeans(scaled_dat$overall, centers = 2, iter.max = 15, nstart = 20)
-clusters_three <- kmeans(scaled_dat$overall, centers = 3, iter.max = 15, nstart = 20)
+clusters_two <- kmeans(scaled_dat, centers = 2, iter.max = 15, nstart = 20)
+clusters_three <- kmeans(scaled_dat, centers = 3, iter.max = 15, nstart = 20)
 
 
 # look at a table of dat broken into two clusters compared to club or not
@@ -58,6 +61,10 @@ cluster_dat <- as_tibble(data.frame(scaled_dat,
                           club_or_not = all_no_na$club_or_not,
                           team_type = all_no_na$team_type,
                           team = all_no_na$team,
+                          satis_combined = all_no_na$satis_combined,
+                          conn_combined = all_no_na$conn_combined,
+                          inclus_combined = all_no_na$inclus_combined,
+                          overall = all_no_na$overall,
                           clusters_two = factor(clusters_two$cluster),
                           clusters_three = factor(clusters_three$cluster)))
 
@@ -109,7 +116,7 @@ ggplot(data = cluster_dat,
 ggplot(data = cluster_dat,    
        aes(x = team_type, y = overall, colour = clusters_two)) + 
   geom_jitter() +
-  ggtitle("Unsupervised Clustering of Overall Scores into Two Groups", subtitle = "No Team Indicators") +
+  ggtitle("Unsupervised Clustering of Overall Scores into Two Groups") +
   labs(x = "Team Type", y = "Overall Happiness") +
   # geom_boxplot(alpha = 0.3) +
   theme_minimal()
@@ -118,7 +125,7 @@ ggplot(data = cluster_dat,
 ggplot(data = cluster_dat, 
        aes(x = team_type, y = overall, colour = clusters_three)) + 
   geom_jitter() +
-  ggtitle("Unsupervised Clustering of Overall Scores into Three Groups -- No Team Indicators") +
+  ggtitle("Unsupervised Clustering of Overall Scores into Three Groups") +
   labs(x = "Team Type", y = "Overall Happiness") +
   theme_minimal()
 
@@ -397,7 +404,7 @@ hc_team <- scaled_dat %>%
 # change the new names to something meaningful (try to get this in the function)
 # names(hc_team)[3:4] <- c("s_amount_scaled", "s_level_scaled")
 
-hc_team_dist <- dist(hc_team[1:(nrow(hc_team) - 1)])
+hc_team_dist <- dist(hc_team[1:(ncol(hc_team) - 1)])
 hc_team_fit <- hclust(hc_team_dist, method = "centroid")
 
 # plot the cluster
