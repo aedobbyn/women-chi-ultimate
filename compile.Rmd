@@ -56,6 +56,8 @@ source("./summary_stats.R")
 
 ```
 
+* Variables collected on a Lickert scale were treated ordinally. Otherwise, treated categorically.
+
 * Categorize teams into 
     + a variable `team_type` with three levels: `mixed`, `no_club`, and `womens`. All players not on a womens or mixed team are `no_club` (which is a little misleading because this encompasses non-Chicago club teams)
     + a variable `club_or_not` with two levels: `club` and `not_club`
