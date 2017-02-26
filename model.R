@@ -296,6 +296,14 @@ leaps <- regsubsets(overall ~
 plot(leaps, scale = "adjr2")
 
 
+leaps <- regsubsets(overall ~ 
+                      team_type + 
+                      where_live, data = all, nbest = 3)
+
+plot(leaps, scale = "adjr2")
+
+
+
 library(car)
 subsets(leaps, statistic = "cp")
 abline(1, 1, lty = 2, col = "red")

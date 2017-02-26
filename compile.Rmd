@@ -149,6 +149,8 @@ get_summaries(d = all, var = "club_or_not")
 
 ```
 
+![](./womens-summit-demographics.jpg) 
+
 
 <br><br><br>
 
@@ -694,6 +696,7 @@ summary(m.overall.club_or_not)
 * Merge with qualitative data
 * Check goodness of fit of models
 * NLP on free responses
+* Take players who play club outside of Chicago out of `no_club`
 
 
 <br><br><br>

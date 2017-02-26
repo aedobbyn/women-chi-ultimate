@@ -5,6 +5,7 @@ source("./model.R")
 library(ggthemes)
 
 
+all_no_na <- all[complete.cases(all), ]
 
 
 
@@ -62,7 +63,7 @@ overall.team_type <- ggplot(data = all) +
 overall.team_type
 
 overall.box <- ggplot(data = all) +
-  geom_boxplot(aes(team, overall), alpha = 0.05, fill = "blue") 
+  geom_boxplot(aes(team, overall), alpha = 0.05, fill = "blue") +
   # geom_boxplot(aes(team, preds.m.big), alpha = 0.05, fill = "red") +
   theme_bw()
 overall.box
@@ -305,8 +306,36 @@ womens_teams.how_long_play
 
 
 
+# data jumble
+ggplot(data = all_no_na) +
+  geom_jitter(aes(how_long_play, satis_combined, colour = team_type)) +
+  ggtitle("Combined Satisfaction by How Long People have Played") +
+  labs(x = "How Long Played", y = "Combined Satisfaction") +
+  theme_minimal()
 
 
+ggplot(data = all_no_na) +
+  geom_jitter(aes(how_long_play, satis_combined, colour = team_type)) +
+  ggtitle("Combined Satisfaction by How Long People have Played") +
+  labs(x = "How Long Played", y = "Combined Satisfaction") +
+  theme_minimal()
+
+
+
+
+# density plots
+
+ggplot(data = all_no_na) +
+  geom_density(aes(satis_combined, colour = team_type)) +
+  theme_minimal()
+
+
+# overall by start playing
+ggplot(data = all_no_na) +
+  geom_density(aes(overall, colour = start_playing)) +
+  ggtitle("Overall Happiness by where Started Playing") +
+  labs(x = "Overall Happiness", y = "Density") +
+  theme_minimal()
 
 
 

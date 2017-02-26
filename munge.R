@@ -1,4 +1,17 @@
 
+# ---- Munging -----
+# When possible, data was pulled straight from the raw data files (raw and sorted) and assigned codes here 
+# When not possible, data was pulled from hand-coded data source (quant), that encompasses
+# all of the quantitative data.
+
+# ---- Variables -----
+# Predictors from raw: age, where_live, team, currently_playing, how_long_play, start_playing, first_experience
+# Predictors derived: team_type (derived from team), club_or_not (derived from team type)
+# Response variables from raw: satis_amount_recode, satis_level_recode, conn_club, conn_recreational, conn_college, conn_youth, inclus_UC, inclus_college, inclus_women, inclus_mixed
+# Response variables derived: satis_combined (sum of satisfaction), conn_combined (sum of connectedness), inclus_combined (sum of inclusiveness), overall (sum of sums)
+
+
+# load packages
 library(plyr)
 library(tidyverse)
 library(readxl)
@@ -7,10 +20,11 @@ library(hash)
 library(knitr)
 library(Hmisc)
 
+# raw data. sorted is the same as raw except that columns are rearranged by category.
 sorted <- read_excel("women_chicago_ultimate_raw.xlsx", sheet = 1, skip = 1)
 raw <- read_excel("women_chicago_ultimate_raw.xlsx", sheet = 2, skip = 0)
-# quant <- read_excel("women_ultimate_quant_data.xlsx")
 
+# grab hand-coded data from google sheet
 quant_sheet <- gs_title("women ultimate quant data.xlsx")
 quant <- quant_sheet %>% 
   gs_read(ws = 1)

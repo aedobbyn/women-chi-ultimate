@@ -22,14 +22,14 @@ all_no_na <- all[complete.cases(all), ]
 # will determine in some part which clusters people fall into)
 dat_for_clustering <- all[complete.cases(all), ] %>% 
   select(
-    # age, where_live, currently_playing, how_long_play, start_playing, first_experience, overall
-    -c(team, team_type, club_or_not,
-       satis_combined, conn_combined, inclus_combined, overall)
+    age, where_live, currently_playing, how_long_play, start_playing, first_experience,
+    satis_combined, conn_combined, inclus_combined
+    # -c(team, team_type, club_or_not,
+    #    satis_combined, conn_combined, inclus_combined, overall)
   )
 
 dat_for_clustering <- as_tibble(dat_for_clustering)
 
-foo <- paste0(names(dat_for_clustering))
 
 # scale the data
 numeric_dat <- as_tibble(sapply(dat_for_clustering, as.numeric))
@@ -77,12 +77,12 @@ cluster_dat <- as_tibble(data.frame(scaled_dat,
 # ------- with groups (team, team_type, etc.) as the fill ------
 
 # without jitter, without boxplot
-ggplot(data = cluster_dat, 
-       aes(x = clusters_two, y = overall, colour = team_type)) + 
-  geom_point() +
-  ggtitle("Unsupervised Clustering of Overall Scores into Two Groups -- No Team Indicators") +
-  labs(x = "Cluster", y = "Overall Happiness") +
-  theme_minimal()
+# ggplot(data = cluster_dat, 
+#        aes(x = clusters_two, y = overall, colour = team_type)) + 
+#   geom_point() +
+#   ggtitle("Unsupervised Clustering of Overall Scores into Two Groups -- No Team Indicators") +
+#   labs(x = "Cluster", y = "Overall Happiness") +
+#   theme_minimal()
 
 # without boxplot
 ggplot(data = cluster_dat, 

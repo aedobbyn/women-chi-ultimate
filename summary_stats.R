@@ -5,6 +5,9 @@ source("./munge.R")
 # make sure we're only using dplyr
 detach(package:plyr)
 
+# get a dataset with only complete cases
+all_no_na <- all[complete.cases(all), ]
+
 
 # function for capitalizing words in vector separated by underscores
 simpleCap <- function(x) {
@@ -70,10 +73,15 @@ get_table <- function(summarise_this) {
 }
 
 get_table("age")
+get_table("team")
 n_by_team_type <- get_table("team_type")
 n_by_team_type
 get_table("where_live")
 get_table("currently_playing")
+get_table("how_long_play")
+get_table("start_playing")
+
+
 
 
 
@@ -96,6 +104,10 @@ get_summaries(d = all, var = "club_or_not")
 get_summaries(d = all, var = "where_live")
 get_summaries(d = all, var = "how_long_play")
 get_summaries(d = all, var = "team")
+get_summaries(d = all_no_na, var = "currently_playing")
+get_summaries(d = all_no_na, var = "first_experience")
+get_summaries(d = all_no_na, var = "start_playing")
+
 
 
 n_by_age <- get_summaries(d = all, var = "age")
