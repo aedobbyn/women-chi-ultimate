@@ -271,92 +271,119 @@ Setup:
 all_no_na <- all[complete.cases(all), ]
 
 # remove the one row with a missing value
-# keep only predictor vars (not outcome vars) that aren't team and team_type (because that's what we think
+# keep only predictor vars that aren't team and team_type (because that's what we think
 # will determine in some part which clusters people fall into)
-cluster_dat <- all[complete.cases(all), ] %>% 
+dat_for_clustering <- all[complete.cases(all), ] %>% 
   select(
     age, where_live, currently_playing, how_long_play, start_playing, first_experience,
-    overall
+    satis_combined, conn_combined, inclus_combined
   )
+
+dat_for_clustering <- as_tibble(dat_for_clustering)
+
+
+# scale the data
+numeric_dat <- as_tibble(sapply(dat_for_clustering, as.numeric))
+scaled_dat <- as_tibble(scale(numeric_dat))
+
 
 # from the pared dataset, cluster people based on their "overall" ratings in first
 # two, then three clusters.
 # this returns an objet of class kmeans. do str(clusters_two) to see what's in here.
 set.seed(10) # for reproducibility
-clusters_two <- kmeans(cluster_dat$overall, centers = 2, iter.max = 15, nstart = 20)
-clusters_three <- kmeans(cluster_dat$overall, centers = 3, iter.max = 15, nstart = 20)
+clusters_two <- kmeans(scaled_dat, centers = 2, iter.max = 15, nstart = 20)
+clusters_three <- kmeans(scaled_dat, centers = 3, iter.max = 15, nstart = 20)
+
+
+# look at a table of dat broken into two clusters compared to club or not
+table(clusters_two$cluster, all_no_na$club_or_not)
+# so club got looped into mostly 2, and not_club is mostly 1
+
+# same but three clusters compared to team_type
+table(clusters_three$cluster, all_no_na$team_type)
+# based on this,
+# no_club = 1 and 3; mixed = 1; womens = 1
+# so the differentiator is that of 2s, most of them are no_club. 1 is a mixed bag
 
 
 # cbind the cluster portion of these two the df with no NAs, plus the variables that had team indicators (i.e.,
 # club_or_not, team_type, and team) that we had taken out originally
-cluster_dat <- as_tibble(data.frame(cluster_dat, 
+cluster_dat <- as_tibble(data.frame(scaled_dat, 
                           club_or_not = all_no_na$club_or_not,
                           team_type = all_no_na$team_type,
                           team = all_no_na$team,
+                          satis_combined = all_no_na$satis_combined,
+                          conn_combined = all_no_na$conn_combined,
+                          inclus_combined = all_no_na$inclus_combined,
+                          overall = all_no_na$overall,
                           clusters_two = factor(clusters_two$cluster),
                           clusters_three = factor(clusters_three$cluster)))
-
 ```
 
 
 <br>
 
-Colored by two clusters.
+Individuals broken into two clusters (x axis). Their team type is shown by the color of their dot. 
 
 ```{r}
-ggplot(data = cluster_dat,    
-       aes(x = club_or_not, y = overall, colour = clusters_two)) + 
+two_kmeans <- 
+  ggplot(data = cluster_dat, 
+       aes(x = clusters_two, y = overall, colour = club_or_not)) + 
   geom_jitter() +
-  ggtitle("Unsupervised Clustering of Overall Scores into Two Groups") +
-  labs(x = "Team Type", y = "Overall Happiness") +
-  # geom_boxplot(alpha = 0.3) +
+  ggtitle("k-Means Clustering of Overall Scores into Two Groups") +
+  labs(x = "Cluster", y = "Overall Happiness") +
   theme_minimal()
+two_kmeans
+```
+
+
+The same with box plots of overall happiness by team type are overlaid. 
+
+```{r}
+two_kmeans_boxplot <-
+ggplot(data = cluster_dat, 
+       aes(x = clusters_two, y = overall, colour = club_or_not)) + 
+  geom_jitter() +
+  ggtitle("k-Means Clustering of Overall Scores into Two Groups") +
+  labs(x = "Cluster", y = "Overall Happiness") +
+  geom_boxplot(alpha = 0.3) +
+  theme_minimal()
+two_kmeans_boxplot
 ```
 
 <br>
 
-Colored by three clusters.
+Colored by team type rather than club or not. 
 
 ```{r}
-ggplot(data = cluster_dat,    
-       aes(x = team_type, y = overall, colour = clusters_three)) + 
+two_kmeans_boxplot <-
+ggplot(data = cluster_dat, 
+       aes(x = clusters_two, y = overall, colour = team_type)) + 
   geom_jitter() +
-  ggtitle("Unsupervised Clustering of Overall Scores into Three Groups") +
-  labs(x = "Team Type", y = "Overall Happiness") +
-  # geom_boxplot(alpha = 0.3) +
+  ggtitle("k-Means Clustering of Overall Scores into Two Groups") +
+  labs(x = "Cluster", y = "Overall Happiness") +
+  geom_boxplot(alpha = 0.3) +
   theme_minimal()
+two_kmeans_boxplot
 ```
 
 <br> 
 
-Wooo box plots
+Three clusters doesn't give us much more information.
 
 ```{r}
-ggplot(data = cluster_dat, 
-       aes(x = clusters_two, y = overall, colour = team_type)) + 
+three_kmeans <-
+  ggplot(data = cluster_dat, 
+         aes(x = clusters_three, y = overall, colour = team_type)) + 
   geom_jitter() +
-  ggtitle("Unsupervised Clustering of Overall Scores into Two Groups") +
+  ggtitle("k-Means Clustering of Overall Scores into Three Groups") +
   labs(x = "Cluster", y = "Overall Happiness") +
-  geom_boxplot(alpha = 0.3) +
   theme_minimal()
+three_kmeans
 ```
 
 
 <br>
-
-With team as the grouper
-
-```{r}
-ggplot(data = cluster_dat, 
-       aes(x = clusters_two, y = overall, colour = team)) + 
-  geom_jitter() +
-  ggtitle("Unsupervised Clustering of Overall Scores into Two Groups") +
-  labs(x = "Cluster", y = "Overall Happiness") +
-  # geom_boxplot(data = all_no_team_indics, aes(overall)) +
-  theme_minimal()
-```
-
-
 
 
 <br /><br />
@@ -696,9 +723,8 @@ summary(m.overall.club_or_not)
 #### Future directions
 * Merge with Ultimate Chicago stats of where people are playing based on league, college, and club data
 * Merge with qualitative data
-* Check goodness of fit of models
 * NLP on free responses
-* Take players who play club outside of Chicago out of `no_club`
+* Remove players who play club outside of Chicago from the `no_club` group
 
 
 <br><br><br>

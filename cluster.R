@@ -18,14 +18,12 @@ source("./munge.R")
 all_no_na <- all[complete.cases(all), ]
 
 # remove the one row with a missing value
-# keep only predictor vars (not outcome vars) that aren't team and team_type (because that's what we think
+# keep only predictor vars that aren't team and team_type (because that's what we think
 # will determine in some part which clusters people fall into)
 dat_for_clustering <- all[complete.cases(all), ] %>% 
   select(
     age, where_live, currently_playing, how_long_play, start_playing, first_experience,
     satis_combined, conn_combined, inclus_combined
-    # -c(team, team_type, club_or_not,
-    #    satis_combined, conn_combined, inclus_combined, overall)
   )
 
 dat_for_clustering <- as_tibble(dat_for_clustering)
@@ -76,52 +74,85 @@ cluster_dat <- as_tibble(data.frame(scaled_dat,
 
 # ------- with groups (team, team_type, etc.) as the fill ------
 
-# without jitter, without boxplot
-# ggplot(data = cluster_dat, 
-#        aes(x = clusters_two, y = overall, colour = team_type)) + 
-#   geom_point() +
-#   ggtitle("Unsupervised Clustering of Overall Scores into Two Groups -- No Team Indicators") +
-#   labs(x = "Cluster", y = "Overall Happiness") +
-#   theme_minimal()
-
-# without boxplot
-ggplot(data = cluster_dat, 
+# two clusters without boxplot, coloured by team type
+two_kmeans <- 
+  ggplot(data = cluster_dat, 
        aes(x = clusters_two, y = overall, colour = team_type)) + 
   geom_jitter() +
-  ggtitle("Unsupervised Clustering of Overall Scores into Two Groups -- No Team Indicators") +
+  ggtitle("k-Means Clustering of Overall Scores into Two Groups") +
   labs(x = "Cluster", y = "Overall Happiness") +
   theme_minimal()
+two_kmeans
 
-# with boxplot overlaid
+two_kmeans_club_or_not <- 
+  ggplot(data = cluster_dat, 
+         aes(x = clusters_two, y = overall, colour = club_or_not)) + 
+  geom_jitter() +
+  ggtitle("k-Means Clustering of Overall Scores into Two Groups") +
+  labs(x = "Cluster", y = "Overall Happiness") +
+  # geom_boxplot(alpha = 0.3) +
+  theme_minimal()
+two_kmeans_club_or_not
+
+# two clusters with boxplot overlaid
+two_kmeans_boxplot <-
 ggplot(data = cluster_dat, 
        aes(x = clusters_two, y = overall, colour = team_type)) + 
   geom_jitter() +
-  ggtitle("Unsupervised Clustering of Overall Scores into Two Groups -- No Team Indicators") +
+  ggtitle("k-Means Clustering of Overall Scores into Two Groups") +
   labs(x = "Cluster", y = "Overall Happiness") +
   geom_boxplot(alpha = 0.3) +
   theme_minimal()
+two_kmeans_boxplot
+
+# three clusters no boxplot
+three_kmeans <-
+  ggplot(data = cluster_dat, 
+         aes(x = clusters_three, y = overall, colour = team_type)) + 
+  geom_jitter() +
+  ggtitle("k-Means Clustering of Overall Scores into Three Groups") +
+  labs(x = "Cluster", y = "Overall Happiness") +
+  theme_minimal()
+three_kmeans
+
+# three clusters with boxplot
+three_kmeans_boxplot <-
+  ggplot(data = cluster_dat, 
+         aes(x = clusters_three, y = overall, colour = team_type)) + 
+  geom_jitter() +
+  ggtitle("k-Means Clustering of Overall Scores into Three Groups") +
+  labs(x = "Cluster", y = "Overall Happiness") +
+  geom_boxplot(alpha = 0.3) +
+  theme_minimal()
+three_kmeans_boxplot
+
+
 
 # team as grouper
 ggplot(data = cluster_dat, 
        aes(x = clusters_two, y = overall, colour = team)) + 
   geom_jitter() +
-  ggtitle("Unsupervised Clustering of Overall Scores into Two Groups -- No Team Indicators") +
+  ggtitle("k-Means Clustering of Overall Scores into Two Groups") +
   labs(x = "Cluster", y = "Overall Happiness") +
-  # geom_boxplot(data = all_no_team_indics, aes(overall)) +
+  geom_boxplot(alpha = 0.2) +
   theme_minimal()
 
 
 # ------- with clusters as the fill ------
 
+# two clusters, club or not on x
+clustering_two_groups <-
 ggplot(data = cluster_dat,    
-       aes(x = team_type, y = overall, colour = clusters_two)) + 
+       aes(x = club_or_not, y = overall, colour = clusters_two)) + 
   geom_jitter() +
   ggtitle("Unsupervised Clustering of Overall Scores into Two Groups") +
   labs(x = "Team Type", y = "Overall Happiness") +
   # geom_boxplot(alpha = 0.3) +
   theme_minimal()
+clustering_two_groups
 
 
+# three clusters
 ggplot(data = cluster_dat, 
        aes(x = team_type, y = overall, colour = clusters_three)) + 
   geom_jitter() +

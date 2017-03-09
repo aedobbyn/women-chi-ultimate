@@ -38,6 +38,8 @@ Outline
 
 
 
+* Variables collected on a Lickert scale were treated ordinally. Otherwise, treated categorically.
+
 * Categorize teams into 
     + a variable `team_type` with three levels: `mixed`, `no_club`, and `womens`. All players not on a womens or mixed team are `no_club` (which is a little misleading because this encompasses non-Chicago club teams)
     + a variable `club_or_not` with two levels: `club` and `not_club`
@@ -226,30 +228,29 @@ Setup:
 
 <br>
 
-Colored by two clusters.
+Individuals broken into two clusters (x axis). Their team type is shown by the color of their dot. 
 
 ![](compile_files/figure-html/unnamed-chunk-10-1.png)<!-- -->
 
-<br>
 
-Colored by three clusters.
+The same with box plots of overall happiness by team type are overlaid. 
 
 ![](compile_files/figure-html/unnamed-chunk-11-1.png)<!-- -->
 
-<br> 
+<br>
 
-Wooo box plots
+Colored by team type rather than club or not. 
 
 ![](compile_files/figure-html/unnamed-chunk-12-1.png)<!-- -->
 
+<br> 
 
-<br>
-
-With team as the grouper
+Three clusters doesn't give us much more information.
 
 ![](compile_files/figure-html/unnamed-chunk-13-1.png)<!-- -->
 
 
+<br>
 
 
 <br /><br />
@@ -634,8 +635,8 @@ Yes, p = 2.32e-09
 #### Future directions
 * Merge with Ultimate Chicago stats of where people are playing based on league, college, and club data
 * Merge with qualitative data
-* Check goodness of fit of models
 * NLP on free responses
+* Remove players who play club outside of Chicago from the `no_club` group
 
 
 <br><br><br>
