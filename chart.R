@@ -8,7 +8,13 @@ library(ggthemes)
 all_no_na <- all[complete.cases(all), ]
 
 
+library(gganimate)
 
+foo <- ggplot(data = all, filename = "gganim_output.gif",
+              aes(x = how_long_play, y = overall, frame = as.numeric(team))) +
+  geom_jitter()
+
+gganimate(foo)
 
 
 # ---------- relabeling -------

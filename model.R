@@ -84,6 +84,29 @@ summary(age.fit)
 
 
 
+# simple linear regression, team type predicting the omnibus variables
+# all signif
+summary(lm(satis_combined ~ team_type, data = all))
+summary(lm(conn_combined ~ team_type, data = all))
+summary(lm(inclus_combined ~ team_type, data = all))
+summary(lm(overall ~ team_type, data = all))
+
+
+# what can classify someone as club or not 
+summary(glm(as.numeric(club_or_not) ~ overall, data = all))
+summary(glm(as.numeric(club_or_not) ~ age, data = all))
+summary(glm(as.numeric(club_or_not) ~ age + satis_combined, data = all))
+
+
+
+summary(lm(conn_combined ~ team_type, data = all))
+summary(lm(inclus_combined ~ team_type, data = all))
+summary(lm(overall ~ team_type, data = all))
+
+
+
+
+
 
 # ----------- ordered logit/probit regressions ---------------
 

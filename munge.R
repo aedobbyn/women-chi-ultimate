@@ -19,6 +19,7 @@ library(googlesheets)
 library(hash)
 library(knitr)
 library(Hmisc)
+library(broom)
 
 # raw data. sorted is the same as raw except that columns are rearranged by category.
 sorted <- read_excel("women_chicago_ultimate_raw.xlsx", sheet = 1, skip = 1)
@@ -146,7 +147,7 @@ age_levels <- c("Under 18", "18-22", "23-26",
 
 demographics$age <- factor(demographics$age, 
                            levels = age_levels,
-                           ordered = TRUE)
+                           ordered = FALSE)
 
 levels(demographics$age)
 
@@ -180,7 +181,7 @@ how_long_play.vals <- values(how_long_play.dict)
 # set the levels of currently_playing based on 
 playing$how_long_play <- factor(playing$how_long_play, 
                                 levels = how_long_play.vals,
-                                ordered = TRUE)
+                                ordered = FALSE)
 
 
 # ---
@@ -197,7 +198,7 @@ currently_playing.vals <- values(currently_playing.dict)
 # set the levels of currently_playing based on 
 playing$currently_playing <- factor(playing$currently_playing, 
                                     labels = currently_playing.vals,
-                                    ordered = TRUE)
+                                    ordered = FALSE)
 
 
 # ----
@@ -223,7 +224,7 @@ start_playing_new_labs <- c("High School", "College", "Post-College")
 # relevel and relabel
 playing$start_playing <- factor(playing$start_playing,
                                           levels = start_playing_new_labs,
-                                          ordered = TRUE)
+                                          ordered = FALSE)
 
 
 
@@ -300,7 +301,7 @@ satisfaction <- satisfaction %>%
 satisfaction$satis_amount_recode <- factor(satisfaction$satis_amount_recode,
                                      levels = satis_amount_vec_plus_other,
                                      labels = satis_relabel,
-                                     ordered = TRUE)
+                                     ordered = FALSE)
 
 
 
@@ -349,7 +350,7 @@ satisfaction <- satisfaction %>%
 satisfaction$satis_level_recode <- factor(satisfaction$satis_level_recode,
                                           levels = satis_level_vec_plus_other,
                                           labels = satis_level_relabel,
-                                           ordered = TRUE)
+                                           ordered = FALSE)
 
 
 # drop columns from before recode
@@ -374,16 +375,16 @@ conn.vals <- values(conn.dict)
 # set the levels of currently_playing based on 
 connectedness$conn_club <- factor(connectedness$conn_club, 
                                   levels = conn.vals,
-                                  ordered = TRUE)
+                                  ordered = FALSE)
 connectedness$conn_recreational <- factor(connectedness$conn_recreational, 
                                   levels = conn.vals,
-                                  ordered = TRUE)
+                                  ordered = FALSE)
 connectedness$conn_college <- factor(connectedness$conn_college, 
                                     levels = conn.vals,
-                                    ordered = TRUE)
+                                    ordered = FALSE)
 connectedness$conn_youth <- factor(connectedness$conn_youth, 
                                     levels = conn.vals,
-                                   ordered = TRUE)
+                                   ordered = FALSE)
 
 
 
@@ -402,12 +403,12 @@ mixed_levels <- c("Disagree", "Somewhat disagree",
 
 
 # set datatypes. ordered = TRUE because these are ordinal variables.
-inclusion$inclus_UC <- factor(inclusion$inclus_UC, levels = name_levels, ordered = TRUE)
-inclusion$inclus_college <- factor(inclusion$inclus_college, levels = name_levels, ordered = TRUE)
-inclusion$inclus_women <- factor(inclusion$inclus_women, levels = name_levels, ordered = TRUE)
+inclusion$inclus_UC <- factor(inclusion$inclus_UC, levels = name_levels, ordered = FALSE)
+inclusion$inclus_college <- factor(inclusion$inclus_college, levels = name_levels, ordered = FALSE)
+inclusion$inclus_women <- factor(inclusion$inclus_women, levels = name_levels, ordered = FALSE)
 
 
-inclusion$inclus_mixed <- factor(inclusion$inclus_mixed,  levels = mixed_levels, ordered = TRUE)  
+inclusion$inclus_mixed <- factor(inclusion$inclus_mixed,  levels = mixed_levels, ordered = FALSE)  
 
 
 # check levels
