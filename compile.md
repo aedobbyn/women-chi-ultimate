@@ -73,11 +73,11 @@ Something to try here might be to take out all the Others and relevel. Or combin
 Snapshot of the top of the data:
 
 
-Particiapnt:   Age:    Please choose the option that best describes where you currently live.   May we anonymously quote your answers from this survey?              Do you currently play or practice with a Chicago-based club team?   Please indicate the ultimate you are playing (or registered for) right now:   How long have you been playing ultimate?   At what point in your life did you start playing ultimate?   What best describes your first ultimate experience?     How satisfied are you with the AMOUNT of ultimate you are currently playing?                                   How satisfied are you with the LEVEL of ultimate you are currently playing?                                                     How connected do you feel to the CLUB ultimate community in Chicago?   How connected do you feel to the RECREATIONAL ultimate community in Chicago? (e.g. UC leagues, pickup)   How connected do you feel to the COLLEGE ultimate community in Chicago?   How connected do you feel to the YOUTH ultimate community in Chicago? (e.g. CUJO, YCC, high school, middle school, etc.)   Ultimate Chicago supports the development and inclusion of women in ultimate.   College ultimate teams support the development and inclusion of women in ultimate.   Women's club teams support the development and inclusion of women in ultimate.   Mixed club teams support the development and inclusion of women in ultimate. 
--------------  ------  -----------------------------------------------------------------------  -------------------------------------------------------------------  ------------------------------------------------------------------  ----------------------------------------------------------------------------  -----------------------------------------  -----------------------------------------------------------  ------------------------------------------------------  -------------------------------------------------------------------------------------------------------------  ------------------------------------------------------------------------------------------------------------------------------  ---------------------------------------------------------------------  -------------------------------------------------------------------------------------------------------  ------------------------------------------------------------------------  -------------------------------------------------------------------------------------------------------------------------  ------------------------------------------------------------------------------  -----------------------------------------------------------------------------------  -------------------------------------------------------------------------------  -----------------------------------------------------------------------------
-A              18-22   I live in Chicago.                                                       Yes, you may anonymously quote my answers to further this project.   Frenzy                                                              Women's Club, College women's                                                 <1 year                                    College                                                      College women's team                                    Somewhat satisfied -- I sometimes wish I could play more, but overall I'm happy with the amount that I play.   Somewhat satisfied -- I sometimes wish I could play more competitively, but overall I'm satisfied with the level that I play.   Somewhat connected                                                     Neutral                                                                                                  Somewhat connected                                                        Disconnected                                                                                                               Neutral - I don't have an opinion here.                                         Agree                                                                                Agree                                                                            Somewhat disagree                                                            
-B              37+     I live in a Chicago suburb.                                              Yes, you may anonymously quote my answers to further this project.   UPA                                                                 Mixed Club                                                                    10+ years                                  Post-college                                                 Recreational league (e.g. an Ultimate Chicago league)   Very satisfied -- I'm playing just the right amount                                                            Very satisfied -- I have the opportunity to play at the right level of competitiveness for me.                                  Somewhat connected                                                     Somewhat disconnected                                                                                    Disconnected                                                              Somewhat connected                                                                                                         Agree                                                                           Neutral - I don't have an opinion here.                                              Agree                                                                            Neutral - I don't have an opinion                                            
-C              31-36   I live in Chicago.                                                       Yes, you may anonymously quote my answers to further this project.   I don't play on a Chicago-based club team.                          UC Fall League (Mixed)                                                        5-10 years                                 Post-college                                                 Recreational league (e.g. an Ultimate Chicago league)   Neutral -- I don't have strong feelings about the amount of ultimate I'm playing.                              Somewhat satisfied -- I sometimes wish I could play more competitively, but overall I'm satisfied with the level that I play.   Disconnected                                                           Somewhat connected                                                                                       Disconnected                                                              Disconnected                                                                                                               Somewhat Agree                                                                  Neutral - I don't have an opinion here.                                              Neutral - I don't have an opinion here.                                          Neutral - I don't have an opinion                                            
+|Particiapnt: |Age:  |Please choose the option that best describes where you currently live. |May we anonymously quote your answers from this survey?            |Do you currently play or practice with a Chicago-based club team? |Please indicate the ultimate you are playing (or registered for) right now: |How long have you been playing ultimate? |At what point in your life did you start playing ultimate? |What best describes your first ultimate experience?   |How satisfied are you with the AMOUNT of ultimate you are currently playing?                                 |How satisfied are you with the LEVEL of ultimate you are currently playing?                                                   |How connected do you feel to the CLUB ultimate community in Chicago? |How connected do you feel to the RECREATIONAL ultimate community in Chicago? (e.g. UC leagues, pickup) |How connected do you feel to the COLLEGE ultimate community in Chicago? |How connected do you feel to the YOUTH ultimate community in Chicago? (e.g. CUJO, YCC, high school, middle school, etc.) |Ultimate Chicago supports the development and inclusion of women in ultimate. |College ultimate teams support the development and inclusion of women in ultimate. |Women's club teams support the development and inclusion of women in ultimate. |Mixed club teams support the development and inclusion of women in ultimate. |
+|:------------|:-----|:----------------------------------------------------------------------|:------------------------------------------------------------------|:-----------------------------------------------------------------|:---------------------------------------------------------------------------|:----------------------------------------|:----------------------------------------------------------|:-----------------------------------------------------|:------------------------------------------------------------------------------------------------------------|:-----------------------------------------------------------------------------------------------------------------------------|:--------------------------------------------------------------------|:------------------------------------------------------------------------------------------------------|:-----------------------------------------------------------------------|:------------------------------------------------------------------------------------------------------------------------|:-----------------------------------------------------------------------------|:----------------------------------------------------------------------------------|:------------------------------------------------------------------------------|:----------------------------------------------------------------------------|
+|A            |18-22 |I live in Chicago.                                                     |Yes, you may anonymously quote my answers to further this project. |Frenzy                                                            |Women's Club, College women's                                               |<1 year                                  |College                                                    |College women's team                                  |Somewhat satisfied -- I sometimes wish I could play more, but overall I'm happy with the amount that I play. |Somewhat satisfied -- I sometimes wish I could play more competitively, but overall I'm satisfied with the level that I play. |Somewhat connected                                                   |Neutral                                                                                                |Somewhat connected                                                      |Disconnected                                                                                                             |Neutral - I don't have an opinion here.                                       |Agree                                                                              |Agree                                                                          |Somewhat disagree                                                            |
+|B            |37+   |I live in a Chicago suburb.                                            |Yes, you may anonymously quote my answers to further this project. |UPA                                                               |Mixed Club                                                                  |10+ years                                |Post-college                                               |Recreational league (e.g. an Ultimate Chicago league) |Very satisfied -- I'm playing just the right amount                                                          |Very satisfied -- I have the opportunity to play at the right level of competitiveness for me.                                |Somewhat connected                                                   |Somewhat disconnected                                                                                  |Disconnected                                                            |Somewhat connected                                                                                                       |Agree                                                                         |Neutral - I don't have an opinion here.                                            |Agree                                                                          |Neutral - I don't have an opinion                                            |
+|C            |31-36 |I live in Chicago.                                                     |Yes, you may anonymously quote my answers to further this project. |I don't play on a Chicago-based club team.                        |UC Fall League (Mixed)                                                      |5-10 years                               |Post-college                                               |Recreational league (e.g. an Ultimate Chicago league) |Neutral -- I don't have strong feelings about the amount of ultimate I'm playing.                            |Somewhat satisfied -- I sometimes wish I could play more competitively, but overall I'm satisfied with the level that I play. |Disconnected                                                         |Somewhat connected                                                                                     |Disconnected                                                            |Disconnected                                                                                                             |Somewhat Agree                                                                |Neutral - I don't have an opinion here.                                            |Neutral - I don't have an opinion here.                                        |Neutral - I don't have an opinion                                            |
 
 <br>
 
@@ -85,33 +85,33 @@ C              31-36   I live in Chicago.                                       
 
 **Predictor variables**
 
-Variable            Name                                                                        
-------------------  ----------------------------------------------------------------------------
-age                 Age:                                                                        
-can_quote           Please choose the option that best describes where you currently live.      
-where_live          May we anonymously quote your answers from this survey?                     
-team                Do you currently play or practice with a Chicago-based club team?           
-currently_playing   Please indicate the ultimate you are playing (or registered for) right now: 
-how_long_play       How long have you been playing ultimate?                                    
-start_playing       At what point in your life did you start playing ultimate?                  
-first_experience    What best describes your first ultimate experience?                         
+|Variable          |Name                                                                        |
+|:-----------------|:---------------------------------------------------------------------------|
+|age               |Age:                                                                        |
+|can_quote         |Please choose the option that best describes where you currently live.      |
+|where_live        |May we anonymously quote your answers from this survey?                     |
+|team              |Do you currently play or practice with a Chicago-based club team?           |
+|currently_playing |Please indicate the ultimate you are playing (or registered for) right now: |
+|how_long_play     |How long have you been playing ultimate?                                    |
+|start_playing     |At what point in your life did you start playing ultimate?                  |
+|first_experience  |What best describes your first ultimate experience?                         |
 
 <br>
 
 **Outcome variables**
 
-Variable              Name                                                                                                                     
---------------------  -------------------------------------------------------------------------------------------------------------------------
-satis_amount_recode   How satisfied are you with the AMOUNT of ultimate you are currently playing?                                             
-satis_level_recode    How satisfied are you with the LEVEL of ultimate you are currently playing?                                              
-conn_club             How connected do you feel to the CLUB ultimate community in Chicago?                                                     
-conn_recreational     How connected do you feel to the RECREATIONAL ultimate community in Chicago? (e.g. UC leagues, pickup)                   
-conn_college          How connected do you feel to the COLLEGE ultimate community in Chicago?                                                  
-conn_youth            How connected do you feel to the YOUTH ultimate community in Chicago? (e.g. CUJO, YCC, high school, middle school, etc.) 
-inclus_UC             Ultimate Chicago supports the development and inclusion of women in ultimate.                                            
-inclus_college        College ultimate teams support the development and inclusion of women in ultimate.                                       
-inclus_women          Women's club teams support the development and inclusion of women in ultimate.                                           
-inclus_mixed          Mixed club teams support the development and inclusion of women in ultimate.                                             
+|Variable            |Name                                                                                                                     |
+|:-------------------|:------------------------------------------------------------------------------------------------------------------------|
+|satis_amount_recode |How satisfied are you with the AMOUNT of ultimate you are currently playing?                                             |
+|satis_level_recode  |How satisfied are you with the LEVEL of ultimate you are currently playing?                                              |
+|conn_club           |How connected do you feel to the CLUB ultimate community in Chicago?                                                     |
+|conn_recreational   |How connected do you feel to the RECREATIONAL ultimate community in Chicago? (e.g. UC leagues, pickup)                   |
+|conn_college        |How connected do you feel to the COLLEGE ultimate community in Chicago?                                                  |
+|conn_youth          |How connected do you feel to the YOUTH ultimate community in Chicago? (e.g. CUJO, YCC, high school, middle school, etc.) |
+|inclus_UC           |Ultimate Chicago supports the development and inclusion of women in ultimate.                                            |
+|inclus_college      |College ultimate teams support the development and inclusion of women in ultimate.                                       |
+|inclus_women        |Women's club teams support the development and inclusion of women in ultimate.                                           |
+|inclus_mixed        |Mixed club teams support the development and inclusion of women in ultimate.                                             |
 
 <br>
 
@@ -121,19 +121,19 @@ inclus_mixed          Mixed club teams support the development and inclusion of 
 * For a sneak peek of the main finding, check that team type column
 
 
-Team Type   Team              Satisfaction   Connectedness   Inclusion   Overall
-----------  ---------------  -------------  --------------  ----------  --------
-No Club     No-Club                   9.92            9.03       15.32     34.27
-No Club     Other                    11.00           10.00       13.83     34.83
-No Club     Non-Chicago              11.10           10.40       16.20     37.70
-Mixed       ELevate                  11.00           10.60       17.30     38.90
-Mixed       UPA                      13.33           10.67       15.00     39.00
-Womens      Dish                     10.75           12.31       16.12     39.19
-Mixed       Shakedown                11.67           10.00       18.17     39.83
-Mixed       Stack Cats               10.86           11.71       17.43     40.00
-Womens      Frenzy                   11.40           12.00       17.20     40.60
-Womens      Nemesis                  11.78           12.22       16.89     40.89
-Mixed       Jabba The Huck           11.75           13.50       17.75     43.00
+|Team Type |Team           | Satisfaction| Connectedness| Inclusion| Overall|
+|:---------|:--------------|------------:|-------------:|---------:|-------:|
+|No Club   |No-Club        |         9.91|          9.05|     15.34|   34.30|
+|No Club   |Other          |        11.00|         10.00|     13.83|   34.83|
+|No Club   |Non-Chicago    |        11.10|         10.40|     16.20|   37.70|
+|Mixed     |ELevate        |        11.00|         10.60|     17.30|   38.90|
+|Mixed     |UPA            |        13.33|         10.67|     15.00|   39.00|
+|Womens    |Dish           |        10.75|         12.31|     16.12|   39.19|
+|Mixed     |Shakedown      |        11.67|         10.00|     18.17|   39.83|
+|Mixed     |Stack Cats     |        10.86|         11.71|     17.43|   40.00|
+|Womens    |Frenzy         |        11.40|         12.00|     17.20|   40.60|
+|Womens    |Nemesis        |        11.78|         12.22|     16.89|   40.89|
+|Mixed     |Jabba The Huck |        11.75|         13.50|     17.75|   43.00|
 
 
 
@@ -298,39 +298,61 @@ Omnibus model with all predictors predicting the overall measure. (Not including
 ##     how_long_play + start_playing + where_live, data = all)
 ## 
 ## Residuals:
-##      Min       1Q   Median       3Q      Max 
-## -13.0696  -3.4739   0.0624   3.7653  14.0166 
+##     Min      1Q  Median      3Q     Max 
+## -13.102  -3.435   0.191   3.820  13.978 
 ## 
 ## Coefficients:
-##                           Estimate Std. Error t value Pr(>|t|)    
-## (Intercept)               34.61750    0.85456  40.509  < 2e-16 ***
-## age.L                     -1.75042    2.58104  -0.678  0.49877    
-## age.Q                     -0.41646    2.07283  -0.201  0.84106    
-## age.C                      1.44790    1.56145   0.927  0.35537    
-## age^4                     -1.76620    1.14665  -1.540  0.12573    
-## age^5                      0.52154    0.97129   0.537  0.59215    
-## team_typemixed             5.37783    1.19311   4.507 1.37e-05 ***
-## team_typewomens            5.25785    1.08403   4.850 3.22e-06 ***
-## currently_playing.L        0.97023    1.04499   0.928  0.35476    
-## currently_playing.Q       -0.19137    1.12741  -0.170  0.86546    
-## currently_playing.C       -0.21041    1.13126  -0.186  0.85271    
-## currently_playing^4       -0.12662    1.14346  -0.111  0.91199    
-## currently_playing^5       -1.96963    1.18942  -1.656  0.09996 .  
-## how_long_play.L            1.13073    1.74601   0.648  0.51829    
-## how_long_play.Q           -0.60788    1.35292  -0.449  0.65390    
-## how_long_play.C            0.65231    1.14202   0.571  0.56878    
-## how_long_play^4           -2.71851    0.96685  -2.812  0.00563 ** 
-## start_playing.L           -0.61066    0.99277  -0.615  0.53948    
-## start_playing.Q            0.04398    0.74445   0.059  0.95298    
-## where_liveChicago Suburbs -0.84417    1.02970  -0.820  0.41370    
-## where_liveOther           -2.79567    2.08464  -1.341  0.18205    
+##                                                       Estimate Std. Error
+## (Intercept)                                           32.89719    4.01058
+## age18-22                                               2.68338    3.37460
+## age23-26                                              -0.07182    3.48251
+## age27-30                                              -0.63664    3.53739
+## age31-36                                              -0.39929    3.63249
+## age37+                                                -0.89453    3.89810
+## team_typemixed                                         5.37088    1.19700
+## team_typewomens                                        5.24275    1.08828
+## currently_playingCombination of League, Club, College -0.46893    1.30193
+## currently_playingClub Only                             1.70559    1.50689
+## currently_playingCollege Only                         -0.51293    1.58925
+## currently_playingNone                                  1.68149    1.53754
+## currently_playingPickup                                0.75561    1.40265
+## how_long_play1-3 years                                 3.10730    2.20874
+## how_long_play3-5 years                                 0.01944    2.13407
+## how_long_play5-10 years                                2.98830    2.21233
+## how_long_play10+ years                                 1.84583    2.50770
+## start_playingCollege                                  -0.53574    1.15177
+## start_playingPost-College                             -0.90846    1.41420
+## where_liveChicago Suburbs                             -0.86606    1.03481
+## where_liveOther                                       -2.84025    2.09504
+##                                                       t value Pr(>|t|)    
+## (Intercept)                                             8.203 1.37e-13 ***
+## age18-22                                                0.795    0.428    
+## age23-26                                               -0.021    0.984    
+## age27-30                                               -0.180    0.857    
+## age31-36                                               -0.110    0.913    
+## age37+                                                 -0.229    0.819    
+## team_typemixed                                          4.487 1.49e-05 ***
+## team_typewomens                                         4.817 3.73e-06 ***
+## currently_playingCombination of League, Club, College  -0.360    0.719    
+## currently_playingClub Only                              1.132    0.260    
+## currently_playingCollege Only                          -0.323    0.747    
+## currently_playingNone                                   1.094    0.276    
+## currently_playingPickup                                 0.539    0.591    
+## how_long_play1-3 years                                  1.407    0.162    
+## how_long_play3-5 years                                  0.009    0.993    
+## how_long_play5-10 years                                 1.351    0.179    
+## how_long_play10+ years                                  0.736    0.463    
+## start_playingCollege                                   -0.465    0.643    
+## start_playingPost-College                              -0.642    0.522    
+## where_liveChicago Suburbs                              -0.837    0.404    
+## where_liveOther                                        -1.356    0.177    
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-## Residual standard error: 5.297 on 141 degrees of freedom
+## Residual standard error: 5.314 on 140 degrees of freedom
 ##   (2 observations deleted due to missingness)
-## Multiple R-squared:  0.3075,	Adjusted R-squared:  0.2092 
-## F-statistic:  3.13 on 20 and 141 DF,  p-value: 4.15e-05
+## Multiple R-squared:  0.3052,	Adjusted R-squared:  0.2059 
+## F-statistic: 3.074 on 20 and 140 DF,  p-value: 5.578e-05
 ```
 
 * So `team_type` is really the only good predictor
@@ -358,27 +380,27 @@ Drilling down into `team`, what's driving the dissatisfaction among `no_club` pl
 ## 
 ## Residuals:
 ##     Min      1Q  Median      3Q     Max 
-## -14.269  -3.733   0.050   3.483  14.731 
+## -14.299  -3.767   0.100   3.551  14.701 
 ## 
 ## Coefficients:
 ##                    Estimate Std. Error t value Pr(>|t|)    
-## (Intercept)         39.1875     1.3490  29.049  < 2e-16 ***
-## teamELevate         -0.2875     2.1752  -0.132  0.89502    
-## teamFrenzy           1.4125     1.9393   0.728  0.46751    
-## teamNo-Club         -4.9183     1.4809  -3.321  0.00112 ** 
-## teamNon-Chicago     -1.4875     2.1752  -0.684  0.49511    
-## teamJabba The Huck   3.8125     3.0165   1.264  0.20819    
-## teamNemesis          1.7014     2.2484   0.757  0.45038    
-## teamOther           -4.3542     2.5832  -1.686  0.09391 .  
-## teamShakedown        0.6458     2.5832   0.250  0.80291    
-## teamStack Cats       0.8125     2.4453   0.332  0.74014    
-## teamUPA             -0.1875     3.3949  -0.055  0.95603    
+## (Intercept)         39.1875     1.3526  28.971  < 2e-16 ***
+## teamELevate         -0.2875     2.1811  -0.132  0.89530    
+## teamFrenzy           1.4125     1.9446   0.726  0.46872    
+## teamNo-Club         -4.8888     1.4866  -3.289  0.00125 ** 
+## teamNon-Chicago     -1.4875     2.1811  -0.682  0.49628    
+## teamJabba The Huck   3.8125     3.0246   1.260  0.20942    
+## teamNemesis          1.7014     2.2544   0.755  0.45160    
+## teamOther           -4.3542     2.5901  -1.681  0.09480 .  
+## teamShakedown        0.6458     2.5901   0.249  0.80343    
+## teamStack Cats       0.8125     2.4519   0.331  0.74082    
+## teamUPA             -0.1875     3.4041  -0.055  0.95615    
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-## Residual standard error: 5.396 on 153 degrees of freedom
-## Multiple R-squared:  0.2292,	Adjusted R-squared:  0.1788 
-## F-statistic: 4.549 on 10 and 153 DF,  p-value: 1.204e-05
+## Residual standard error: 5.411 on 152 degrees of freedom
+## Multiple R-squared:  0.2268,	Adjusted R-squared:  0.1759 
+## F-statistic: 4.459 on 10 and 152 DF,  p-value: 1.629e-05
 ```
 
 <br><br>
@@ -411,8 +433,8 @@ What about the effect of team type on satisfaction of just the **level** of ulti
 ## m.satis_level_team_t    flexible  
 ## 
 ##                         no.par    AIC  logLik LR.stat df Pr(>Chisq)
-## m.satis_level_no.team_t      9 401.10 -191.55                      
-## m.satis_level_team_t        11 404.19 -191.10  0.9048  2     0.6361
+## m.satis_level_no.team_t      9 393.92 -187.96                      
+## m.satis_level_team_t        11 397.00 -187.50  0.9163  2     0.6325
 ```
 
 <br> 
@@ -438,8 +460,8 @@ Model with team type *does* predict satisfaction level better than the one witho
 ## m.sais_amount_team_t    flexible  
 ## 
 ##                         no.par    AIC  logLik LR.stat df Pr(>Chisq)   
-## m.sais_amount_no.team_t     10 480.57 -230.29                         
-## m.sais_amount_team_t        12 474.71 -225.35  9.8677  2   0.007199 **
+## m.sais_amount_no.team_t     10 478.95 -229.47                         
+## m.sais_amount_team_t        12 473.09 -224.55  9.8549  2   0.007245 **
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
@@ -471,19 +493,19 @@ Satisfaction: yes (p = 0.0252)
 ## 
 ## Residuals:
 ##     Min      1Q  Median      3Q     Max 
-## -8.4333 -1.4333  0.5667  1.8830  3.8830 
+## -8.4333 -1.4333  0.5667  1.8925  3.8925 
 ## 
 ## Coefficients:
 ##                 Estimate Std. Error t value Pr(>|t|)    
-## (Intercept)      10.1170     0.2679  37.766   <2e-16 ***
-## team_typemixed    1.3163     0.5446   2.417   0.0168 *  
-## team_typewomens   1.1080     0.4903   2.260   0.0252 *  
+## (Intercept)      10.1075     0.2701  37.426   <2e-16 ***
+## team_typemixed    1.3258     0.5468   2.424   0.0164 *  
+## team_typewomens   1.1175     0.4925   2.269   0.0246 *  
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-## Residual standard error: 2.597 on 161 degrees of freedom
-## Multiple R-squared:  0.05091,	Adjusted R-squared:  0.03912 
-## F-statistic: 4.318 on 2 and 161 DF,  p-value: 0.0149
+## Residual standard error: 2.604 on 160 degrees of freedom
+## Multiple R-squared:  0.05148,	Adjusted R-squared:  0.03963 
+## F-statistic: 4.342 on 2 and 160 DF,  p-value: 0.01458
 ```
 
 Connection: yes (p = 1.17e-07)
@@ -494,20 +516,20 @@ Connection: yes (p = 1.17e-07)
 ## lm(formula = conn_combined ~ team_type, data = all)
 ## 
 ## Residuals:
-##     Min      1Q  Median      3Q     Max 
-## -7.1750 -2.1898 -0.2045  1.8250  7.7660 
+##    Min     1Q Median     3Q    Max 
+## -7.175 -2.175 -0.175  1.825  7.742 
 ## 
 ## Coefficients:
 ##                 Estimate Std. Error t value Pr(>|t|)    
-## (Intercept)       9.2340     0.2897  31.875  < 2e-16 ***
-## team_typemixed    1.8993     0.5890   3.225  0.00153 ** 
-## team_typewomens   2.9410     0.5302   5.547 1.17e-07 ***
+## (Intercept)       9.2581     0.2916  31.752  < 2e-16 ***
+## team_typemixed    1.8753     0.5904   3.176  0.00179 ** 
+## team_typewomens   2.9169     0.5317   5.486 1.58e-07 ***
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-## Residual standard error: 2.809 on 161 degrees of freedom
-## Multiple R-squared:  0.1744,	Adjusted R-squared:  0.1641 
-## F-statistic:    17 on 2 and 161 DF,  p-value: 1.998e-07
+## Residual standard error: 2.812 on 160 degrees of freedom
+## Multiple R-squared:  0.1718,	Adjusted R-squared:  0.1614 
+## F-statistic: 16.59 on 2 and 160 DF,  p-value: 2.832e-07
 ```
 
 Inclusion: yes (p = 0.00245)
@@ -519,19 +541,19 @@ Inclusion: yes (p = 0.00245)
 ## 
 ## Residuals:
 ##     Min      1Q  Median      3Q     Max 
-## -6.7000 -1.4250 -0.3191  1.6809  4.6809 
+## -6.7000 -1.5167 -0.3333  1.6667  4.6667 
 ## 
 ## Coefficients:
 ##                 Estimate Std. Error t value Pr(>|t|)    
-## (Intercept)      15.3191     0.2451  62.490  < 2e-16 ***
-## team_typemixed    2.0142     0.4984   4.041 8.21e-05 ***
-## team_typewomens   1.3809     0.4487   3.078  0.00245 ** 
+## (Intercept)      15.3333     0.2470  62.081  < 2e-16 ***
+## team_typemixed    2.0000     0.5001   3.999 9.69e-05 ***
+## team_typewomens   1.3667     0.4504   3.035  0.00281 ** 
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-## Residual standard error: 2.377 on 161 degrees of freedom
-## Multiple R-squared:  0.1135,	Adjusted R-squared:  0.1025 
-## F-statistic:  10.3 on 2 and 161 DF,  p-value: 6.156e-05
+## Residual standard error: 2.382 on 160 degrees of freedom
+## Multiple R-squared:  0.1116,	Adjusted R-squared:  0.1005 
+## F-statistic: 10.05 on 2 and 160 DF,  p-value: 7.729e-05
 ```
 
 Overall: yes (p = 2.82e-07)
@@ -543,19 +565,19 @@ Overall: yes (p = 2.82e-07)
 ## 
 ## Residuals:
 ##     Min      1Q  Median      3Q     Max 
-## -14.670  -3.670   0.100   3.472  15.330 
+## -14.699  -3.699   0.100   3.600  15.301 
 ## 
 ## Coefficients:
 ##                 Estimate Std. Error t value Pr(>|t|)    
-## (Intercept)      34.6702     0.5533  62.661  < 2e-16 ***
-## team_typemixed    5.2298     1.1249   4.649 6.90e-06 ***
-## team_typewomens   5.4298     1.0127   5.362 2.82e-07 ***
+## (Intercept)      34.6989     0.5576  62.233  < 2e-16 ***
+## team_typemixed    5.2011     1.1290   4.607 8.30e-06 ***
+## team_typewomens   5.4011     1.0167   5.312 3.57e-07 ***
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-## Residual standard error: 5.364 on 161 degrees of freedom
-## Multiple R-squared:  0.1984,	Adjusted R-squared:  0.1884 
-## F-statistic: 19.92 on 2 and 161 DF,  p-value: 1.861e-08
+## Residual standard error: 5.377 on 160 degrees of freedom
+## Multiple R-squared:  0.1962,	Adjusted R-squared:  0.1861 
+## F-statistic: 19.53 on 2 and 160 DF,  p-value: 2.583e-08
 ```
 
 <br>
@@ -606,18 +628,18 @@ Yes, p = 2.32e-09
 ## 
 ## Residuals:
 ##      Min       1Q   Median       3Q      Max 
-## -14.6702  -3.6702  -0.0143   3.4938  15.3298 
+## -14.6989  -3.6989  -0.0143   3.6434  15.3011 
 ## 
 ## Coefficients:
 ##                     Estimate Std. Error t value Pr(>|t|)    
-## (Intercept)          40.0143     0.6392  62.597  < 2e-16 ***
-## club_or_notnot_club  -5.3441     0.8443  -6.329 2.32e-09 ***
+## (Intercept)          40.0143     0.6407  62.452  < 2e-16 ***
+## club_or_notnot_club  -5.3154     0.8482  -6.266 3.25e-09 ***
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-## Residual standard error: 5.348 on 162 degrees of freedom
-## Multiple R-squared:  0.1983,	Adjusted R-squared:  0.1933 
-## F-statistic: 40.06 on 1 and 162 DF,  p-value: 2.315e-09
+## Residual standard error: 5.361 on 161 degrees of freedom
+## Multiple R-squared:  0.1961,	Adjusted R-squared:  0.1911 
+## F-statistic: 39.27 on 1 and 161 DF,  p-value: 3.245e-09
 ```
 
 ***

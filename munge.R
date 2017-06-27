@@ -114,6 +114,8 @@ inclusion <- inclusion %>%
 
 # ------------------- set datatypes ---------------------------------------------------------------
 
+quant <- quant[1:(nrow(quant) - 1), ]
+
 # ------------ demographics -----------
 # getting where_live from quant
 demographics$where_live <- factor(quant[["Please choose the option that best describes where you currently live."]])
@@ -495,7 +497,7 @@ summary(all$overall)
 # ------ for presenting graphs with capitalized things
 
 all_present <- all %>% 
-  rename(
+  dplyr::rename(
     `Club or Not` = club_or_not,
     `Team Type` = team_type
   )
