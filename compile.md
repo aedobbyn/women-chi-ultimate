@@ -38,6 +38,79 @@ Outline
 
 
 
+
+```r
+source("./munge.R")
+source("./summary_stats.R")
+```
+
+```
+## # A tibble: 2 x 2
+##   club_or_not     n
+##        <fctr> <int>
+## 1        club    70
+## 2    not_club    94
+## # A tibble: 3 x 2
+##        where_live     n
+##            <fctr> <int>
+## 1         Chicago   114
+## 2 Chicago Suburbs    41
+## 3           Other     9
+## # A tibble: 5 x 2
+##   how_long_play     n
+##          <fctr> <int>
+## 1       <1 year     9
+## 2     1-3 years    25
+## 3     3-5 years    36
+## 4    5-10 years    56
+## 5     10+ years    38
+## # A tibble: 11 x 2
+##              team     n
+##            <fctr> <int>
+##  1           Dish    16
+##  2        ELevate    10
+##  3         Frenzy    15
+##  4        No-Club    78
+##  5    Non-Chicago    10
+##  6 Jabba The Huck     4
+##  7        Nemesis     9
+##  8          Other     6
+##  9      Shakedown     6
+## 10     Stack Cats     7
+## 11            UPA     3
+## # A tibble: 6 x 2
+##                      currently_playing     n
+##                                 <fctr> <int>
+## 1                          League Only    42
+## 2 Combination of League, Club, College    34
+## 3                            Club Only    23
+## 4                         College Only    18
+## 5                                 None    20
+## 6                               Pickup    25
+## # A tibble: 4 x 2
+##        first_experience     n
+##                  <fctr> <int>
+## 1               College    73
+## 2 Middle or High School    34
+## 3                Pickup    28
+## 4                League    27
+## # A tibble: 3 x 2
+##   start_playing     n
+##          <fctr> <int>
+## 1   High School    35
+## 2       College    93
+## 3  Post-College    34
+## # A tibble: 6 x 2
+##        age     n
+##     <fctr> <int>
+## 1 Under 18     3
+## 2    18-22    38
+## 3    23-26    44
+## 4    27-30    35
+## 5    31-36    28
+## 6      37+    16
+```
+
 * Variables collected on a Lickert scale were treated ordinally. Otherwise, treated categorically.
 
 * Categorize teams into 
@@ -123,7 +196,7 @@ Snapshot of the top of the data:
 
 |Team Type |Team           | Satisfaction| Connectedness| Inclusion| Overall|
 |:---------|:--------------|------------:|-------------:|---------:|-------:|
-|No Club   |No-Club        |         9.91|          9.05|     15.34|   34.30|
+|No Club   |No-Club        |         9.92|          9.03|     15.32|   34.27|
 |No Club   |Other          |        11.00|         10.00|     13.83|   34.83|
 |No Club   |Non-Chicago    |        11.10|         10.40|     16.20|   37.70|
 |Mixed     |ELevate        |        11.00|         10.60|     17.30|   38.90|
@@ -146,7 +219,7 @@ Snapshot of the top of the data:
 Have some histograms of some predictor variables:
 
 
-![](compile_files/figure-html/unnamed-chunk-5-1.png)<!-- -->![](compile_files/figure-html/unnamed-chunk-5-2.png)<!-- -->![](compile_files/figure-html/unnamed-chunk-5-3.png)<!-- -->![](compile_files/figure-html/unnamed-chunk-5-4.png)<!-- -->![](compile_files/figure-html/unnamed-chunk-5-5.png)<!-- -->
+![](compile_files/figure-html/unnamed-chunk-6-1.png)<!-- -->![](compile_files/figure-html/unnamed-chunk-6-2.png)<!-- -->![](compile_files/figure-html/unnamed-chunk-6-3.png)<!-- -->![](compile_files/figure-html/unnamed-chunk-6-4.png)<!-- -->![](compile_files/figure-html/unnamed-chunk-6-5.png)<!-- -->
 
 ![](./womens-summit-demographics.jpg) 
 
@@ -164,7 +237,7 @@ Have some histograms of some predictor variables:
 
 * Note that many people took the survey after their seasons had ended so what they play in season might != what they said they were `currently_playing`
 
-![](compile_files/figure-html/unnamed-chunk-6-1.png)<!-- -->
+![](compile_files/figure-html/unnamed-chunk-7-1.png)<!-- -->
 
 
 <br>
@@ -179,7 +252,7 @@ Have some histograms of some predictor variables:
 ### Drilling down into team_type
 
 **Non-Club: How long have non-Chicago club players been playing?**
-![](compile_files/figure-html/unnamed-chunk-7-1.png)<!-- -->
+![](compile_files/figure-html/unnamed-chunk-8-1.png)<!-- -->
 
 <br>
 
@@ -187,12 +260,12 @@ Have some histograms of some predictor variables:
 
 (Best fit lines are fitted using the linear `method = "lm"`)
 
-![](compile_files/figure-html/unnamed-chunk-8-1.png)<!-- -->
+![](compile_files/figure-html/unnamed-chunk-9-1.png)<!-- -->
 
 <br>
 
 **Mixed: where you started playing predicting overall satisfaction**
-![](compile_files/figure-html/unnamed-chunk-9-1.png)<!-- -->
+![](compile_files/figure-html/unnamed-chunk-10-1.png)<!-- -->
 
 <br><br>
 
@@ -230,24 +303,24 @@ Setup:
 
 Individuals broken into two clusters (x axis). Their team type is shown by the color of their dot. 
 
-![](compile_files/figure-html/unnamed-chunk-10-1.png)<!-- -->
+![](compile_files/figure-html/unnamed-chunk-11-1.png)<!-- -->
 
 
 The same with box plots of overall happiness by team type are overlaid. 
 
-![](compile_files/figure-html/unnamed-chunk-11-1.png)<!-- -->
+![](compile_files/figure-html/unnamed-chunk-12-1.png)<!-- -->
 
 <br>
 
 Colored by team type rather than club or not. 
 
-![](compile_files/figure-html/unnamed-chunk-12-1.png)<!-- -->
+![](compile_files/figure-html/unnamed-chunk-13-1.png)<!-- -->
 
 <br> 
 
 Three clusters doesn't give us much more information.
 
-![](compile_files/figure-html/unnamed-chunk-13-1.png)<!-- -->
+![](compile_files/figure-html/unnamed-chunk-14-1.png)<!-- -->
 
 
 <br>
@@ -261,7 +334,7 @@ Three clusters doesn't give us much more information.
 * Grouping var: `age`
 
 
-![](compile_files/figure-html/unnamed-chunk-14-1.png)<!-- -->
+![](compile_files/figure-html/unnamed-chunk-15-1.png)<!-- -->
 
 <br><br><br>
 
@@ -270,7 +343,7 @@ These age clusters seem to make pretty good sense. Try a similar clustering stra
 * Dependent vars: satisfaction amount and satisfaction level
 * Grouping var: `team`
 
-![](compile_files/figure-html/unnamed-chunk-15-1.png)<!-- -->
+![](compile_files/figure-html/unnamed-chunk-16-1.png)<!-- -->
 
 
 
@@ -298,61 +371,61 @@ Omnibus model with all predictors predicting the overall measure. (Not including
 ##     how_long_play + start_playing + where_live, data = all)
 ## 
 ## Residuals:
-##     Min      1Q  Median      3Q     Max 
-## -13.102  -3.435   0.191   3.820  13.978 
+##      Min       1Q   Median       3Q      Max 
+## -13.0696  -3.4739   0.0624   3.7653  14.0166 
 ## 
 ## Coefficients:
 ##                                                       Estimate Std. Error
-## (Intercept)                                           32.89719    4.01058
-## age18-22                                               2.68338    3.37460
-## age23-26                                              -0.07182    3.48251
-## age27-30                                              -0.63664    3.53739
-## age31-36                                              -0.39929    3.63249
-## age37+                                                -0.89453    3.89810
-## team_typemixed                                         5.37088    1.19700
-## team_typewomens                                        5.24275    1.08828
-## currently_playingCombination of League, Club, College -0.46893    1.30193
-## currently_playingClub Only                             1.70559    1.50689
-## currently_playingCollege Only                         -0.51293    1.58925
-## currently_playingNone                                  1.68149    1.53754
-## currently_playingPickup                                0.75561    1.40265
-## how_long_play1-3 years                                 3.10730    2.20874
-## how_long_play3-5 years                                 0.01944    2.13407
-## how_long_play5-10 years                                2.98830    2.21233
-## how_long_play10+ years                                 1.84583    2.50770
-## start_playingCollege                                  -0.53574    1.15177
-## start_playingPost-College                             -0.90846    1.41420
-## where_liveChicago Suburbs                             -0.86606    1.03481
-## where_liveOther                                       -2.84025    2.09504
+## (Intercept)                                           32.90297    3.99805
+## age18-22                                               2.68149    3.36408
+## age23-26                                              -0.08609    3.47142
+## age27-30                                              -0.71080    3.52003
+## age31-36                                              -0.41322    3.62095
+## age37+                                                -0.94724    3.88305
+## team_typemixed                                         5.37783    1.19311
+## team_typewomens                                        5.25785    1.08403
+## currently_playingCombination of League, Club, College -0.47972    1.29751
+## currently_playingClub Only                             1.60337    1.47372
+## currently_playingCollege Only                         -0.52073    1.58414
+## currently_playingNone                                  1.67638    1.53268
+## currently_playingPickup                                0.75467    1.39828
+## how_long_play1-3 years                                 3.08841    2.20120
+## how_long_play3-5 years                                -0.05335    2.11730
+## how_long_play5-10 years                                2.97843    2.20525
+## how_long_play10+ years                                 1.84283    2.49987
+## start_playingCollege                                  -0.48566    1.13929
+## start_playingPost-College                             -0.86360    1.40399
+## where_liveChicago Suburbs                             -0.84417    1.02970
+## where_liveOther                                       -2.79567    2.08464
 ##                                                       t value Pr(>|t|)    
-## (Intercept)                                             8.203 1.37e-13 ***
-## age18-22                                                0.795    0.428    
-## age23-26                                               -0.021    0.984    
-## age27-30                                               -0.180    0.857    
-## age31-36                                               -0.110    0.913    
-## age37+                                                 -0.229    0.819    
-## team_typemixed                                          4.487 1.49e-05 ***
-## team_typewomens                                         4.817 3.73e-06 ***
-## currently_playingCombination of League, Club, College  -0.360    0.719    
-## currently_playingClub Only                              1.132    0.260    
-## currently_playingCollege Only                          -0.323    0.747    
+## (Intercept)                                             8.230 1.13e-13 ***
+## age18-22                                                0.797    0.427    
+## age23-26                                               -0.025    0.980    
+## age27-30                                               -0.202    0.840    
+## age31-36                                               -0.114    0.909    
+## age37+                                                 -0.244    0.808    
+## team_typemixed                                          4.507 1.37e-05 ***
+## team_typewomens                                         4.850 3.22e-06 ***
+## currently_playingCombination of League, Club, College  -0.370    0.712    
+## currently_playingClub Only                              1.088    0.278    
+## currently_playingCollege Only                          -0.329    0.743    
 ## currently_playingNone                                   1.094    0.276    
-## currently_playingPickup                                 0.539    0.591    
-## how_long_play1-3 years                                  1.407    0.162    
-## how_long_play3-5 years                                  0.009    0.993    
+## currently_playingPickup                                 0.540    0.590    
+## how_long_play1-3 years                                  1.403    0.163    
+## how_long_play3-5 years                                 -0.025    0.980    
 ## how_long_play5-10 years                                 1.351    0.179    
-## how_long_play10+ years                                  0.736    0.463    
-## start_playingCollege                                   -0.465    0.643    
-## start_playingPost-College                              -0.642    0.522    
-## where_liveChicago Suburbs                              -0.837    0.404    
-## where_liveOther                                        -1.356    0.177    
+## how_long_play10+ years                                  0.737    0.462    
+## start_playingCollege                                   -0.426    0.671    
+## start_playingPost-College                              -0.615    0.539    
+## where_liveChicago Suburbs                              -0.820    0.414    
+## where_liveOther                                        -1.341    0.182    
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-## Residual standard error: 5.314 on 140 degrees of freedom
+## Residual standard error: 5.297 on 141 degrees of freedom
 ##   (2 observations deleted due to missingness)
-## Multiple R-squared:  0.3052,	Adjusted R-squared:  0.2059 
-## F-statistic: 3.074 on 20 and 140 DF,  p-value: 5.578e-05
+## Multiple R-squared:  0.3075,	Adjusted R-squared:  0.2092 
+## F-statistic:  3.13 on 20 and 141 DF,  p-value: 4.15e-05
 ```
 
 * So `team_type` is really the only good predictor
@@ -364,7 +437,7 @@ Are there patterns in how the happiness scores of players in each team type clus
 
 * Yes: when we cluster by team type, we get the same answer, even when outcome variables are not combined into an overall score: womens and mixed team players are closer to each other on measures of happiness than they are to non-club players
 
-![](compile_files/figure-html/unnamed-chunk-17-1.png)<!-- -->![](compile_files/figure-html/unnamed-chunk-17-2.png)<!-- -->
+![](compile_files/figure-html/unnamed-chunk-18-1.png)<!-- -->![](compile_files/figure-html/unnamed-chunk-18-2.png)<!-- -->
 
 
 <br><br>
@@ -380,27 +453,27 @@ Drilling down into `team`, what's driving the dissatisfaction among `no_club` pl
 ## 
 ## Residuals:
 ##     Min      1Q  Median      3Q     Max 
-## -14.299  -3.767   0.100   3.551  14.701 
+## -14.269  -3.733   0.050   3.483  14.731 
 ## 
 ## Coefficients:
 ##                    Estimate Std. Error t value Pr(>|t|)    
-## (Intercept)         39.1875     1.3526  28.971  < 2e-16 ***
-## teamELevate         -0.2875     2.1811  -0.132  0.89530    
-## teamFrenzy           1.4125     1.9446   0.726  0.46872    
-## teamNo-Club         -4.8888     1.4866  -3.289  0.00125 ** 
-## teamNon-Chicago     -1.4875     2.1811  -0.682  0.49628    
-## teamJabba The Huck   3.8125     3.0246   1.260  0.20942    
-## teamNemesis          1.7014     2.2544   0.755  0.45160    
-## teamOther           -4.3542     2.5901  -1.681  0.09480 .  
-## teamShakedown        0.6458     2.5901   0.249  0.80343    
-## teamStack Cats       0.8125     2.4519   0.331  0.74082    
-## teamUPA             -0.1875     3.4041  -0.055  0.95615    
+## (Intercept)         39.1875     1.3490  29.049  < 2e-16 ***
+## teamELevate         -0.2875     2.1752  -0.132  0.89502    
+## teamFrenzy           1.4125     1.9393   0.728  0.46751    
+## teamNo-Club         -4.9183     1.4809  -3.321  0.00112 ** 
+## teamNon-Chicago     -1.4875     2.1752  -0.684  0.49511    
+## teamJabba The Huck   3.8125     3.0165   1.264  0.20819    
+## teamNemesis          1.7014     2.2484   0.757  0.45038    
+## teamOther           -4.3542     2.5832  -1.686  0.09391 .  
+## teamShakedown        0.6458     2.5832   0.250  0.80291    
+## teamStack Cats       0.8125     2.4453   0.332  0.74014    
+## teamUPA             -0.1875     3.3949  -0.055  0.95603    
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-## Residual standard error: 5.411 on 152 degrees of freedom
-## Multiple R-squared:  0.2268,	Adjusted R-squared:  0.1759 
-## F-statistic: 4.459 on 10 and 152 DF,  p-value: 1.629e-05
+## Residual standard error: 5.396 on 153 degrees of freedom
+## Multiple R-squared:  0.2292,	Adjusted R-squared:  0.1788 
+## F-statistic: 4.549 on 10 and 153 DF,  p-value: 1.204e-05
 ```
 
 <br><br>
@@ -433,8 +506,8 @@ What about the effect of team type on satisfaction of just the **level** of ulti
 ## m.satis_level_team_t    flexible  
 ## 
 ##                         no.par    AIC  logLik LR.stat df Pr(>Chisq)
-## m.satis_level_no.team_t      9 393.92 -187.96                      
-## m.satis_level_team_t        11 397.00 -187.50  0.9163  2     0.6325
+## m.satis_level_no.team_t      9 401.10 -191.55                      
+## m.satis_level_team_t        11 404.19 -191.10  0.9048  2     0.6361
 ```
 
 <br> 
@@ -460,8 +533,8 @@ Model with team type *does* predict satisfaction level better than the one witho
 ## m.sais_amount_team_t    flexible  
 ## 
 ##                         no.par    AIC  logLik LR.stat df Pr(>Chisq)   
-## m.sais_amount_no.team_t     10 478.95 -229.47                         
-## m.sais_amount_team_t        12 473.09 -224.55  9.8549  2   0.007245 **
+## m.sais_amount_no.team_t     10 480.57 -230.29                         
+## m.sais_amount_team_t        12 474.71 -225.35  9.8677  2   0.007199 **
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
@@ -471,7 +544,7 @@ Model with team type *does* predict satisfaction level better than the one witho
 * And that difference is borne out in this graph (check that leftmost bar)
 <br>
 
-![](compile_files/figure-html/unnamed-chunk-23-1.png)<!-- -->
+![](compile_files/figure-html/unnamed-chunk-24-1.png)<!-- -->
 
 
 <br>
@@ -493,19 +566,19 @@ Satisfaction: yes (p = 0.0252)
 ## 
 ## Residuals:
 ##     Min      1Q  Median      3Q     Max 
-## -8.4333 -1.4333  0.5667  1.8925  3.8925 
+## -8.4333 -1.4333  0.5667  1.8830  3.8830 
 ## 
 ## Coefficients:
 ##                 Estimate Std. Error t value Pr(>|t|)    
-## (Intercept)      10.1075     0.2701  37.426   <2e-16 ***
-## team_typemixed    1.3258     0.5468   2.424   0.0164 *  
-## team_typewomens   1.1175     0.4925   2.269   0.0246 *  
+## (Intercept)      10.1170     0.2679  37.766   <2e-16 ***
+## team_typemixed    1.3163     0.5446   2.417   0.0168 *  
+## team_typewomens   1.1080     0.4903   2.260   0.0252 *  
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-## Residual standard error: 2.604 on 160 degrees of freedom
-## Multiple R-squared:  0.05148,	Adjusted R-squared:  0.03963 
-## F-statistic: 4.342 on 2 and 160 DF,  p-value: 0.01458
+## Residual standard error: 2.597 on 161 degrees of freedom
+## Multiple R-squared:  0.05091,	Adjusted R-squared:  0.03912 
+## F-statistic: 4.318 on 2 and 161 DF,  p-value: 0.0149
 ```
 
 Connection: yes (p = 1.17e-07)
@@ -516,20 +589,20 @@ Connection: yes (p = 1.17e-07)
 ## lm(formula = conn_combined ~ team_type, data = all)
 ## 
 ## Residuals:
-##    Min     1Q Median     3Q    Max 
-## -7.175 -2.175 -0.175  1.825  7.742 
+##     Min      1Q  Median      3Q     Max 
+## -7.1750 -2.1898 -0.2045  1.8250  7.7660 
 ## 
 ## Coefficients:
 ##                 Estimate Std. Error t value Pr(>|t|)    
-## (Intercept)       9.2581     0.2916  31.752  < 2e-16 ***
-## team_typemixed    1.8753     0.5904   3.176  0.00179 ** 
-## team_typewomens   2.9169     0.5317   5.486 1.58e-07 ***
+## (Intercept)       9.2340     0.2897  31.875  < 2e-16 ***
+## team_typemixed    1.8993     0.5890   3.225  0.00153 ** 
+## team_typewomens   2.9410     0.5302   5.547 1.17e-07 ***
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-## Residual standard error: 2.812 on 160 degrees of freedom
-## Multiple R-squared:  0.1718,	Adjusted R-squared:  0.1614 
-## F-statistic: 16.59 on 2 and 160 DF,  p-value: 2.832e-07
+## Residual standard error: 2.809 on 161 degrees of freedom
+## Multiple R-squared:  0.1744,	Adjusted R-squared:  0.1641 
+## F-statistic:    17 on 2 and 161 DF,  p-value: 1.998e-07
 ```
 
 Inclusion: yes (p = 0.00245)
@@ -541,19 +614,19 @@ Inclusion: yes (p = 0.00245)
 ## 
 ## Residuals:
 ##     Min      1Q  Median      3Q     Max 
-## -6.7000 -1.5167 -0.3333  1.6667  4.6667 
+## -6.7000 -1.4250 -0.3191  1.6809  4.6809 
 ## 
 ## Coefficients:
 ##                 Estimate Std. Error t value Pr(>|t|)    
-## (Intercept)      15.3333     0.2470  62.081  < 2e-16 ***
-## team_typemixed    2.0000     0.5001   3.999 9.69e-05 ***
-## team_typewomens   1.3667     0.4504   3.035  0.00281 ** 
+## (Intercept)      15.3191     0.2451  62.490  < 2e-16 ***
+## team_typemixed    2.0142     0.4984   4.041 8.21e-05 ***
+## team_typewomens   1.3809     0.4487   3.078  0.00245 ** 
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-## Residual standard error: 2.382 on 160 degrees of freedom
-## Multiple R-squared:  0.1116,	Adjusted R-squared:  0.1005 
-## F-statistic: 10.05 on 2 and 160 DF,  p-value: 7.729e-05
+## Residual standard error: 2.377 on 161 degrees of freedom
+## Multiple R-squared:  0.1135,	Adjusted R-squared:  0.1025 
+## F-statistic:  10.3 on 2 and 161 DF,  p-value: 6.156e-05
 ```
 
 Overall: yes (p = 2.82e-07)
@@ -565,19 +638,19 @@ Overall: yes (p = 2.82e-07)
 ## 
 ## Residuals:
 ##     Min      1Q  Median      3Q     Max 
-## -14.699  -3.699   0.100   3.600  15.301 
+## -14.670  -3.670   0.100   3.472  15.330 
 ## 
 ## Coefficients:
 ##                 Estimate Std. Error t value Pr(>|t|)    
-## (Intercept)      34.6989     0.5576  62.233  < 2e-16 ***
-## team_typemixed    5.2011     1.1290   4.607 8.30e-06 ***
-## team_typewomens   5.4011     1.0167   5.312 3.57e-07 ***
+## (Intercept)      34.6702     0.5533  62.661  < 2e-16 ***
+## team_typemixed    5.2298     1.1249   4.649 6.90e-06 ***
+## team_typewomens   5.4298     1.0127   5.362 2.82e-07 ***
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-## Residual standard error: 5.377 on 160 degrees of freedom
-## Multiple R-squared:  0.1962,	Adjusted R-squared:  0.1861 
-## F-statistic: 19.53 on 2 and 160 DF,  p-value: 2.583e-08
+## Residual standard error: 5.364 on 161 degrees of freedom
+## Multiple R-squared:  0.1984,	Adjusted R-squared:  0.1884 
+## F-statistic: 19.92 on 2 and 161 DF,  p-value: 1.861e-08
 ```
 
 <br>
@@ -615,7 +688,7 @@ No, p = 0.841
 
 So, narrowing down to club or not, is playing club at all a significant predictor of overall happiness with ultimate in Chicago?
 
-![](compile_files/figure-html/unnamed-chunk-29-1.png)<!-- -->
+![](compile_files/figure-html/unnamed-chunk-30-1.png)<!-- -->
 
 <br>
 
@@ -628,18 +701,18 @@ Yes, p = 2.32e-09
 ## 
 ## Residuals:
 ##      Min       1Q   Median       3Q      Max 
-## -14.6989  -3.6989  -0.0143   3.6434  15.3011 
+## -14.6702  -3.6702  -0.0143   3.4938  15.3298 
 ## 
 ## Coefficients:
 ##                     Estimate Std. Error t value Pr(>|t|)    
-## (Intercept)          40.0143     0.6407  62.452  < 2e-16 ***
-## club_or_notnot_club  -5.3154     0.8482  -6.266 3.25e-09 ***
+## (Intercept)          40.0143     0.6392  62.597  < 2e-16 ***
+## club_or_notnot_club  -5.3441     0.8443  -6.329 2.32e-09 ***
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-## Residual standard error: 5.361 on 161 degrees of freedom
-## Multiple R-squared:  0.1961,	Adjusted R-squared:  0.1911 
-## F-statistic: 39.27 on 1 and 161 DF,  p-value: 3.245e-09
+## Residual standard error: 5.348 on 162 degrees of freedom
+## Multiple R-squared:  0.1983,	Adjusted R-squared:  0.1933 
+## F-statistic: 40.06 on 1 and 162 DF,  p-value: 2.315e-09
 ```
 
 ***

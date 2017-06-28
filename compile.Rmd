@@ -52,10 +52,11 @@ library(knitr)
 knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
 options(knitr.table.format = 'markdown')
 
-source("./munge.R")
-# source("./model.R")
-source("./summary_stats.R")
+```
 
+```{r, echo=TRUE}
+source("./munge.R")
+source("./summary_stats.R")
 ```
 
 * Variables collected on a Lickert scale were treated ordinally. Otherwise, treated categorically.
