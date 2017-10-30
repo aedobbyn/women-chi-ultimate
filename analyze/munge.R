@@ -21,8 +21,8 @@ library(knitr)
 library(Hmisc)
 
 # raw data. sorted is the same as raw except that columns are rearranged by category.
-sorted <- read_excel("../data/women_chicago_ultimate_raw.xlsx", sheet = 1, skip = 1)
-raw <- read_excel("../data/women_chicago_ultimate_raw.xlsx", sheet = 2, skip = 0)
+sorted <- read_excel("./data/women_chicago_ultimate_raw.xlsx", sheet = 1, skip = 1)
+raw <- read_excel("./data/women_chicago_ultimate_raw.xlsx", sheet = 2, skip = 0)
 
 # grab hand-coded data from google sheet
 quant_sheet <- gs_title("women ultimate quant data.xlsx")

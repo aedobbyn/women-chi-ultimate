@@ -194,7 +194,7 @@ means_overall <- means.by.team %>%
     3:ncol(.)
   ) %>% 
   map_dbl(mean)
-means_overall
+# means_overall
 
 
 

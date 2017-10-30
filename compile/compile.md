@@ -26,7 +26,7 @@ Outline
 
 ***
 
-![](./cujo.jpg) 
+![](../img/cujo.jpg)
 
 ***
 
@@ -35,6 +35,9 @@ Outline
 ***
 
 ## Munge
+
+
+
 
 
 
@@ -148,7 +151,7 @@ Have some histograms of some predictor variables:
 
 ![](compile_files/figure-html/unnamed-chunk-5-1.png)<!-- -->![](compile_files/figure-html/unnamed-chunk-5-2.png)<!-- -->![](compile_files/figure-html/unnamed-chunk-5-3.png)<!-- -->![](compile_files/figure-html/unnamed-chunk-5-4.png)<!-- -->![](compile_files/figure-html/unnamed-chunk-5-5.png)<!-- -->
 
-![](./womens-summit-demographics.jpg) 
+![](../img/womens-summit-demographics.jpg)
 
 
 <br><br><br>
@@ -627,7 +630,8 @@ Yes, p = 2.32e-09
 <br><br><br>
 
 
-![](./clinic.jpg) 
+![](../img/clinic.jpg)
+
 
 <br><br><br>
 

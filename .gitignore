@@ -7,3 +7,4 @@
 .DS_Store
 
 analyze/wordcloud.R
+compile/compile_cache/
