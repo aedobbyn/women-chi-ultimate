@@ -37,7 +37,7 @@ Outline
 
 ***
 
-![](./cujo.jpg) 
+![](./img/cujo.jpg) 
 
 ***
 
@@ -49,10 +49,12 @@ Outline
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+knitr::opts_chunk$set(cache=TRUE)
+knitr::opts_chunk$set(root.dir=normalizePath('../'))
+knitr::opts_knit$set(root.dir=normalizePath('../'))
 
-source("./munge.R")
-# source("./model.R")
-source("./summary_stats.R")
+source("../analyze/munge.R")
+source("../analyze/summary_stats.R")
 
 ```
 
@@ -151,7 +153,7 @@ get_summaries(d = all, var = "club_or_not")
 
 ```
 
-![](./womens-summit-demographics.jpg) 
+![](./img/womens-summit-demographics.jpg) 
 
 
 <br><br><br>
@@ -715,7 +717,7 @@ summary(m.overall.club_or_not)
 <br><br><br>
 
 
-![](./clinic.jpg) 
+![](./img/clinic.jpg) 
 
 <br><br><br>
 

@@ -1,6 +1,6 @@
 # summary stats
 
-source("./munge.R")
+# source("./analyze/munge.R")
 
 # make sure we're only using dplyr
 detach(package:plyr)

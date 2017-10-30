@@ -1,6 +1,6 @@
 
-source("./munge.R")
-source("./model.R")
+source("./analyze/munge.R")
+source("./analyze/model.R")
 
 library(ggthemes)
 

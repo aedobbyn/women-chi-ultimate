@@ -5,7 +5,7 @@
 
 # library(MASS)
 
-source("./munge.R")
+source("./analyze/munge.R")
 
 
 # - - - - omnibus - - - - 
